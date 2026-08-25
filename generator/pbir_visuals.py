@@ -12,7 +12,11 @@ from typing import Any
 VISUAL_SCHEMA = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json"
 MOBILE_SCHEMA = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainerMobileState/2.4.0/schema.json"
 PAGE_SCHEMA = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json"
+BOOKMARK_SCHEMA = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/2.1.0/schema.json"
+BOOKMARKS_METADATA_SCHEMA = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmarksMetadata/1.0.0/schema.json"
 NAMESPACE = uuid.UUID("68e18ef0-e292-47ef-9de7-fc2b573aa4c1")
+SOC_OPERATIONS_BOOKMARK = "f145a352ab22f855cfd6"
+COMMAND_CENTER_BOOKMARK = "0eec5555eec8573e85e1"
 
 
 def visual_id(page: str, label: str) -> str:
@@ -306,7 +310,9 @@ def page_header(page: str, title: str, subtitle: str, *, reset: str | None = Non
         navigator(page, 10),
     ]
     if reset == "bookmark":
-        visuals.append(action_button(page, "reset-bookmark", "Estado padrão", "f145a352ab22f855cfd6", 1116, 14, 140, 34, 3, action_type="Bookmark"))
+        visuals.append(action_button(page, "reset-bookmark", "Estado padrão", SOC_OPERATIONS_BOOKMARK, 1116, 14, 140, 34, 3, action_type="Bookmark"))
+    elif reset == "command-bookmark":
+        visuals.append(action_button(page, "reset-filters", "Limpar filtros", COMMAND_CENTER_BOOKMARK, 1116, 14, 140, 34, 3, action_type="Bookmark"))
     elif reset == "clear":
         visuals.append(action_button(page, "reset-filters", "Limpar filtros", None, 1116, 14, 140, 34, 3, action_type="ClearAllSlicers"))
     return visuals
@@ -316,7 +322,7 @@ def build_pages() -> dict[str, list[dict[str, Any]]]:
     pages: dict[str, list[dict[str, Any]]] = {}
 
     p = "CommandCenter"
-    pages[p] = page_header(p, "COMMAND CENTER", "Visão executiva • dados sintéticos • America/Sao_Paulo", reset="clear") + [
+    pages[p] = page_header(p, "COMMAND CENTER", "Visão executiva • dados sintéticos • America/Sao_Paulo", reset="command-bookmark") + [
         card(p, "kpi-primary", "Prioridade agora", ["Incidentes ativos", "Incidentes críticos ativos"], 24, 120, 292, 122, 20),
         card(p, "kpi-backlog", "Backlog e SLA", ["Backlog", "Cumprimento de SLA"], 332, 120, 292, 122, 21),
         card(p, "kpi-time", "Velocidade e tendência", ["MTTD (min)", "MTTR resolução (min)", "Variação mensal de incidentes %"], 640, 120, 616, 122, 22),
@@ -391,7 +397,7 @@ def build_pages() -> dict[str, list[dict[str, Any]]]:
     p = "DataQuality"
     pages[p] = page_header(p, "DATA QUALITY", "Completude, validade, rejeições e linhagem segura", reset="clear") + [
         card(p, "quality-volume", "Estado do dataset", ["Registros rejeitados", "Total de eventos"], 24, 120, 440, 118, 20),
-        card(p, "quality-refresh", "Atualização e fidelidade", ["Última atualização UTC", "Fidelidade da fonte"], 480, 120, 440, 118, 21, value_font_size=12),
+        card(p, "quality-refresh", "Atualização e fidelidade", ["Última atualização UTC", "Fidelidade da fonte"], 480, 120, 440, 118, 21, value_font_size=10),
         slicer(p, "source", "Produto-fonte", ("DimSourceProduct", "SourceProduct"), 940, 120, 316, 80, 22),
         chart(p, "quality-source", "Eventos por produto-fonte", "clusteredBarChart", ("DimSourceProduct", "SourceProduct"), [measure("Total de eventos")], 24, 254, 610, 242, 30),
         chart(p, "fidelity-source", "Fidelidade por produto-fonte", "clusteredBarChart", ("DimSourceProduct", "SourceProduct"), [measure("Fidelidade da fonte")], 650, 254, 606, 242, 31),
@@ -427,6 +433,75 @@ def drillthrough_config() -> tuple[dict[str, Any], dict[str, Any]]:
     filter_config = {"filters": [{"name": filter_name, "field": field, "type": "Categorical", "howCreated": "Drillthrough"}]}
     page_binding = {"name": "Pod", "type": "Drillthrough", "parameters": [{"name": "Param_" + filter_name, "boundFilter": filter_name, "fieldExpr": field}]}
     return filter_config, page_binding
+
+
+def _bookmark_visual_state(payload: dict[str, Any]) -> dict[str, Any]:
+    """Capture an explicit no-selection data state for one PBIR visual."""
+    visual = payload["visual"]
+    visual_type = visual["visualType"]
+    single_visual: dict[str, Any] = {"visualType": visual_type, "objects": {}}
+    state: dict[str, Any] = {"singleVisual": single_visual}
+    filters: list[dict[str, Any]] = []
+    active_projections: dict[str, list[dict[str, Any]]] = {}
+
+    query_state = visual.get("query", {}).get("queryState", {})
+    for role, bucket in query_state.items():
+        for index, projection in enumerate(bucket.get("projections", [])):
+            field = projection.get("field")
+            if not field:
+                continue
+            filters.append({
+                "name": hashlib.sha256(
+                    f"bookmark:{payload['name']}:{role}:{index}".encode("utf-8")
+                ).hexdigest()[:20],
+                "type": "Categorical" if "Column" in field else "Advanced",
+                "expression": field,
+                "howCreated": 0,
+            })
+            if "Column" in field:
+                active_projections.setdefault(role, []).append(field)
+
+    if filters:
+        state["filters"] = {"byExpr": filters}
+    if active_projections:
+        single_visual["activeProjections"] = active_projections
+    if visual_type == "slicer":
+        single_visual["objects"] = {
+            "merge": {"data": [{"properties": {"mode": lit_string("Dropdown")}}]}
+        }
+    return state
+
+
+def write_command_center_bookmark(
+    report_definition: Path, visuals: list[dict[str, Any]]
+) -> None:
+    """Persist the default Command Center state used by Limpar filtros."""
+    bookmarks_root = report_definition / "bookmarks"
+    write_json(bookmarks_root / "bookmarks.json", {
+        "$schema": BOOKMARKS_METADATA_SCHEMA,
+        "items": [
+            {"name": SOC_OPERATIONS_BOOKMARK},
+            {"name": COMMAND_CENTER_BOOKMARK},
+        ],
+    })
+    write_json(bookmarks_root / f"{COMMAND_CENTER_BOOKMARK}.bookmark.json", {
+        "$schema": BOOKMARK_SCHEMA,
+        "displayName": "Estado padrão Command Center",
+        "name": COMMAND_CENTER_BOOKMARK,
+        "options": {"targetVisualNames": []},
+        "explorationState": {
+            "version": "1.0",
+            "activeSection": "CommandCenter",
+            "sections": {
+                "CommandCenter": {
+                    "visualContainers": {
+                        payload["name"]: _bookmark_visual_state(payload)
+                        for payload in visuals
+                    }
+                }
+            },
+        },
+    })
 
 
 def generate_visuals(report_definition: Path) -> dict[str, int]:
@@ -472,4 +547,5 @@ def generate_visuals(report_definition: Path) -> dict[str, int]:
             })
             mobile_y += mobile_height + 8
             total += 1
+    write_command_center_bookmark(report_definition, pages["CommandCenter"])
     return {"pages": len(pages), "visuals": total}

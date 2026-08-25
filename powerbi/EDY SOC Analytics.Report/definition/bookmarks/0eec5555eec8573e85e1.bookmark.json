@@ -1,0 +1,485 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/2.1.0/schema.json",
+  "displayName": "Estado padrão Command Center",
+  "name": "0eec5555eec8573e85e1",
+  "options": {
+    "targetVisualNames": []
+  },
+  "explorationState": {
+    "version": "1.0",
+    "activeSection": "CommandCenter",
+    "sections": {
+      "CommandCenter": {
+        "visualContainers": {
+          "a70c657e7e455eaeab99": {
+            "singleVisual": {
+              "visualType": "textbox",
+              "objects": {}
+            }
+          },
+          "f0f48c43cd0754f9a9d2": {
+            "singleVisual": {
+              "visualType": "textbox",
+              "objects": {}
+            }
+          },
+          "d865b24d1a7f5720b40d": {
+            "singleVisual": {
+              "visualType": "pageNavigator",
+              "objects": {}
+            }
+          },
+          "07dd385141415f659ba1": {
+            "singleVisual": {
+              "visualType": "actionButton",
+              "objects": {}
+            }
+          },
+          "47a96d16d1415f83b040": {
+            "singleVisual": {
+              "visualType": "cardVisual",
+              "objects": {}
+            },
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "bb3446eb1aff43d5f9c0",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Measures"
+                        }
+                      },
+                      "Property": "Incidentes ativos"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "866c300b5a10200d247c",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Measures"
+                        }
+                      },
+                      "Property": "Incidentes críticos ativos"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            }
+          },
+          "0e3b9d698b69588eab04": {
+            "singleVisual": {
+              "visualType": "cardVisual",
+              "objects": {}
+            },
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "f112dd7fcdaa83fd5fc4",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Measures"
+                        }
+                      },
+                      "Property": "Backlog"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "b274b255a9a78870b125",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Measures"
+                        }
+                      },
+                      "Property": "Cumprimento de SLA"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            }
+          },
+          "c2c79e24652d5ce59995": {
+            "singleVisual": {
+              "visualType": "cardVisual",
+              "objects": {}
+            },
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "9271712ffd38e07e6e67",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Measures"
+                        }
+                      },
+                      "Property": "MTTD (min)"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "19f5163f32866c594fde",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Measures"
+                        }
+                      },
+                      "Property": "MTTR resolução (min)"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "6ed2db1a64b0c32d91cc",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Measures"
+                        }
+                      },
+                      "Property": "Variação mensal de incidentes %"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            }
+          },
+          "010fb39b23d75ba49327": {
+            "singleVisual": {
+              "visualType": "lineChart",
+              "objects": {},
+              "activeProjections": {
+                "Category": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DimDate"
+                        }
+                      },
+                      "Property": "YearMonth"
+                    }
+                  }
+                ]
+              }
+            },
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "6aa7e8c766a39a0fda10",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DimDate"
+                        }
+                      },
+                      "Property": "YearMonth"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "643fe39c464035227ab8",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Measures"
+                        }
+                      },
+                      "Property": "Total de incidentes"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            }
+          },
+          "f6e0e767fc605a12b2e9": {
+            "singleVisual": {
+              "visualType": "clusteredBarChart",
+              "objects": {},
+              "activeProjections": {
+                "Category": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DimSeverity"
+                        }
+                      },
+                      "Property": "SeverityPT"
+                    }
+                  }
+                ]
+              }
+            },
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "3292e2e0909245d107af",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DimSeverity"
+                        }
+                      },
+                      "Property": "SeverityPT"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "fd8835969fdf4740217f",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Measures"
+                        }
+                      },
+                      "Property": "Total de incidentes"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            }
+          },
+          "8da278ae90b759138da8": {
+            "singleVisual": {
+              "visualType": "tableEx",
+              "objects": {},
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "FactIncidents"
+                        }
+                      },
+                      "Property": "IncidentId"
+                    }
+                  },
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DimSeverity"
+                        }
+                      },
+                      "Property": "SeverityPT"
+                    }
+                  },
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DimStatus"
+                        }
+                      },
+                      "Property": "StatusPT"
+                    }
+                  },
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DimAsset"
+                        }
+                      },
+                      "Property": "AssetLabel"
+                    }
+                  },
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "FactIncidents"
+                        }
+                      },
+                      "Property": "RiskScore"
+                    }
+                  }
+                ]
+              }
+            },
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "3648bd315bc0d8b4206e",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "FactIncidents"
+                        }
+                      },
+                      "Property": "IncidentId"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "92a6e4b71cc4311c4cae",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DimSeverity"
+                        }
+                      },
+                      "Property": "SeverityPT"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "58bc8a52d1dd32457d27",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DimStatus"
+                        }
+                      },
+                      "Property": "StatusPT"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "1ae84d2ccf23b001d4d0",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DimAsset"
+                        }
+                      },
+                      "Property": "AssetLabel"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "24ccc2c3675d1de8fc01",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "FactIncidents"
+                        }
+                      },
+                      "Property": "RiskScore"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            }
+          },
+          "c2c4010a41cf5edd9ca0": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {
+                "merge": {
+                  "data": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "'Dropdown'"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DimDate"
+                        }
+                      },
+                      "Property": "Year"
+                    }
+                  }
+                ]
+              }
+            },
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "05e2bdfd3a55ca2e4c1e",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DimDate"
+                        }
+                      },
+                      "Property": "Year"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            }
+          },
+          "49bb2a9b2edb5eb8b314": {
+            "singleVisual": {
+              "visualType": "actionButton",
+              "objects": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}

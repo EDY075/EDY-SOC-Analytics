@@ -129,7 +129,7 @@ MEASURES = [
     ("Peso de complexidade resolvida", "SUMX ( FILTER ( FactIncidents, RELATED ( DimStatus[IsOpen] ) = FALSE () ), RELATED ( DimSeverity[RiskWeight] ) * ( 1 + DIVIDE ( FactIncidents[RiskScore], 100 ) ) )", "#,0.0", "06 Contexto"),
     ("Índice contextual de resolução", "VAR Complexidade = [Peso de complexidade resolvida] VAR Tempo = [MTTR resolução (min)] VAR SLA = [Cumprimento de SLA] RETURN DIVIDE ( Complexidade * ( 0.5 + SLA ), 1 + DIVIDE ( Tempo, 60 ) )", "#,0.0", "06 Contexto"),
     ("Registros rejeitados", "COALESCE ( COUNTROWS ( DQ_RejectedRows ), 0 )", "#,0", "04 Qualidade"),
-    ("Última atualização UTC", "MAX ( FactSecurityEvents[ReceivedAtUTC] )", "dd/MM/yyyy HH:mm", "04 Qualidade"),
+    ("Última atualização UTC", "MAX ( FactSecurityEvents[ReceivedAtUTC] )", 'dd/MM/yy HH:mm "UTC"', "04 Qualidade"),
 ]
 
 

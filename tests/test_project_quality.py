@@ -135,9 +135,10 @@ class ProjectQualityTests(unittest.TestCase):
 
         self.assertEqual(
             [action[0] for action in actions].count("ClearAllSlicers"),
-            6,
+            5,
         )
         self.assertIn(("Bookmark", None, "f145a352ab22f855cfd6"), actions)
+        self.assertIn(("Bookmark", None, "0eec5555eec8573e85e1"), actions)
         self.assertIn(("PageNavigation", "Methodology", None), actions)
         self.assertIn(("PageNavigation", "CommandCenter", None), actions)
 
@@ -154,6 +155,76 @@ class ProjectQualityTests(unittest.TestCase):
         field = filters[0]["field"]["Column"]
         self.assertEqual(field["Expression"]["SourceRef"]["Entity"], "FactIncidents")
         self.assertEqual(field["Property"], "IncidentId")
+
+    def test_command_center_reset_bookmark_captures_default_data_state(self):
+        definition = (
+            ROOT / "powerbi" / "EDY SOC Analytics.Report" / "definition"
+        )
+        bookmark_name = "0eec5555eec8573e85e1"
+        command_page = definition / "pages" / "CommandCenter"
+        reset_path = (
+            command_page
+            / "visuals"
+            / "07dd385141415f659ba1"
+            / "visual.json"
+        )
+        reset = read_json(reset_path)
+        link = reset["visual"]["visualContainerObjects"]["visualLink"][0][
+            "properties"
+        ]
+
+        def literal(name):
+            return link[name]["expr"]["Literal"]["Value"].strip("'")
+
+        self.assertEqual(reset["visual"]["visualType"], "actionButton")
+        self.assertEqual(literal("show"), "true")
+        self.assertEqual(literal("type"), "Bookmark")
+        self.assertEqual(literal("bookmark"), bookmark_name)
+        self.assertEqual(reset["position"]["tabOrder"], 3)
+
+        metadata = read_json(definition / "bookmarks" / "bookmarks.json")
+        declared = {item["name"] for item in metadata["items"]}
+        existing = {
+            path.name.removesuffix(".bookmark.json")
+            for path in (definition / "bookmarks").glob("*.bookmark.json")
+        }
+        self.assertEqual(declared, existing)
+        self.assertIn(bookmark_name, declared)
+
+        bookmark = read_json(
+            definition / "bookmarks" / f"{bookmark_name}.bookmark.json"
+        )
+        state = bookmark["explorationState"]
+        self.assertEqual(state["activeSection"], "CommandCenter")
+        self.assertEqual(bookmark["options"]["targetVisualNames"], [])
+        captured = state["sections"]["CommandCenter"]["visualContainers"]
+        page_visuals = {
+            path.parent.name: read_json(path)
+            for path in command_page.glob("visuals/*/visual.json")
+        }
+        self.assertEqual(set(captured), set(page_visuals))
+
+        data_visuals = {
+            name
+            for name, payload in page_visuals.items()
+            if payload.get("visual", {}).get("query", {}).get("queryState")
+        }
+        self.assertTrue(data_visuals)
+        for name in data_visuals:
+            saved = captured[name]
+            self.assertEqual(
+                saved["singleVisual"]["visualType"],
+                page_visuals[name]["visual"]["visualType"],
+            )
+            self.assertTrue(saved["filters"]["byExpr"], name)
+            for saved_filter in saved["filters"]["byExpr"]:
+                self.assertNotIn("filter", saved_filter)
+                self.assertNotIn("where", saved_filter)
+
+        for chart_name in ("010fb39b23d75ba49327", "f6e0e767fc605a12b2e9"):
+            saved = captured[chart_name]
+            self.assertIn("Category", saved["singleVisual"]["activeProjections"])
+            self.assertTrue(saved["filters"]["byExpr"])
 
     def test_visual_finishing_contracts(self):
         pages = (
@@ -198,7 +269,37 @@ class ProjectQualityTests(unittest.TestCase):
             / "visual.json"
         )
         value_size = quality_refresh["visual"]["objects"]["value"][0]["properties"]["fontSize"]
-        self.assertEqual(value_size["expr"]["Literal"]["Value"], "12D")
+        self.assertEqual(value_size["expr"]["Literal"]["Value"], "10D")
+
+        quality_mobile = read_json(
+            pages
+            / "DataQuality"
+            / "visuals"
+            / "e28667afd71f5261b652"
+            / "mobile.json"
+        )
+        mobile_position = quality_mobile["position"]
+        self.assertEqual(mobile_position["width"], 320)
+        self.assertGreaterEqual(mobile_position["height"], 176)
+
+        measures = (
+            ROOT
+            / "powerbi"
+            / "EDY SOC Analytics.SemanticModel"
+            / "definition"
+            / "tables"
+            / "_Measures.tmdl"
+        ).read_text(encoding="utf-8")
+        timestamp = re.search(
+            r"measure 'Última atualização UTC'.*?formatString:\s*([^\r\n]+)",
+            measures,
+            flags=re.DOTALL,
+        )
+        self.assertIsNotNone(timestamp)
+        timestamp_format = timestamp.group(1).strip()
+        self.assertEqual(timestamp_format, 'dd/MM/yy HH:mm "UTC"')
+        self.assertIn("UTC", timestamp_format)
+        self.assertNotIn("...", timestamp_format)
 
         rejection_table = read_json(
             pages

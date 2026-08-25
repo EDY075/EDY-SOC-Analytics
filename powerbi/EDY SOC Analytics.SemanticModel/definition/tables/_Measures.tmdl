@@ -202,7 +202,7 @@ table _Measures
 		lineageTag: 41510749-01eb-5104-975c-3fa793fbf36a
 
 	measure 'Última atualização UTC' = MAX ( FactSecurityEvents[ReceivedAtUTC] )
-		formatString: dd/MM/yyyy HH:mm
+		formatString: dd/MM/yy HH:mm "UTC"
 		displayFolder: 04 Qualidade
 		lineageTag: 03142f22-c849-5144-9a41-9ae435298c5e
 

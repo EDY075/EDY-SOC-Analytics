@@ -106,7 +106,7 @@
             "type": {
               "expr": {
                 "Literal": {
-                  "Value": "'ClearAllSlicers'"
+                  "Value": "'Bookmark'"
                 }
               }
             },
@@ -121,6 +121,13 @@
               "expr": {
                 "Literal": {
                   "Value": "'Limpar filtros'"
+                }
+              }
+            },
+            "bookmark": {
+              "expr": {
+                "Literal": {
+                  "Value": "'0eec5555eec8573e85e1'"
                 }
               }
             }
