@@ -30,10 +30,10 @@ Os resultados estruturados estão em `validation/results/`; as capturas desktop 
 ## Acabamentos finais
 
 - Os nove slicers agora escondem o cabeçalho técnico redundante do campo e preservam o título amigável e o `altText` em português. Os aliases PBIR de `Year`, `YearMonth` e `Team` foram corrigidos para `Ano`, `Ano/mês` e `Equipe`.
-- O valor de `Última atualização UTC` foi reduzido de 14 para 12 pontos para caber no card mobile de Data Quality sem alterar o layout de 320 pontos.
+- O valor de `Última atualização UTC` agora usa o formato curto e inequívoco `dd/MM/yy HH:mm "UTC"` e fonte de 10 pontos no card de Data Quality. O layout mobile permanece com 320 pontos de largura e 176 de altura, sem reticências e com o fuso explícito.
 - O subtítulo e os seis painéis de Methodology passaram a usar cores secundárias mais claras (`#B8C6DA` e `#F1F5FA`), preservando o tema Signal Grid.
 - A tabela vazia informa `Registros rejeitados — nenhum no período selecionado`; a mensagem foi confirmada na instância limpa.
-- O inventário permaneceu em 10 páginas, 101 visuais e 91 estados mobile. Nenhum TMDL, medida DAX, role, relacionamento ou dado foi alterado.
+- O inventário permaneceu em 10 páginas, 101 visuais e 91 estados mobile. Apenas o `formatString` de apresentação da medida de atualização foi alterado; expressão DAX, roles, relacionamentos e dados permaneceram intactos.
 
 Uma nova instância limpa foi aberta no PBIP desta reconciliação, confirmada pelo bridge com `hasUnsavedChanges: false`, e recarregou somente os arquivos externos desta branch. Não houve novo refresh. Oito páginas afetadas foram recapturadas em `screenshots/reconcile-final-2026-08-25/`; a ausência de dados na instância limpa é indicada pelos banners do Desktop e não foi interpretada como regressão visual.
 
@@ -41,14 +41,25 @@ O acabamento de rótulos foi concluído no PBIR sem alterar o modelo semântico.
 
 ## Evidência interativa final
 
-O arquivo `validation/results/interaction-validation.json` registra origem, ação, resultado esperado, observado, evidência e status das seis interações. O refresh vivo carregou 20/20 tabelas em 29,07 s e a navegação real entre as dez páginas foi aprovada pelo Desktop bridge. Drillthrough, cross-filter, bookmark, reset de filtros e foco visível por teclado permaneceram inconclusivos mesmo com dados: o driver reconheceu linhas, barras e botões na árvore acessível, mas não forneceu geometria para cliques; as alternativas seguras também não acionaram os controles. Nenhuma interação foi aprovada apenas pelo contrato estático. A instância ficou aberta com `hasUnsavedChanges: true` e não foi salva após o refresh.
+Os testes manuais com dados carregados produziram a seguinte evidência real:
 
-Gates finais: `tests.test_project_quality` aprovou 8/8; `tests.test_security` aprovou 5/5; PBIR estrutural e schema oficial retornaram 0 erros/0 avisos; a suíte completa desta rodada foi executada uma única vez e aprovou 27/27 em 47,242 s. O teste novo valida independentemente todos os `displayName` usados nos cabeçalhos das tabelas.
+- **navegação — aprovada:** Command Center → Methodology → Command Center;
+- **cross-filter — aprovado:** a seleção de `2025-06` reduziu `Incidentes ativos` e `Backlog` de 253 para 22 e atualizou tabela e demais visuais;
+- **drillthrough — aprovado:** `INC-00000001` abriu a página 9 com total 1, ativo sintético 067, risco 285, timeline e MITRE filtrados;
+- **estado vazio — aprovado:** `Registros rejeitados — nenhum no período selecionado` foi exibido corretamente;
+- **Methodology mobile — aprovado:** conteúdo legível, sem cortes ou sobreposição;
+- **reset/bookmark — aguardando reteste após correção:** antes da correção, `Limpar filtros` não removia a seleção do gráfico nem restaurava os cartões de 22 para 253, inclusive com Ctrl+clique;
+- **timestamp mobile — aguardando reteste após correção:** antes da correção, o valor aparecia truncado como `31/07/2026 23:...`;
+- **teclado — inconclusivo:** após clicar no canvas e pressionar Tab três vezes, não surgiu foco visível.
+
+A causa do reset foi confirmada no PBIR: o botão usava `ClearAllSlicers`, ação que não restaura seleções de pontos de dados em gráficos. Ele agora aponta para o bookmark determinístico `Estado padrão Command Center`, com `Data` representado pelo estado sem seleção de todos os visuais de dados, página ativa `CommandCenter`, slicer e projeções capturados. O teste regressivo verifica ação habilitada, tipo, referência existente, registro no catálogo, cobertura dos visuais e ausência de referência quebrada. A posição de teclado do botão permanece `tabOrder: 3`; o navegador de páginas e os botões essenciais continuam presentes na ordem estrutural, mas o foco visível ainda requer novo teste manual.
+
+Gates finais desta correção: `tests.test_project_quality` aprovou 9/9; `tests.test_security` aprovou 5/5; PBIR estrutural e schema oficial retornaram 0 erros/0 avisos; a suíte completa conclusiva aprovou 28/28 em 38,721 s. A primeira chamada da suíte perdeu a cauda do resultado no transporte do PTY e foi repetida uma vez para obter exit code verificável; o resultado estruturado registra as duas tentativas sem ocultá-las. O inventário permaneceu em 10 páginas, 101 visuais, 91 estados mobile, 21 tabelas, 41 medidas, 2 roles e 27 relacionamentos. Os testes de manifesto e seed confirmaram novamente os dados e hashes determinísticos.
 
 ## Limitações registradas sem sobredeclaração
 
-- O driver de entrada do Windows não conseguiu executar com segurança cliques no Power BI Desktop. Drillthrough, bookmark, navegação por teclado, reset e cross-filter foram confirmados apenas por contrato PBIR, não por interação automatizada nesta sessão.
-- A recaptura mobile viva não foi possível porque o driver reconheceu o botão `Layout móvel`, mas não conseguiu acioná-lo; os 91 estados mobile e as correções de tamanho/cor permanecem aprovados estruturalmente.
+- O reset por bookmark e o timestamp mobile corrigidos ainda exigem reteste manual com dados carregados; não há captura pós-correção inventada.
+- A navegação básica por teclado continua inconclusiva: o contrato de `tabOrder` está válido, mas o foco visível não foi demonstrado manualmente.
 - RLS no Power BI Service, associação de grupos e comportamento por licença continuam dependentes de um tenant autorizado.
 
 ## Próxima decisão

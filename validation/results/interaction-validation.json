@@ -1,73 +1,68 @@
 {
   "runDate": "2026-08-25",
-  "scope": "clean RECONCILE Power BI Desktop instance",
+  "scope": "manual Power BI Desktop validation with loaded synthetic data",
   "reportPath": "powerbi/EDY SOC Analytics.pbip",
-  "instance": {
-    "bridgeStatus": "connected",
-    "hasUnsavedChanges": true,
-    "externalFilesReloaded": true,
-    "dataState": "loaded_20_of_20_tables",
-    "refreshSeconds": 29.07,
+  "dataState": {
+    "loaded": true,
+    "activeIncidentsDefault": 253,
+    "backlogDefault": 253,
     "savedAfterRefresh": false
   },
-  "automation": {
-    "primary": "Accessibility tree was captured, but indexed click failed because input geometry was unavailable.",
-    "safeAlternative": "Secondary accessibility actions, keyboard alternatives, and screenshot-backed input could not invoke the report controls safely.",
-    "retryLimitRespected": true
+  "postFixEvidence": {
+    "screenshotsCreated": false,
+    "resetBookmark": "awaiting_manual_retest",
+    "mobileTimestamp": "awaiting_manual_retest"
   },
   "interactions": [
     {
-      "interaction": "drillthrough",
-      "origin": "Command Center — incident table",
-      "action": "Open Incident Drillthrough from one selected incident",
-      "expected": "Page 9 opens filtered to the selected IncidentId",
-      "observed": "Incident rows were loaded and exposed in the accessibility tree, but both context-click and row-selection alternatives failed because input geometry was unavailable.",
-      "evidence": "screenshots/reconcile-final-2026-08-25/CommandCenter-loaded.png",
-      "result": "inconclusive"
-    },
-    {
-      "interaction": "cross-filter",
-      "origin": "Command Center — severity chart and incident table",
-      "action": "Select one severity bar",
-      "expected": "The incident table and related KPIs are filtered",
-      "observed": "Five loaded severity bars were exposed as selectable items, but accessibility click and screenshot-backed input both failed in the driver.",
-      "evidence": "screenshots/reconcile-final-2026-08-25/CommandCenter-loaded.png",
-      "result": "inconclusive"
-    },
-    {
-      "interaction": "bookmark",
-      "origin": "SOC Operations — Estado padrão",
-      "action": "Activate the default-state bookmark",
-      "expected": "The saved default report state is restored",
-      "observed": "Estado padrão was exposed as a live button, but accessibility click lacked geometry and the safe secondary action was unsupported.",
-      "evidence": "screenshots/reconcile-final-2026-08-25/SOCOperations-loaded.png",
-      "result": "inconclusive"
-    },
-    {
-      "interaction": "reset_filters",
-      "origin": "Analyst & SLA — Limpar filtros",
-      "action": "Activate ClearAllSlicers after a filter selection",
-      "expected": "The page slicer returns to Todos and dependent visuals reset",
-      "observed": "Loaded slicers and the live Limpar filtros button were exposed, but accessibility click lacked geometry and the safe secondary action was unsupported.",
-      "evidence": "screenshots/reconcile-final-2026-08-25/CommandCenter-loaded.png",
-      "result": "inconclusive"
-    },
-    {
       "interaction": "page_navigation",
-      "origin": "Affected report pages",
-      "action": "Navigate to each affected page through the connected Desktop bridge",
-      "expected": "The selected page changes and renders its corresponding layout",
-      "observed": "All ten pages were selected and captured with loaded data through the connected Desktop bridge; each active-page state matched the requested page.",
-      "evidence": "screenshots/reconcile-final-2026-08-25/",
+      "action": "Command Center → Methodology → Command Center",
+      "observed": "Both page transitions completed and returned to Command Center.",
       "result": "approved"
     },
     {
+      "interaction": "cross_filter",
+      "action": "Select 2025-06 in the Command Center trend chart",
+      "observed": "Incidentes ativos and Backlog changed from 253 to 22; the table and remaining visuals updated.",
+      "result": "approved"
+    },
+    {
+      "interaction": "drillthrough",
+      "action": "Open drillthrough for INC-00000001",
+      "observed": "Page 9 opened with total 1, synthetic asset 067, risk 285, and filtered timeline and MITRE visuals.",
+      "result": "approved"
+    },
+    {
+      "interaction": "rejections_empty_state",
+      "action": "Inspect the rejected-records visual with no rows in the selected period",
+      "observed": "Registros rejeitados — nenhum no período selecionado was displayed correctly.",
+      "result": "approved"
+    },
+    {
+      "interaction": "methodology_mobile",
+      "action": "Inspect Methodology in mobile layout",
+      "observed": "The page was legible, with no clipping or overlap.",
+      "result": "approved"
+    },
+    {
+      "interaction": "reset_bookmark",
+      "action": "Ctrl+click Limpar filtros after selecting 2025-06",
+      "observedBeforeFix": "The chart selection remained active and both cards remained at 22 instead of returning to 253.",
+      "fix": "ClearAllSlicers was replaced by a Command Center bookmark that captures the explicit default data state.",
+      "result": "awaiting_manual_retest"
+    },
+    {
+      "interaction": "mobile_timestamp",
+      "action": "Inspect Última atualização UTC in Data Quality mobile",
+      "observedBeforeFix": "The value was truncated as 31/07/2026 23:...",
+      "fix": "The display format is now dd/MM/yy HH:mm UTC and the value font is 10 pt in a 320 x 176 mobile card.",
+      "result": "awaiting_manual_retest"
+    },
+    {
       "interaction": "keyboard_focus",
-      "origin": "Methodology — page navigator",
-      "action": "Move focus with Tab and activate a page with Enter",
-      "expected": "A visible focus indicator follows the declared tab order and Enter activates the control",
-      "observed": "Tab and Shift+Tab were delivered, but focus remained on the report document root; the page-navigation keyboard shortcut did not change the active page.",
-      "evidence": "Accessibility tree observed after both keyboard attempts; visible focus not captured",
+      "action": "Click the canvas and press Tab three times",
+      "observed": "No visible focus indicator appeared.",
+      "structuralState": "Essential buttons remain in valid tab order; Limpar filtros is tabOrder 3.",
       "result": "inconclusive"
     }
   ]
