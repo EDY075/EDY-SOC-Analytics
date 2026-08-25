@@ -23,14 +23,36 @@
     }
   },
   "fullSuite": {
-    "attemptedRuns": 2,
+    "attemptedRuns": 1,
     "conclusiveRuns": 1,
     "tests": 28,
     "failures": 0,
     "errors": 0,
-    "seconds": 38.721,
+    "seconds": 38.765,
     "result": "passed",
-    "note": "The first PTY invocation returned without its final output tail; the single conclusive rerun completed with exit code 0."
+    "note": "Single conclusive pre-merge run completed with exit code 0."
+  },
+  "releaseCandidateGate": {
+    "combinedSeconds": 59.138,
+    "datasetRegeneration": "passed_no_diff",
+    "inventory": {
+      "pages": 10,
+      "visuals": 101,
+      "mobileStates": 91,
+      "tables": 21,
+      "measures": 41,
+      "roles": 2,
+      "relationships": 27
+    },
+    "daxStatic": "passed",
+    "rlsStatic": "passed",
+    "altTextAndTabOrder": "passed",
+    "linksAndImages": "passed",
+    "secretsAndPii": "passed",
+    "pbirStructural": "passed_0_errors_0_warnings",
+    "pbirOfficialSchema": "passed_0_errors_0_warnings",
+    "manualInteractionsApproved": 9,
+    "result": "passed"
   },
   "liveRefresh": {
     "tables": 20,
@@ -39,5 +61,5 @@
     "result": "passed"
   },
   "semanticLiveGatesRepeated": false,
-  "reason": "The confirmed manual interactions were recorded. DAX, RLS, and performance gates were not repeated because only a bookmark, visual formatting, and one measure formatString changed; no DAX expression, data, role, or relationship changed."
+  "reason": "Nine manual results were approved. The final local release gate revalidated deterministic data, static DAX/RLS, report inventory, accessibility structure, security, and official PBIR schemas without reopening Power BI Desktop."
 }

@@ -1,6 +1,6 @@
 # Checklist de acessibilidade
 
-Estado da revisão: validação estrutural aprovada; inspeção das evidências da release-base concluída; alto contraste, leitor de tela e recaptura pós-hardening permanecem manuais.
+Estado da revisão: validação estrutural aprovada; foco visível por teclado e as páginas mobile afetadas foram retestados manualmente; alto contraste e leitor de tela permanecem pendentes.
 
 ## Evidência automatizada
 
@@ -43,7 +43,8 @@ Todos superam 4,5:1 para texto normal. O cálculo de cor não substitui inspeç�
 - [x] Não há sobreposição nos layouts mobile versionados.
 - [x] Oito páginas afetadas foram recapturadas após os acabamentos finais; os slicers exibem apenas títulos amigáveis e Data Quality/Methodology preservam o layout desktop.
 - [x] Dez páginas foram recapturadas com dados após o refresh final; os cabeçalhos de tabelas usam `displayName` amigável e o estado vazio de Data Quality permanece explícito.
-- [ ] Recapturar e reinspecionar as dez páginas após as alterações de ordenação, rótulos e Methodology mobile.
+- [x] Methodology mobile foi retestada com conteúdo legível, sem cortes ou sobreposições.
+- [x] Data Quality mobile foi recapturada com dados e estado vazio; o timestamp apareceu completo como `31/07/26 23:22 UTC`.
 
 Problemas encontrados na evidência-base:
 
@@ -52,11 +53,13 @@ Problemas encontrados na evidência-base:
 - a captura de Incident Drillthrough estava sem um único incidente filtrado;
 - as capturas desktop mantinham uma faixa estreita do painel lateral do Desktop.
 
-Os três primeiros receberam correção de definição. As páginas desktop afetadas foram recapturadas com dados em `screenshots/reconcile-final-2026-08-25/`; a aprovação mobile final ainda depende de recaptura real no editor, pois o driver não conseguiu acionar `Layout móvel`.
+Os três primeiros receberam correção de definição. As páginas desktop afetadas foram recapturadas com dados em `screenshots/reconcile-final-2026-08-25/`; o reteste manual posterior aprovou Methodology e Data Quality no editor mobile. Nenhuma captura pós-correção adicional foi incluída no Git sem arquivo-fonte verificável.
 
 ## Checklist manual exato
 
 ### Teclado
+
+Resultado manual de 25/08/2026: **aprovado no escopo testado**. O contorno de foco visível alcançou o painel de filtros e o visual `Fidelidade por produto-fonte`. O `tabOrder` estrutural de todos os visuais continuou válido; não foi executada auditoria completa com leitor de tela.
 
 1. Abrir cada página no modo de consumo.
 2. Pressionar `Tab` e confirmar ordem: título → ações/filtros → KPIs → gráficos → tabelas.
@@ -85,6 +88,8 @@ Esta revisão não altera configurações globais do Windows automaticamente e n
 
 ### Mobile real
 
+Resultado manual de 25/08/2026: **aprovado para as páginas afetadas**. Methodology ficou legível, sem cortes ou sobreposição; Data Quality exibiu dados, estado vazio e o timestamp completo `31/07/26 23:22 UTC`.
+
 1. Abrir o editor de layout mobile.
 2. Revisar as dez páginas em 100% de zoom.
 3. Confirmar timestamp completo em Data Quality e leitura confortável em Methodology.
@@ -93,15 +98,15 @@ Esta revisão não altera configurações globais do Windows automaticamente e n
 
 ## Critério de conclusão
 
-O projeto só pode afirmar acessibilidade manual completa quando teclado, alto contraste, leitor de tela e recaptura pós-hardening tiverem data, versão do Desktop, evidência visual e resultado registrado. Até lá, a afirmação correta é: **acessibilidade estrutural aprovada; validações assistivas finais pendentes**.
+O projeto não afirma acessibilidade manual completa enquanto alto contraste e leitor de tela não tiverem evidência interativa registrada. A afirmação correta é: **acessibilidade estrutural aprovada; foco por teclado e mobile afetado aprovados manualmente; alto contraste e leitor de tela pendentes**.
 
 ## Checklist final para envio
 
-- [x] 27/27 testes automatizados aprovados.
+- [x] 28/28 testes automatizados aprovados na última rodada conclusiva registrada.
 - [x] PBIR estrutural e schema oficial com zero erros e zero avisos.
 - [x] Scanner sem segredos, PII, `.env` ou banco local versionado.
 - [x] Cabeçalhos de tabelas recapturados com nomes amigáveis em português.
 - [x] Refresh vivo de 20/20 tabelas aprovado sem salvar o estado em memória.
-- [x] Limitações de interação e recaptura mobile documentadas sem aprovação indevida.
+- [x] Reset/bookmark, timestamp e foco visível retestados manualmente; limitações assistivas documentadas sem aprovação indevida.
 
-Decisão técnica desta revisão: **pronto para push quando houver autorização explícita**. Isso não equivale a acessibilidade manual completa nem autoriza publicação, merge ou release.
+Decisão técnica desta revisão: **pronto para merge e release somente após os gates conclusivos e o CI pós-merge**. Isso não equivale a acessibilidade manual completa.

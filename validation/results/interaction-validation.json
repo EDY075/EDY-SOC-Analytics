@@ -8,62 +8,64 @@
     "backlogDefault": 253,
     "savedAfterRefresh": false
   },
-  "postFixEvidence": {
-    "screenshotsCreated": false,
-    "resetBookmark": "awaiting_manual_retest",
-    "mobileTimestamp": "awaiting_manual_retest"
+  "evidence": {
+    "source": "manual validation reported by the project owner",
+    "dataQualityMobileRecaptured": true,
+    "newFilesAddedToRepository": false,
+    "screenReaderTested": false,
+    "highContrastTested": false
   },
   "interactions": [
     {
       "interaction": "page_navigation",
-      "action": "Command Center → Methodology → Command Center",
-      "observed": "Both page transitions completed and returned to Command Center.",
+      "observed": "Navigation between the tested pages completed correctly.",
       "result": "approved"
     },
     {
       "interaction": "cross_filter",
-      "action": "Select 2025-06 in the Command Center trend chart",
-      "observed": "Incidentes ativos and Backlog changed from 253 to 22; the table and remaining visuals updated.",
+      "observed": "A chart selection reduced the cards and filtered the related visuals.",
       "result": "approved"
     },
     {
       "interaction": "drillthrough",
-      "action": "Open drillthrough for INC-00000001",
-      "observed": "Page 9 opened with total 1, synthetic asset 067, risk 285, and filtered timeline and MITRE visuals.",
+      "observed": "INC-00000001 opened page 9 with total 1, synthetic asset 067, risk 285, and corresponding timeline and MITRE visuals.",
+      "result": "approved"
+    },
+    {
+      "interaction": "reset_bookmark",
+      "observed": "After a selection reduced the cards from 253 to 30, Limpar filtros removed the selection and restored 253.",
+      "result": "approved"
+    },
+    {
+      "interaction": "mobile_timestamp",
+      "observed": "Última atualização UTC was fully displayed as 31/07/26 23:22 UTC.",
       "result": "approved"
     },
     {
       "interaction": "rejections_empty_state",
-      "action": "Inspect the rejected-records visual with no rows in the selected period",
       "observed": "Registros rejeitados — nenhum no período selecionado was displayed correctly.",
       "result": "approved"
     },
     {
       "interaction": "methodology_mobile",
-      "action": "Inspect Methodology in mobile layout",
       "observed": "The page was legible, with no clipping or overlap.",
       "result": "approved"
     },
     {
-      "interaction": "reset_bookmark",
-      "action": "Ctrl+click Limpar filtros after selecting 2025-06",
-      "observedBeforeFix": "The chart selection remained active and both cards remained at 22 instead of returning to 253.",
-      "fix": "ClearAllSlicers was replaced by a Command Center bookmark that captures the explicit default data state.",
-      "result": "awaiting_manual_retest"
-    },
-    {
-      "interaction": "mobile_timestamp",
-      "action": "Inspect Última atualização UTC in Data Quality mobile",
-      "observedBeforeFix": "The value was truncated as 31/07/2026 23:...",
-      "fix": "The display format is now dd/MM/yy HH:mm UTC and the value font is 10 pt in a 320 x 176 mobile card.",
-      "result": "awaiting_manual_retest"
+      "interaction": "data_quality_mobile",
+      "observed": "Loaded data and the empty state were recaptured and reviewed.",
+      "result": "approved"
     },
     {
       "interaction": "keyboard_focus",
-      "action": "Click the canvas and press Tab three times",
-      "observed": "No visible focus indicator appeared.",
-      "structuralState": "Essential buttons remain in valid tab order; Limpar filtros is tabOrder 3.",
-      "result": "inconclusive"
+      "observed": "A visible focus outline reached the filters pane and the Fidelidade por produto-fonte visual.",
+      "coverage": "tested targets only; not a screen-reader audit",
+      "result": "approved"
     }
+  ],
+  "remainingLimitations": [
+    "Interactive screen-reader validation was not performed.",
+    "Interactive Windows high-contrast validation was not performed.",
+    "Power BI Service tenant, RLS group assignment, and license behavior remain outside the local validation scope."
   ]
 }

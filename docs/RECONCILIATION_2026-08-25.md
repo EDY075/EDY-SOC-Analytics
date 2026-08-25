@@ -48,20 +48,21 @@ Os testes manuais com dados carregados produziram a seguinte evidência real:
 - **drillthrough — aprovado:** `INC-00000001` abriu a página 9 com total 1, ativo sintético 067, risco 285, timeline e MITRE filtrados;
 - **estado vazio — aprovado:** `Registros rejeitados — nenhum no período selecionado` foi exibido corretamente;
 - **Methodology mobile — aprovado:** conteúdo legível, sem cortes ou sobreposição;
-- **reset/bookmark — aguardando reteste após correção:** antes da correção, `Limpar filtros` não removia a seleção do gráfico nem restaurava os cartões de 22 para 253, inclusive com Ctrl+clique;
-- **timestamp mobile — aguardando reteste após correção:** antes da correção, o valor aparecia truncado como `31/07/2026 23:...`;
-- **teclado — inconclusivo:** após clicar no canvas e pressionar Tab três vezes, não surgiu foco visível.
+- **Data Quality mobile — aprovado:** dados e estado vazio foram recapturados e revisados;
+- **reset/bookmark — aprovado:** após uma seleção reduzir os cartões de 253 para 30, `Limpar filtros` removeu a seleção e restaurou 253;
+- **timestamp mobile — aprovado:** o valor foi exibido integralmente como `31/07/26 23:22 UTC`;
+- **foco por teclado — aprovado no escopo testado:** o contorno visível alcançou o painel de filtros e o visual `Fidelidade por produto-fonte`.
 
-A causa do reset foi confirmada no PBIR: o botão usava `ClearAllSlicers`, ação que não restaura seleções de pontos de dados em gráficos. Ele agora aponta para o bookmark determinístico `Estado padrão Command Center`, com `Data` representado pelo estado sem seleção de todos os visuais de dados, página ativa `CommandCenter`, slicer e projeções capturados. O teste regressivo verifica ação habilitada, tipo, referência existente, registro no catálogo, cobertura dos visuais e ausência de referência quebrada. A posição de teclado do botão permanece `tabOrder: 3`; o navegador de páginas e os botões essenciais continuam presentes na ordem estrutural, mas o foco visível ainda requer novo teste manual.
+A causa do reset foi confirmada no PBIR: o botão usava `ClearAllSlicers`, ação que não restaura seleções de pontos de dados em gráficos. Ele agora aponta para o bookmark determinístico `Estado padrão Command Center`, com `Data` representado pelo estado sem seleção de todos os visuais de dados, página ativa `CommandCenter`, slicer e projeções capturados. O teste regressivo verifica ação habilitada, tipo, referência existente, registro no catálogo, cobertura dos visuais e ausência de referência quebrada. O reteste manual confirmou a restauração de 253 e o teste de teclado confirmou foco visível nos dois alvos observados.
 
-Gates finais desta correção: `tests.test_project_quality` aprovou 9/9; `tests.test_security` aprovou 5/5; PBIR estrutural e schema oficial retornaram 0 erros/0 avisos; a suíte completa conclusiva aprovou 28/28 em 38,721 s. A primeira chamada da suíte perdeu a cauda do resultado no transporte do PTY e foi repetida uma vez para obter exit code verificável; o resultado estruturado registra as duas tentativas sem ocultá-las. O inventário permaneceu em 10 páginas, 101 visuais, 91 estados mobile, 21 tabelas, 41 medidas, 2 roles e 27 relacionamentos. Os testes de manifesto e seed confirmaram novamente os dados e hashes determinísticos.
+Gate conclusivo pré-merge de 25/08/2026: uma rodada combinada aprovou 28/28 testes em 38,765 s e todos os gates em 59,138 s. A regeneração não alterou os dados determinísticos; PBIR estrutural e schema oficial retornaram 0 erros/0 avisos; DAX estático confirmou 41 medidas com metadados; RLS estático confirmou 2 roles; o modelo preservou 27 relacionamentos. O inventário permaneceu em 10 páginas, 101 visuais, 91 estados mobile e 21 tabelas. Links, imagens, `altText`, `tabOrder`, segredos e PII foram aprovados pela mesma rodada.
 
 ## Limitações registradas sem sobredeclaração
 
-- O reset por bookmark e o timestamp mobile corrigidos ainda exigem reteste manual com dados carregados; não há captura pós-correção inventada.
-- A navegação básica por teclado continua inconclusiva: o contrato de `tabOrder` está válido, mas o foco visível não foi demonstrado manualmente.
+- Leitor de tela e alto contraste não foram executados interativamente e não são declarados aprovados.
+- O teste de teclado comprovou foco visível nos alvos observados, mas não substitui uma auditoria completa com tecnologia assistiva em todos os 101 visuais.
 - RLS no Power BI Service, associação de grupos e comportamento por licença continuam dependentes de um tenant autorizado.
 
 ## Próxima decisão
 
-O branch de reconciliação é o candidato recomendado para revisão técnica porque preserva o hardening, resolve o refresh local real e acrescenta gates vivos seguros. Qualquer merge, push, tag, release ou publicação deve ocorrer apenas após autorização explícita e revisão dos commits locais.
+O branch de reconciliação está autorizado para merge normal e release `v1.1.0` somente após uma rodada conclusiva local, CI da PR e CI pós-merge aprovados. A publicação no LinkedIn permanece fora deste escopo.
