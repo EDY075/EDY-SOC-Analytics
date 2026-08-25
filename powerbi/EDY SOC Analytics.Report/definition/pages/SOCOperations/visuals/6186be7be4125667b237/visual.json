@@ -27,7 +27,7 @@
                 }
               },
               "queryRef": "DimDate.YearMonth",
-              "nativeQueryRef": "YearMonth",
+              "nativeQueryRef": "Ano/mês",
               "active": true
             }
           ]

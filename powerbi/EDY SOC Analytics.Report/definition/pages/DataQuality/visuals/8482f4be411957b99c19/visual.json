@@ -183,7 +183,7 @@
             "altText": {
               "expr": {
                 "Literal": {
-                  "Value": "'Tabela acessível: Registros rejeitados (sem payload).'"
+                  "Value": "'Tabela acessível: Registros rejeitados — nenhum no período selecionado.'"
                 }
               }
             }
@@ -203,7 +203,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Registros rejeitados (sem payload)'"
+                  "Value": "'Registros rejeitados — nenhum no período selecionado'"
                 }
               }
             },

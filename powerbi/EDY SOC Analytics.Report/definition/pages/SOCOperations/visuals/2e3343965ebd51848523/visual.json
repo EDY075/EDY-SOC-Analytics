@@ -27,7 +27,7 @@
                 }
               },
               "queryRef": "DimDate.Year",
-              "nativeQueryRef": "Year"
+              "nativeQueryRef": "Ano"
             }
           ]
         }
@@ -41,6 +41,19 @@
               "expr": {
                 "Literal": {
                   "Value": "'Dropdown'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "header": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

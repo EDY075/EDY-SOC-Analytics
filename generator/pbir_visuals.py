@@ -47,6 +47,9 @@ def position(x: int, y: int, width: int, height: int, order: int) -> dict[str, A
 
 
 FRIENDLY_COLUMN_LABELS = {
+    "Year": "Ano",
+    "YearMonth": "Ano/mês",
+    "Team": "Equipe",
     "SeverityPT": "Severidade",
     "StatusPT": "Status",
     "BusinessUnit": "Unidade de negócio",
@@ -98,7 +101,8 @@ def measure(name: str) -> dict[str, Any]:
 def aggregation(table: str, name: str, function: int) -> dict[str, Any]:
     labels = {0: "Sum", 1: "Average", 2: "Count", 3: "Min", 4: "Max", 5: "CountNonNull", 6: "Median", 7: "StandardDeviation", 8: "Variance"}
     label = labels[function]
-    native = {0: "Sum", 1: "Average", 2: "Count", 3: "Minimum", 4: "Maximum", 5: "Count", 6: "Median", 7: "Standard deviation", 8: "Variance"}[function]
+    native = {0: "Soma", 1: "Média", 2: "Contagem", 3: "Mínimo", 4: "Máximo", 5: "Contagem", 6: "Mediana", 7: "Desvio padrão", 8: "Variância"}[function]
+    friendly_name = FRIENDLY_COLUMN_LABELS.get(name, name)
     return {
         "field": {
             "Aggregation": {
@@ -107,7 +111,7 @@ def aggregation(table: str, name: str, function: int) -> dict[str, Any]:
             }
         },
         "queryRef": f"{label}({table}.{name})",
-        "nativeQueryRef": f"{native} of {name}",
+        "nativeQueryRef": f"{native} de {friendly_name}",
     }
 
 
@@ -232,7 +236,12 @@ def slicer(page: str, label: str, title: str, field: tuple[str, str], x: int, y:
     visual: dict[str, Any] = {
         "visualType": "slicer",
         "query": {"queryState": {"Values": {"projections": [column(field[0], field[1])]}}},
-        "objects": {"data": [{"properties": {"mode": lit_string("Dropdown")}}]},
+        "objects": {
+            "data": [{"properties": {"mode": lit_string("Dropdown")}}],
+            # The report title already supplies the accessible Portuguese label.
+            # Hide Power BI's raw model-column header (for example, Year/Team).
+            "header": [{"properties": {"show": lit_bool(False)}}],
+        },
         "visualContainerObjects": vco(title, f"Filtro {title}. Permite uma ou múltiplas seleções."),
     }
     if sync_group:
@@ -287,10 +296,10 @@ def action_button(
     }
 
 
-def page_header(page: str, title: str, subtitle: str, *, reset: str | None = None) -> list[dict[str, Any]]:
+def page_header(page: str, title: str, subtitle: str, *, reset: str | None = None, subtitle_color: str = "#8FA0B8") -> list[dict[str, Any]]:
     visuals = [
         textbox(page, "title", title, 24, 12, 760, 40, 1, size=22),
-        textbox(page, "subtitle", subtitle, 800, 18, 300 if reset else 456, 26, 2, size=11, color_hex="#8FA0B8", weight="Segoe UI"),
+        textbox(page, "subtitle", subtitle, 800, 18, 300 if reset else 456, 26, 2, size=11, color_hex=subtitle_color, weight="Segoe UI"),
         navigator(page, 10),
     ]
     if reset == "bookmark":
@@ -379,11 +388,11 @@ def build_pages() -> dict[str, list[dict[str, Any]]]:
     p = "DataQuality"
     pages[p] = page_header(p, "DATA QUALITY", "Completude, validade, rejeições e linhagem segura", reset="clear") + [
         card(p, "quality-volume", "Estado do dataset", ["Registros rejeitados", "Total de eventos"], 24, 120, 440, 118, 20),
-        card(p, "quality-refresh", "Atualização e fidelidade", ["Última atualização UTC", "Fidelidade da fonte"], 480, 120, 440, 118, 21, value_font_size=14),
+        card(p, "quality-refresh", "Atualização e fidelidade", ["Última atualização UTC", "Fidelidade da fonte"], 480, 120, 440, 118, 21, value_font_size=12),
         slicer(p, "source", "Produto-fonte", ("DimSourceProduct", "SourceProduct"), 940, 120, 316, 80, 22),
         chart(p, "quality-source", "Eventos por produto-fonte", "clusteredBarChart", ("DimSourceProduct", "SourceProduct"), [measure("Total de eventos")], 24, 254, 610, 242, 30),
         chart(p, "fidelity-source", "Fidelidade por produto-fonte", "clusteredBarChart", ("DimSourceProduct", "SourceProduct"), [measure("Fidelidade da fonte")], 650, 254, 606, 242, 31),
-        table(p, "rejections", "Registros rejeitados (sem payload)", [column("DQ_RejectedRows", "source_product"), column("DQ_RejectedRows", "QualityIssue"), column("DQ_RejectedRows", "data_classification")], 24, 512, 610, 184, 40),
+        table(p, "rejections", "Registros rejeitados — nenhum no período selecionado", [column("DQ_RejectedRows", "source_product"), column("DQ_RejectedRows", "QualityIssue"), column("DQ_RejectedRows", "data_classification")], 24, 512, 610, 184, 40),
         table(p, "lineage", "Classificação e origem", [column("DimSourceProduct", "SourceProduct"), column("DimSourceProduct", "SourceSystem"), column("DimSourceProduct", "DataClassification"), measure("Total de eventos"), measure("Fidelidade da fonte")], 650, 512, 606, 184, 41),
     ]
 
@@ -398,13 +407,13 @@ def build_pages() -> dict[str, list[dict[str, Any]]]:
     ]
 
     p = "Methodology"
-    pages[p] = page_header(p, "METHODOLOGY", "Definições, limites e fontes primárias") + [
-        textbox(p, "scope", "ESCOPO E ÉTICA\nTodos os registros são sintéticos, determinísticos e classificados como SYNTHETIC_DEMO_DATA. Nenhum log, banco, credencial, IP pessoal ou evidência operacional foi usado.", 24, 124, 386, 190, 20, size=14, weight="Segoe UI", panel=True),
-        textbox(p, "clocks", "RELÓGIOS DO SOC\nMTTD: evento → detecção. MTTA: criação → reconhecimento. Triagem, contenção, resolução e recuperação são medidos separadamente; MTTR neste relatório significa tempo até resolução.", 426, 124, 402, 190, 21, size=14, weight="Segoe UI", panel=True),
-        textbox(p, "security", "SEGURANÇA E ACESSO\nRLS demonstrativa: SOC_Analyst restringe somente o domínio de incidentes da equipe; eventos e alertas permanecem globais. SOC_Manager tem visão completa.", 844, 124, 412, 190, 22, size=14, weight="Segoe UI", panel=True),
-        textbox(p, "sources", "FONTES PRIMÁRIAS\nMicrosoft Learn: PL-300, Power BI, star schema, PBIP/PBIR/TMDL, RLS, acessibilidade, mobile e Performance Analyzer. MITRE ATT&CK Enterprise. NIST CSF 2.0 e SP 800-61 Rev. 3.", 24, 334, 600, 176, 30, size=14, weight="Segoe UI", panel=True),
-        textbox(p, "limits", "LIMITAÇÕES\nO dataset representa uma operação fictícia e não estima risco real. Comparações entre analistas são contextualizadas por severidade e complexidade; não constituem avaliação individual. Cobertura MITRE significa técnicas observadas no conjunto sintético.", 640, 334, 616, 176, 31, size=14, weight="Segoe UI", panel=True),
-        textbox(p, "usage", "COMO LER\nComece no Command Center, use os filtros por período e severidade, selecione barras para filtrar os detalhes e abra o drillthrough a partir de um incidente. Tabelas oferecem alternativa legível aos gráficos.", 24, 530, 1232, 142, 40, size=14, weight="Segoe UI", panel=True),
+    pages[p] = page_header(p, "METHODOLOGY", "Definições, limites e fontes primárias", subtitle_color="#B8C6DA") + [
+        textbox(p, "scope", "ESCOPO E ÉTICA\nTodos os registros são sintéticos, determinísticos e classificados como SYNTHETIC_DEMO_DATA. Nenhum log, banco, credencial, IP pessoal ou evidência operacional foi usado.", 24, 124, 386, 190, 20, size=14, color_hex="#F1F5FA", weight="Segoe UI", panel=True),
+        textbox(p, "clocks", "RELÓGIOS DO SOC\nMTTD: evento → detecção. MTTA: criação → reconhecimento. Triagem, contenção, resolução e recuperação são medidos separadamente; MTTR neste relatório significa tempo até resolução.", 426, 124, 402, 190, 21, size=14, color_hex="#F1F5FA", weight="Segoe UI", panel=True),
+        textbox(p, "security", "SEGURANÇA E ACESSO\nRLS demonstrativa: SOC_Analyst restringe somente o domínio de incidentes da equipe; eventos e alertas permanecem globais. SOC_Manager tem visão completa.", 844, 124, 412, 190, 22, size=14, color_hex="#F1F5FA", weight="Segoe UI", panel=True),
+        textbox(p, "sources", "FONTES PRIMÁRIAS\nMicrosoft Learn: PL-300, Power BI, star schema, PBIP/PBIR/TMDL, RLS, acessibilidade, mobile e Performance Analyzer. MITRE ATT&CK Enterprise. NIST CSF 2.0 e SP 800-61 Rev. 3.", 24, 334, 600, 176, 30, size=14, color_hex="#F1F5FA", weight="Segoe UI", panel=True),
+        textbox(p, "limits", "LIMITAÇÕES\nO dataset representa uma operação fictícia e não estima risco real. Comparações entre analistas são contextualizadas por severidade e complexidade; não constituem avaliação individual. Cobertura MITRE significa técnicas observadas no conjunto sintético.", 640, 334, 616, 176, 31, size=14, color_hex="#F1F5FA", weight="Segoe UI", panel=True),
+        textbox(p, "usage", "COMO LER\nComece no Command Center, use os filtros por período e severidade, selecione barras para filtrar os detalhes e abra o drillthrough a partir de um incidente. Tabelas oferecem alternativa legível aos gráficos.", 24, 530, 1232, 142, 40, size=14, color_hex="#F1F5FA", weight="Segoe UI", panel=True),
     ]
     return pages
 

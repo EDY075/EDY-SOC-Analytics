@@ -51,7 +51,7 @@
                 }
               },
               "queryRef": "Average(FactIncidentLifecycle.MinutesFromPreviousStage)",
-              "nativeQueryRef": "Average of MinutesFromPreviousStage"
+              "nativeQueryRef": "Média de Minutos desde etapa anterior"
             }
           ]
         }
