@@ -1,0 +1,66 @@
+table DimDetectionRule
+	lineageTag: 4149beee-7205-582e-a519-0baadb577c89
+	column DetectionRuleKey
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: 900f7ee7-7dfc-5d59-8c07-01958f72c893
+		summarizeBy: none
+		sourceColumn: DetectionRuleKey
+	column RuleId
+		dataType: string
+		lineageTag: 8bf32030-a55c-5fee-ae8e-469395a59581
+		summarizeBy: none
+		sourceColumn: RuleId
+	column RuleName
+		dataType: string
+		lineageTag: 72e25876-05e0-5fcc-a790-6ce873217653
+		summarizeBy: none
+		sourceColumn: RuleName
+	column RuleFamily
+		dataType: string
+		lineageTag: 0aed859f-78ff-5137-9590-4c27cca06085
+		summarizeBy: none
+		sourceColumn: RuleFamily
+	column DefaultSeverityKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ef7c2766-5fd6-5c57-a457-9d20baee4fe6
+		summarizeBy: none
+		sourceColumn: DefaultSeverityKey
+	column AttackTechniqueKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a71761ff-0f95-5aac-8363-6b246af27b73
+		summarizeBy: none
+		sourceColumn: AttackTechniqueKey
+	column ExpectedFidelity
+		dataType: double
+		formatString: 0.00
+		lineageTag: c51e2edc-0a44-5510-babb-36598cef3ed5
+		summarizeBy: none
+		sourceColumn: ExpectedFidelity
+	column NoiseFactor
+		dataType: double
+		formatString: 0.00
+		lineageTag: bd39604d-bb31-5679-bd7c-8bbe67783330
+		summarizeBy: none
+		sourceColumn: NoiseFactor
+	column IsEnabled
+		dataType: boolean
+		lineageTag: 35b7fd6a-87ef-5d3d-b4d5-d43c91058da4
+		summarizeBy: none
+		sourceColumn: IsEnabled
+	partition DimDetectionRule = m
+		mode: import
+		source =
+				let
+				    Source = fxCsv("data/reference/DimDetectionRule.csv"),
+				    Selected = Table.SelectColumns(Source, {"DetectionRuleKey", "RuleId", "RuleName", "RuleFamily", "DefaultSeverityKey", "AttackTechniqueKey", "ExpectedFidelity", "NoiseFactor", "IsEnabled"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"DetectionRuleKey", Int64.Type}, {"RuleId", type text}, {"RuleName", type text}, {"RuleFamily", type text}, {"DefaultSeverityKey", Int64.Type}, {"AttackTechniqueKey", Int64.Type}, {"ExpectedFidelity", type number}, {"NoiseFactor", type number}, {"IsEnabled", type logical}})
+				in
+				    Typed
+	annotation PBI_ResultType = Table

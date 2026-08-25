@@ -1,0 +1,14 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "AssetsExposure",
+  "displayName": "5. Assets & Exposure",
+  "displayOption": "FitToPage",
+  "width": 1280,
+  "height": 720,
+  "annotations": [
+    {
+      "name": "purpose",
+      "value": "5. Assets & Exposure"
+    }
+  ]
+}

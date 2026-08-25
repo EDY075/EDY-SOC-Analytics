@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "9.9.9",
+  "exportId": "invalid",
+  "generatedAt": "not-a-date",
+  "sourceProduct": "Unknown",
+  "records": [
+    {
+      "recordId": "1",
+      "recordType": "Payload",
+      "occurredAt": "yesterday",
+      "severity": "Urgent",
+      "status": "Maybe",
+      "sourceProduct": "Unknown",
+      "sourceSystem": "x",
+      "assetId": "server-1",
+      "ruleId": "rule"
+    }
+  ]
+}
+

@@ -1,0 +1,50 @@
+table DimAnalyst
+	lineageTag: 6e924777-f7c3-58de-af0c-ffa5ee7573a1
+	column AnalystKey
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: 9d783c98-393a-5a6b-a2af-66abbc44f5a8
+		summarizeBy: none
+		sourceColumn: AnalystKey
+	column AnalystId
+		dataType: string
+		lineageTag: 7540406e-566d-5ab7-93d2-d02af64fb17e
+		summarizeBy: none
+		sourceColumn: AnalystId
+	column AnalystLabel
+		dataType: string
+		lineageTag: 66936a20-5619-5512-95a7-bef30c05b8c4
+		summarizeBy: none
+		sourceColumn: AnalystLabel
+	column Team
+		dataType: string
+		lineageTag: 1ac3a35a-d80d-5965-be72-c080629831bd
+		summarizeBy: none
+		sourceColumn: Team
+	column Region
+		dataType: string
+		lineageTag: 856c6cdd-c2df-512e-b29e-85ce6ab4681c
+		summarizeBy: none
+		sourceColumn: Region
+	column ExperienceBand
+		dataType: string
+		lineageTag: 25d28cb9-56fc-5d21-960a-b3fb0598c0a1
+		summarizeBy: none
+		sourceColumn: ExperienceBand
+	column IsSynthetic
+		dataType: boolean
+		lineageTag: fcd153fe-8a2f-51db-b19c-aa26eb920cf9
+		summarizeBy: none
+		sourceColumn: IsSynthetic
+	partition DimAnalyst = m
+		mode: import
+		source =
+				let
+				    Source = fxCsv("data/reference/DimAnalyst.csv"),
+				    Selected = Table.SelectColumns(Source, {"AnalystKey", "AnalystId", "AnalystLabel", "Team", "Region", "ExperienceBand", "IsSynthetic"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"AnalystKey", Int64.Type}, {"AnalystId", type text}, {"AnalystLabel", type text}, {"Team", type text}, {"Region", type text}, {"ExperienceBand", type text}, {"IsSynthetic", type logical}})
+				in
+				    Typed
+	annotation PBI_ResultType = Table

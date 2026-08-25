@@ -1,0 +1,242 @@
+AssetKey,AssetId,AssetLabel,AssetType,BusinessUnit,Environment,Criticality,NetworkAddress,IsSynthetic
+0,UNKNOWN,Ativo não informado,Desconhecido,Não informado,Não informado,1,,True
+1,AST-0001,Ativo sintético 001,Servidor,Corporativo,Desenvolvimento,4,192.0.2.2,True
+2,AST-0002,Ativo sintético 002,Endpoint,Pesquisa,Homologação,3,198.51.100.3,True
+3,AST-0003,Ativo sintético 003,Identidade,Atendimento,Produção,3,203.0.113.4,True
+4,AST-0004,Ativo sintético 004,Aplicação,Tecnologia,Desenvolvimento,2,192.0.2.5,True
+5,AST-0005,Ativo sintético 005,Nuvem,Financeiro,Homologação,5,198.51.100.6,True
+6,AST-0006,Ativo sintético 006,Dispositivo de rede,Operações,Produção,4,203.0.113.7,True
+7,AST-0007,Ativo sintético 007,Servidor,Corporativo,Desenvolvimento,3,192.0.2.8,True
+8,AST-0008,Ativo sintético 008,Endpoint,Pesquisa,Homologação,2,198.51.100.9,True
+9,AST-0009,Ativo sintético 009,Identidade,Atendimento,Produção,1,203.0.113.10,True
+10,AST-0010,Ativo sintético 010,Aplicação,Tecnologia,Desenvolvimento,4,192.0.2.11,True
+11,AST-0011,Ativo sintético 011,Nuvem,Financeiro,Homologação,3,198.51.100.12,True
+12,AST-0012,Ativo sintético 012,Dispositivo de rede,Operações,Produção,3,203.0.113.13,True
+13,AST-0013,Ativo sintético 013,Servidor,Corporativo,Desenvolvimento,2,192.0.2.14,True
+14,AST-0014,Ativo sintético 014,Endpoint,Pesquisa,Homologação,5,198.51.100.15,True
+15,AST-0015,Ativo sintético 015,Identidade,Atendimento,Produção,4,203.0.113.16,True
+16,AST-0016,Ativo sintético 016,Aplicação,Tecnologia,Desenvolvimento,3,192.0.2.17,True
+17,AST-0017,Ativo sintético 017,Nuvem,Financeiro,Homologação,2,198.51.100.18,True
+18,AST-0018,Ativo sintético 018,Dispositivo de rede,Operações,Produção,1,203.0.113.19,True
+19,AST-0019,Ativo sintético 019,Servidor,Corporativo,Desenvolvimento,4,192.0.2.20,True
+20,AST-0020,Ativo sintético 020,Endpoint,Pesquisa,Homologação,3,198.51.100.21,True
+21,AST-0021,Ativo sintético 021,Identidade,Atendimento,Produção,3,203.0.113.22,True
+22,AST-0022,Ativo sintético 022,Aplicação,Tecnologia,Desenvolvimento,2,192.0.2.23,True
+23,AST-0023,Ativo sintético 023,Nuvem,Financeiro,Homologação,5,198.51.100.24,True
+24,AST-0024,Ativo sintético 024,Dispositivo de rede,Operações,Produção,4,203.0.113.25,True
+25,AST-0025,Ativo sintético 025,Servidor,Corporativo,Desenvolvimento,3,192.0.2.26,True
+26,AST-0026,Ativo sintético 026,Endpoint,Pesquisa,Homologação,2,198.51.100.27,True
+27,AST-0027,Ativo sintético 027,Identidade,Atendimento,Produção,1,203.0.113.28,True
+28,AST-0028,Ativo sintético 028,Aplicação,Tecnologia,Desenvolvimento,4,192.0.2.29,True
+29,AST-0029,Ativo sintético 029,Nuvem,Financeiro,Homologação,3,198.51.100.30,True
+30,AST-0030,Ativo sintético 030,Dispositivo de rede,Operações,Produção,3,203.0.113.31,True
+31,AST-0031,Ativo sintético 031,Servidor,Corporativo,Desenvolvimento,2,192.0.2.32,True
+32,AST-0032,Ativo sintético 032,Endpoint,Pesquisa,Homologação,5,198.51.100.33,True
+33,AST-0033,Ativo sintético 033,Identidade,Atendimento,Produção,4,203.0.113.34,True
+34,AST-0034,Ativo sintético 034,Aplicação,Tecnologia,Desenvolvimento,3,192.0.2.35,True
+35,AST-0035,Ativo sintético 035,Nuvem,Financeiro,Homologação,2,198.51.100.36,True
+36,AST-0036,Ativo sintético 036,Dispositivo de rede,Operações,Produção,1,203.0.113.37,True
+37,AST-0037,Ativo sintético 037,Servidor,Corporativo,Desenvolvimento,4,192.0.2.38,True
+38,AST-0038,Ativo sintético 038,Endpoint,Pesquisa,Homologação,3,198.51.100.39,True
+39,AST-0039,Ativo sintético 039,Identidade,Atendimento,Produção,3,203.0.113.40,True
+40,AST-0040,Ativo sintético 040,Aplicação,Tecnologia,Desenvolvimento,2,192.0.2.41,True
+41,AST-0041,Ativo sintético 041,Nuvem,Financeiro,Homologação,5,198.51.100.42,True
+42,AST-0042,Ativo sintético 042,Dispositivo de rede,Operações,Produção,4,203.0.113.43,True
+43,AST-0043,Ativo sintético 043,Servidor,Corporativo,Desenvolvimento,3,192.0.2.44,True
+44,AST-0044,Ativo sintético 044,Endpoint,Pesquisa,Homologação,2,198.51.100.45,True
+45,AST-0045,Ativo sintético 045,Identidade,Atendimento,Produção,1,203.0.113.46,True
+46,AST-0046,Ativo sintético 046,Aplicação,Tecnologia,Desenvolvimento,4,192.0.2.47,True
+47,AST-0047,Ativo sintético 047,Nuvem,Financeiro,Homologação,3,198.51.100.48,True
+48,AST-0048,Ativo sintético 048,Dispositivo de rede,Operações,Produção,3,203.0.113.49,True
+49,AST-0049,Ativo sintético 049,Servidor,Corporativo,Desenvolvimento,2,192.0.2.50,True
+50,AST-0050,Ativo sintético 050,Endpoint,Pesquisa,Homologação,5,198.51.100.51,True
+51,AST-0051,Ativo sintético 051,Identidade,Atendimento,Produção,4,203.0.113.52,True
+52,AST-0052,Ativo sintético 052,Aplicação,Tecnologia,Desenvolvimento,3,192.0.2.53,True
+53,AST-0053,Ativo sintético 053,Nuvem,Financeiro,Homologação,2,198.51.100.54,True
+54,AST-0054,Ativo sintético 054,Dispositivo de rede,Operações,Produção,1,203.0.113.55,True
+55,AST-0055,Ativo sintético 055,Servidor,Corporativo,Desenvolvimento,4,192.0.2.56,True
+56,AST-0056,Ativo sintético 056,Endpoint,Pesquisa,Homologação,3,198.51.100.57,True
+57,AST-0057,Ativo sintético 057,Identidade,Atendimento,Produção,3,203.0.113.58,True
+58,AST-0058,Ativo sintético 058,Aplicação,Tecnologia,Desenvolvimento,2,192.0.2.59,True
+59,AST-0059,Ativo sintético 059,Nuvem,Financeiro,Homologação,5,198.51.100.60,True
+60,AST-0060,Ativo sintético 060,Dispositivo de rede,Operações,Produção,4,203.0.113.61,True
+61,AST-0061,Ativo sintético 061,Servidor,Corporativo,Desenvolvimento,3,192.0.2.62,True
+62,AST-0062,Ativo sintético 062,Endpoint,Pesquisa,Homologação,2,198.51.100.63,True
+63,AST-0063,Ativo sintético 063,Identidade,Atendimento,Produção,1,203.0.113.64,True
+64,AST-0064,Ativo sintético 064,Aplicação,Tecnologia,Desenvolvimento,4,192.0.2.65,True
+65,AST-0065,Ativo sintético 065,Nuvem,Financeiro,Homologação,3,198.51.100.66,True
+66,AST-0066,Ativo sintético 066,Dispositivo de rede,Operações,Produção,3,203.0.113.67,True
+67,AST-0067,Ativo sintético 067,Servidor,Corporativo,Desenvolvimento,2,192.0.2.68,True
+68,AST-0068,Ativo sintético 068,Endpoint,Pesquisa,Homologação,5,198.51.100.69,True
+69,AST-0069,Ativo sintético 069,Identidade,Atendimento,Produção,4,203.0.113.70,True
+70,AST-0070,Ativo sintético 070,Aplicação,Tecnologia,Desenvolvimento,3,192.0.2.71,True
+71,AST-0071,Ativo sintético 071,Nuvem,Financeiro,Homologação,2,198.51.100.72,True
+72,AST-0072,Ativo sintético 072,Dispositivo de rede,Operações,Produção,1,203.0.113.73,True
+73,AST-0073,Ativo sintético 073,Servidor,Corporativo,Desenvolvimento,4,192.0.2.74,True
+74,AST-0074,Ativo sintético 074,Endpoint,Pesquisa,Homologação,3,198.51.100.75,True
+75,AST-0075,Ativo sintético 075,Identidade,Atendimento,Produção,3,203.0.113.76,True
+76,AST-0076,Ativo sintético 076,Aplicação,Tecnologia,Desenvolvimento,2,192.0.2.77,True
+77,AST-0077,Ativo sintético 077,Nuvem,Financeiro,Homologação,5,198.51.100.78,True
+78,AST-0078,Ativo sintético 078,Dispositivo de rede,Operações,Produção,4,203.0.113.79,True
+79,AST-0079,Ativo sintético 079,Servidor,Corporativo,Desenvolvimento,3,192.0.2.80,True
+80,AST-0080,Ativo sintético 080,Endpoint,Pesquisa,Homologação,2,198.51.100.81,True
+81,AST-0081,Ativo sintético 081,Identidade,Atendimento,Produção,1,203.0.113.82,True
+82,AST-0082,Ativo sintético 082,Aplicação,Tecnologia,Desenvolvimento,4,192.0.2.83,True
+83,AST-0083,Ativo sintético 083,Nuvem,Financeiro,Homologação,3,198.51.100.84,True
+84,AST-0084,Ativo sintético 084,Dispositivo de rede,Operações,Produção,3,203.0.113.85,True
+85,AST-0085,Ativo sintético 085,Servidor,Corporativo,Desenvolvimento,2,192.0.2.86,True
+86,AST-0086,Ativo sintético 086,Endpoint,Pesquisa,Homologação,5,198.51.100.87,True
+87,AST-0087,Ativo sintético 087,Identidade,Atendimento,Produção,4,203.0.113.88,True
+88,AST-0088,Ativo sintético 088,Aplicação,Tecnologia,Desenvolvimento,3,192.0.2.89,True
+89,AST-0089,Ativo sintético 089,Nuvem,Financeiro,Homologação,2,198.51.100.90,True
+90,AST-0090,Ativo sintético 090,Dispositivo de rede,Operações,Produção,1,203.0.113.91,True
+91,AST-0091,Ativo sintético 091,Servidor,Corporativo,Desenvolvimento,4,192.0.2.92,True
+92,AST-0092,Ativo sintético 092,Endpoint,Pesquisa,Homologação,3,198.51.100.93,True
+93,AST-0093,Ativo sintético 093,Identidade,Atendimento,Produção,3,203.0.113.94,True
+94,AST-0094,Ativo sintético 094,Aplicação,Tecnologia,Desenvolvimento,2,192.0.2.95,True
+95,AST-0095,Ativo sintético 095,Nuvem,Financeiro,Homologação,5,198.51.100.96,True
+96,AST-0096,Ativo sintético 096,Dispositivo de rede,Operações,Produção,4,203.0.113.97,True
+97,AST-0097,Ativo sintético 097,Servidor,Corporativo,Desenvolvimento,3,192.0.2.98,True
+98,AST-0098,Ativo sintético 098,Endpoint,Pesquisa,Homologação,2,198.51.100.99,True
+99,AST-0099,Ativo sintético 099,Identidade,Atendimento,Produção,1,203.0.113.100,True
+100,AST-0100,Ativo sintético 100,Aplicação,Tecnologia,Desenvolvimento,4,192.0.2.101,True
+101,AST-0101,Ativo sintético 101,Nuvem,Financeiro,Homologação,3,198.51.100.102,True
+102,AST-0102,Ativo sintético 102,Dispositivo de rede,Operações,Produção,3,203.0.113.103,True
+103,AST-0103,Ativo sintético 103,Servidor,Corporativo,Desenvolvimento,2,192.0.2.104,True
+104,AST-0104,Ativo sintético 104,Endpoint,Pesquisa,Homologação,5,198.51.100.105,True
+105,AST-0105,Ativo sintético 105,Identidade,Atendimento,Produção,4,203.0.113.106,True
+106,AST-0106,Ativo sintético 106,Aplicação,Tecnologia,Desenvolvimento,3,192.0.2.107,True
+107,AST-0107,Ativo sintético 107,Nuvem,Financeiro,Homologação,2,198.51.100.108,True
+108,AST-0108,Ativo sintético 108,Dispositivo de rede,Operações,Produção,1,203.0.113.109,True
+109,AST-0109,Ativo sintético 109,Servidor,Corporativo,Desenvolvimento,4,192.0.2.110,True
+110,AST-0110,Ativo sintético 110,Endpoint,Pesquisa,Homologação,3,198.51.100.111,True
+111,AST-0111,Ativo sintético 111,Identidade,Atendimento,Produção,3,203.0.113.112,True
+112,AST-0112,Ativo sintético 112,Aplicação,Tecnologia,Desenvolvimento,2,192.0.2.113,True
+113,AST-0113,Ativo sintético 113,Nuvem,Financeiro,Homologação,5,198.51.100.114,True
+114,AST-0114,Ativo sintético 114,Dispositivo de rede,Operações,Produção,4,203.0.113.115,True
+115,AST-0115,Ativo sintético 115,Servidor,Corporativo,Desenvolvimento,3,192.0.2.116,True
+116,AST-0116,Ativo sintético 116,Endpoint,Pesquisa,Homologação,2,198.51.100.117,True
+117,AST-0117,Ativo sintético 117,Identidade,Atendimento,Produção,1,203.0.113.118,True
+118,AST-0118,Ativo sintético 118,Aplicação,Tecnologia,Desenvolvimento,4,192.0.2.119,True
+119,AST-0119,Ativo sintético 119,Nuvem,Financeiro,Homologação,3,198.51.100.120,True
+120,AST-0120,Ativo sintético 120,Dispositivo de rede,Operações,Produção,3,203.0.113.121,True
+121,AST-0121,Ativo sintético 121,Servidor,Corporativo,Desenvolvimento,2,192.0.2.122,True
+122,AST-0122,Ativo sintético 122,Endpoint,Pesquisa,Homologação,5,198.51.100.123,True
+123,AST-0123,Ativo sintético 123,Identidade,Atendimento,Produção,4,203.0.113.124,True
+124,AST-0124,Ativo sintético 124,Aplicação,Tecnologia,Desenvolvimento,3,192.0.2.125,True
+125,AST-0125,Ativo sintético 125,Nuvem,Financeiro,Homologação,2,198.51.100.126,True
+126,AST-0126,Ativo sintético 126,Dispositivo de rede,Operações,Produção,1,203.0.113.127,True
+127,AST-0127,Ativo sintético 127,Servidor,Corporativo,Desenvolvimento,4,192.0.2.128,True
+128,AST-0128,Ativo sintético 128,Endpoint,Pesquisa,Homologação,3,198.51.100.129,True
+129,AST-0129,Ativo sintético 129,Identidade,Atendimento,Produção,3,203.0.113.130,True
+130,AST-0130,Ativo sintético 130,Aplicação,Tecnologia,Desenvolvimento,2,192.0.2.131,True
+131,AST-0131,Ativo sintético 131,Nuvem,Financeiro,Homologação,5,198.51.100.132,True
+132,AST-0132,Ativo sintético 132,Dispositivo de rede,Operações,Produção,4,203.0.113.133,True
+133,AST-0133,Ativo sintético 133,Servidor,Corporativo,Desenvolvimento,3,192.0.2.134,True
+134,AST-0134,Ativo sintético 134,Endpoint,Pesquisa,Homologação,2,198.51.100.135,True
+135,AST-0135,Ativo sintético 135,Identidade,Atendimento,Produção,1,203.0.113.136,True
+136,AST-0136,Ativo sintético 136,Aplicação,Tecnologia,Desenvolvimento,4,192.0.2.137,True
+137,AST-0137,Ativo sintético 137,Nuvem,Financeiro,Homologação,3,198.51.100.138,True
+138,AST-0138,Ativo sintético 138,Dispositivo de rede,Operações,Produção,3,203.0.113.139,True
+139,AST-0139,Ativo sintético 139,Servidor,Corporativo,Desenvolvimento,2,192.0.2.140,True
+140,AST-0140,Ativo sintético 140,Endpoint,Pesquisa,Homologação,5,198.51.100.141,True
+141,AST-0141,Ativo sintético 141,Identidade,Atendimento,Produção,4,203.0.113.142,True
+142,AST-0142,Ativo sintético 142,Aplicação,Tecnologia,Desenvolvimento,3,192.0.2.143,True
+143,AST-0143,Ativo sintético 143,Nuvem,Financeiro,Homologação,2,198.51.100.144,True
+144,AST-0144,Ativo sintético 144,Dispositivo de rede,Operações,Produção,1,203.0.113.145,True
+145,AST-0145,Ativo sintético 145,Servidor,Corporativo,Desenvolvimento,4,192.0.2.146,True
+146,AST-0146,Ativo sintético 146,Endpoint,Pesquisa,Homologação,3,198.51.100.147,True
+147,AST-0147,Ativo sintético 147,Identidade,Atendimento,Produção,3,203.0.113.148,True
+148,AST-0148,Ativo sintético 148,Aplicação,Tecnologia,Desenvolvimento,2,192.0.2.149,True
+149,AST-0149,Ativo sintético 149,Nuvem,Financeiro,Homologação,5,198.51.100.150,True
+150,AST-0150,Ativo sintético 150,Dispositivo de rede,Operações,Produção,4,203.0.113.151,True
+151,AST-0151,Ativo sintético 151,Servidor,Corporativo,Desenvolvimento,3,192.0.2.152,True
+152,AST-0152,Ativo sintético 152,Endpoint,Pesquisa,Homologação,2,198.51.100.153,True
+153,AST-0153,Ativo sintético 153,Identidade,Atendimento,Produção,1,203.0.113.154,True
+154,AST-0154,Ativo sintético 154,Aplicação,Tecnologia,Desenvolvimento,4,192.0.2.155,True
+155,AST-0155,Ativo sintético 155,Nuvem,Financeiro,Homologação,3,198.51.100.156,True
+156,AST-0156,Ativo sintético 156,Dispositivo de rede,Operações,Produção,3,203.0.113.157,True
+157,AST-0157,Ativo sintético 157,Servidor,Corporativo,Desenvolvimento,2,192.0.2.158,True
+158,AST-0158,Ativo sintético 158,Endpoint,Pesquisa,Homologação,5,198.51.100.159,True
+159,AST-0159,Ativo sintético 159,Identidade,Atendimento,Produção,4,203.0.113.160,True
+160,AST-0160,Ativo sintético 160,Aplicação,Tecnologia,Desenvolvimento,3,192.0.2.161,True
+161,AST-0161,Ativo sintético 161,Nuvem,Financeiro,Homologação,2,198.51.100.162,True
+162,AST-0162,Ativo sintético 162,Dispositivo de rede,Operações,Produção,1,203.0.113.163,True
+163,AST-0163,Ativo sintético 163,Servidor,Corporativo,Desenvolvimento,4,192.0.2.164,True
+164,AST-0164,Ativo sintético 164,Endpoint,Pesquisa,Homologação,3,198.51.100.165,True
+165,AST-0165,Ativo sintético 165,Identidade,Atendimento,Produção,3,203.0.113.166,True
+166,AST-0166,Ativo sintético 166,Aplicação,Tecnologia,Desenvolvimento,2,192.0.2.167,True
+167,AST-0167,Ativo sintético 167,Nuvem,Financeiro,Homologação,5,198.51.100.168,True
+168,AST-0168,Ativo sintético 168,Dispositivo de rede,Operações,Produção,4,203.0.113.169,True
+169,AST-0169,Ativo sintético 169,Servidor,Corporativo,Desenvolvimento,3,192.0.2.170,True
+170,AST-0170,Ativo sintético 170,Endpoint,Pesquisa,Homologação,2,198.51.100.171,True
+171,AST-0171,Ativo sintético 171,Identidade,Atendimento,Produção,1,203.0.113.172,True
+172,AST-0172,Ativo sintético 172,Aplicação,Tecnologia,Desenvolvimento,4,192.0.2.173,True
+173,AST-0173,Ativo sintético 173,Nuvem,Financeiro,Homologação,3,198.51.100.174,True
+174,AST-0174,Ativo sintético 174,Dispositivo de rede,Operações,Produção,3,203.0.113.175,True
+175,AST-0175,Ativo sintético 175,Servidor,Corporativo,Desenvolvimento,2,192.0.2.176,True
+176,AST-0176,Ativo sintético 176,Endpoint,Pesquisa,Homologação,5,198.51.100.177,True
+177,AST-0177,Ativo sintético 177,Identidade,Atendimento,Produção,4,203.0.113.178,True
+178,AST-0178,Ativo sintético 178,Aplicação,Tecnologia,Desenvolvimento,3,192.0.2.179,True
+179,AST-0179,Ativo sintético 179,Nuvem,Financeiro,Homologação,2,198.51.100.180,True
+180,AST-0180,Ativo sintético 180,Dispositivo de rede,Operações,Produção,1,203.0.113.181,True
+181,AST-0181,Ativo sintético 181,Servidor,Corporativo,Desenvolvimento,4,192.0.2.182,True
+182,AST-0182,Ativo sintético 182,Endpoint,Pesquisa,Homologação,3,198.51.100.183,True
+183,AST-0183,Ativo sintético 183,Identidade,Atendimento,Produção,3,203.0.113.184,True
+184,AST-0184,Ativo sintético 184,Aplicação,Tecnologia,Desenvolvimento,2,192.0.2.185,True
+185,AST-0185,Ativo sintético 185,Nuvem,Financeiro,Homologação,5,198.51.100.186,True
+186,AST-0186,Ativo sintético 186,Dispositivo de rede,Operações,Produção,4,203.0.113.187,True
+187,AST-0187,Ativo sintético 187,Servidor,Corporativo,Desenvolvimento,3,192.0.2.188,True
+188,AST-0188,Ativo sintético 188,Endpoint,Pesquisa,Homologação,2,198.51.100.189,True
+189,AST-0189,Ativo sintético 189,Identidade,Atendimento,Produção,1,203.0.113.190,True
+190,AST-0190,Ativo sintético 190,Aplicação,Tecnologia,Desenvolvimento,4,192.0.2.191,True
+191,AST-0191,Ativo sintético 191,Nuvem,Financeiro,Homologação,3,198.51.100.192,True
+192,AST-0192,Ativo sintético 192,Dispositivo de rede,Operações,Produção,3,203.0.113.193,True
+193,AST-0193,Ativo sintético 193,Servidor,Corporativo,Desenvolvimento,2,192.0.2.194,True
+194,AST-0194,Ativo sintético 194,Endpoint,Pesquisa,Homologação,5,198.51.100.195,True
+195,AST-0195,Ativo sintético 195,Identidade,Atendimento,Produção,4,203.0.113.196,True
+196,AST-0196,Ativo sintético 196,Aplicação,Tecnologia,Desenvolvimento,3,192.0.2.197,True
+197,AST-0197,Ativo sintético 197,Nuvem,Financeiro,Homologação,2,198.51.100.198,True
+198,AST-0198,Ativo sintético 198,Dispositivo de rede,Operações,Produção,1,203.0.113.199,True
+199,AST-0199,Ativo sintético 199,Servidor,Corporativo,Desenvolvimento,4,192.0.2.200,True
+200,AST-0200,Ativo sintético 200,Endpoint,Pesquisa,Homologação,3,198.51.100.201,True
+201,AST-0201,Ativo sintético 201,Identidade,Atendimento,Produção,3,203.0.113.202,True
+202,AST-0202,Ativo sintético 202,Aplicação,Tecnologia,Desenvolvimento,2,192.0.2.203,True
+203,AST-0203,Ativo sintético 203,Nuvem,Financeiro,Homologação,5,198.51.100.204,True
+204,AST-0204,Ativo sintético 204,Dispositivo de rede,Operações,Produção,4,203.0.113.205,True
+205,AST-0205,Ativo sintético 205,Servidor,Corporativo,Desenvolvimento,3,192.0.2.206,True
+206,AST-0206,Ativo sintético 206,Endpoint,Pesquisa,Homologação,2,198.51.100.207,True
+207,AST-0207,Ativo sintético 207,Identidade,Atendimento,Produção,1,203.0.113.208,True
+208,AST-0208,Ativo sintético 208,Aplicação,Tecnologia,Desenvolvimento,4,192.0.2.209,True
+209,AST-0209,Ativo sintético 209,Nuvem,Financeiro,Homologação,3,198.51.100.210,True
+210,AST-0210,Ativo sintético 210,Dispositivo de rede,Operações,Produção,3,203.0.113.211,True
+211,AST-0211,Ativo sintético 211,Servidor,Corporativo,Desenvolvimento,2,192.0.2.212,True
+212,AST-0212,Ativo sintético 212,Endpoint,Pesquisa,Homologação,5,198.51.100.213,True
+213,AST-0213,Ativo sintético 213,Identidade,Atendimento,Produção,4,203.0.113.214,True
+214,AST-0214,Ativo sintético 214,Aplicação,Tecnologia,Desenvolvimento,3,192.0.2.215,True
+215,AST-0215,Ativo sintético 215,Nuvem,Financeiro,Homologação,2,198.51.100.216,True
+216,AST-0216,Ativo sintético 216,Dispositivo de rede,Operações,Produção,1,203.0.113.217,True
+217,AST-0217,Ativo sintético 217,Servidor,Corporativo,Desenvolvimento,4,192.0.2.218,True
+218,AST-0218,Ativo sintético 218,Endpoint,Pesquisa,Homologação,3,198.51.100.219,True
+219,AST-0219,Ativo sintético 219,Identidade,Atendimento,Produção,3,203.0.113.220,True
+220,AST-0220,Ativo sintético 220,Aplicação,Tecnologia,Desenvolvimento,2,192.0.2.221,True
+221,AST-0221,Ativo sintético 221,Nuvem,Financeiro,Homologação,5,198.51.100.222,True
+222,AST-0222,Ativo sintético 222,Dispositivo de rede,Operações,Produção,4,203.0.113.223,True
+223,AST-0223,Ativo sintético 223,Servidor,Corporativo,Desenvolvimento,3,192.0.2.224,True
+224,AST-0224,Ativo sintético 224,Endpoint,Pesquisa,Homologação,2,198.51.100.225,True
+225,AST-0225,Ativo sintético 225,Identidade,Atendimento,Produção,1,203.0.113.226,True
+226,AST-0226,Ativo sintético 226,Aplicação,Tecnologia,Desenvolvimento,4,192.0.2.227,True
+227,AST-0227,Ativo sintético 227,Nuvem,Financeiro,Homologação,3,198.51.100.228,True
+228,AST-0228,Ativo sintético 228,Dispositivo de rede,Operações,Produção,3,203.0.113.229,True
+229,AST-0229,Ativo sintético 229,Servidor,Corporativo,Desenvolvimento,2,192.0.2.230,True
+230,AST-0230,Ativo sintético 230,Endpoint,Pesquisa,Homologação,5,198.51.100.231,True
+231,AST-0231,Ativo sintético 231,Identidade,Atendimento,Produção,4,203.0.113.232,True
+232,AST-0232,Ativo sintético 232,Aplicação,Tecnologia,Desenvolvimento,3,192.0.2.233,True
+233,AST-0233,Ativo sintético 233,Nuvem,Financeiro,Homologação,2,198.51.100.234,True
+234,AST-0234,Ativo sintético 234,Dispositivo de rede,Operações,Produção,1,203.0.113.235,True
+235,AST-0235,Ativo sintético 235,Servidor,Corporativo,Desenvolvimento,4,192.0.2.236,True
+236,AST-0236,Ativo sintético 236,Endpoint,Pesquisa,Homologação,3,198.51.100.237,True
+237,AST-0237,Ativo sintético 237,Identidade,Atendimento,Produção,3,203.0.113.238,True
+238,AST-0238,Ativo sintético 238,Aplicação,Tecnologia,Desenvolvimento,2,192.0.2.239,True
+239,AST-0239,Ativo sintético 239,Nuvem,Financeiro,Homologação,5,198.51.100.240,True
+240,AST-0240,Ativo sintético 240,Dispositivo de rede,Operações,Produção,4,203.0.113.241,True

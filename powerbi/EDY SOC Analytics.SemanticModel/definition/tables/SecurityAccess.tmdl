@@ -1,0 +1,40 @@
+table SecurityAccess
+	lineageTag: c2fcdbb4-64ff-5b0a-8613-6de636774e43
+	column AccessKey
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: af9b9983-8823-5821-ac76-16bf7fe472f4
+		summarizeBy: none
+		sourceColumn: AccessKey
+	column UPN
+		dataType: string
+		lineageTag: a0e6df7d-616c-5b18-ae33-f09866e0967c
+		summarizeBy: none
+		sourceColumn: UPN
+	column Team
+		dataType: string
+		lineageTag: 8516b326-0e49-5f9d-9434-6d2cc45c96fe
+		summarizeBy: none
+		sourceColumn: Team
+	column RoleName
+		dataType: string
+		lineageTag: 3c687cf8-39b3-515e-8cb2-f8ce45672147
+		summarizeBy: none
+		sourceColumn: RoleName
+	column IsSynthetic
+		dataType: boolean
+		lineageTag: c3030bc9-30ca-5a1e-8e7e-8986ea8bf19e
+		summarizeBy: none
+		sourceColumn: IsSynthetic
+	partition SecurityAccess = m
+		mode: import
+		source =
+				let
+				    Source = fxCsv("data/reference/SecurityAccess.csv"),
+				    Selected = Table.SelectColumns(Source, {"AccessKey", "UPN", "Team", "RoleName", "IsSynthetic"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"AccessKey", Int64.Type}, {"UPN", type text}, {"Team", type text}, {"RoleName", type text}, {"IsSynthetic", type logical}})
+				in
+				    Typed
+	annotation PBI_ResultType = Table

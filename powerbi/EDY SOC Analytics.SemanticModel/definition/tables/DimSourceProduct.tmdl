@@ -1,0 +1,48 @@
+table DimSourceProduct
+	lineageTag: 5f25b901-64ea-5272-9db9-a09afb2ebe46
+	column SourceProductKey
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: ae272e16-7bfd-5c8b-b1b2-f8e6b7c217b6
+		summarizeBy: none
+		sourceColumn: SourceProductKey
+	column SourceProduct
+		dataType: string
+		lineageTag: 99697dba-daf9-569c-b0ab-90b2fcc1ea48
+		summarizeBy: none
+		sourceColumn: SourceProduct
+	column SourceSystem
+		dataType: string
+		lineageTag: 071f9945-e86f-5392-b642-e67e481990b6
+		summarizeBy: none
+		sourceColumn: SourceSystem
+	column ExpectedFidelity
+		dataType: double
+		formatString: 0.00
+		lineageTag: 97d0b17f-7d03-5b18-8d4c-efce5aaba08e
+		summarizeBy: none
+		sourceColumn: ExpectedFidelity
+	column VolumeFactor
+		dataType: double
+		formatString: 0.00
+		lineageTag: 7f374aa1-40bc-51d5-9b70-2db99a369dde
+		summarizeBy: none
+		sourceColumn: VolumeFactor
+	column DataClassification
+		dataType: string
+		isHidden
+		lineageTag: 4bfb0bd8-58b3-58b4-93f7-ad94504c6c4b
+		summarizeBy: none
+		sourceColumn: DataClassification
+	partition DimSourceProduct = m
+		mode: import
+		source =
+				let
+				    Source = fxCsv("data/reference/DimSourceProduct.csv"),
+				    Selected = Table.SelectColumns(Source, {"SourceProductKey", "SourceProduct", "SourceSystem", "ExpectedFidelity", "VolumeFactor", "DataClassification"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"SourceProductKey", Int64.Type}, {"SourceProduct", type text}, {"SourceSystem", type text}, {"ExpectedFidelity", type number}, {"VolumeFactor", type number}, {"DataClassification", type text}})
+				in
+				    Typed
+	annotation PBI_ResultType = Table

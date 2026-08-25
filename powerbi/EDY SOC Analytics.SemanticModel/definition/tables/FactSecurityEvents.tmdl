@@ -1,0 +1,134 @@
+table FactSecurityEvents
+	lineageTag: ad83d9b4-c72c-5cdc-9598-0e51764157e1
+	column EventKey
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: 9872f951-ea4f-5be3-8a7b-47d3c9119b54
+		summarizeBy: none
+		sourceColumn: EventKey
+	column EventId
+		dataType: string
+		isHidden
+		lineageTag: c47c9c90-e53e-5524-87a3-3dcdbaa75fc1
+		summarizeBy: none
+		sourceColumn: EventId
+	column EventTimestampUTC
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm:ss
+		lineageTag: 26d96abe-b127-5783-b575-90155da6d547
+		summarizeBy: none
+		sourceColumn: EventTimestampUTC
+	column ReceivedAtUTC
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm:ss
+		lineageTag: 038095a6-8e32-5891-b364-3001d4a058b6
+		summarizeBy: none
+		sourceColumn: ReceivedAtUTC
+	column EventDateKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: fc660d43-2993-5cfb-9a46-52e6f1fd0826
+		summarizeBy: none
+		sourceColumn: EventDateKey
+	column EventTimeKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6ff674b8-25fb-5fb2-8de9-e1a9220d3ff8
+		summarizeBy: none
+		sourceColumn: EventTimeKey
+	column SourceProductKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f7d9ae68-d6a4-5a64-902c-03d9ab1c027f
+		summarizeBy: none
+		sourceColumn: SourceProductKey
+	column AssetKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b8211b9d-a829-57bb-9f6e-f7c658650e1f
+		summarizeBy: none
+		sourceColumn: AssetKey
+	column DetectionRuleKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: fdb1bf51-fec0-555f-ad39-44ec45e2c70a
+		summarizeBy: none
+		sourceColumn: DetectionRuleKey
+	column SeverityKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a974dda1-fabe-57a5-8bac-ad362344f89a
+		summarizeBy: none
+		sourceColumn: SeverityKey
+	column EventCount
+		dataType: int64
+		formatString: 0
+		lineageTag: 25946b89-2822-5dea-844d-cd15fd32b37f
+		summarizeBy: none
+		sourceColumn: EventCount
+	column IngestionDelaySeconds
+		dataType: int64
+		formatString: 0
+		lineageTag: 18965bee-2e11-5bd9-8568-aa93d306d1ac
+		summarizeBy: none
+		sourceColumn: IngestionDelaySeconds
+	column IsDuplicate
+		dataType: boolean
+		lineageTag: b10c38f0-5f1c-5430-95d5-5d09e4b19441
+		summarizeBy: none
+		sourceColumn: IsDuplicate
+	column IsRejected
+		dataType: boolean
+		lineageTag: 78a4186f-92d3-5f67-8ca3-88478b10f974
+		summarizeBy: none
+		sourceColumn: IsRejected
+	column DataClassification
+		dataType: string
+		isHidden
+		lineageTag: ee24f7e2-9139-53bf-8ca0-5ddfd9d9a083
+		summarizeBy: none
+		sourceColumn: DataClassification
+	partition FactSecurityEvents = m
+		mode: import
+		source =
+				let
+				    Source = fxCsv("data/raw/security_events_raw.csv"),
+				    Selected = Table.SelectColumns(Source, {"event_id", "event_timestamp", "received_at", "source_product", "source_system", "asset_id", "rule_id", "severity", "event_category", "data_classification"}),
+				    Trimmed = Table.TransformColumns(Selected, {
+				        {"event_id", Text.Trim, type text}, {"source_product", Text.Trim, type text},
+				        {"asset_id", Text.Trim, type text}, {"rule_id", Text.Trim, type text},
+				        {"severity", Text.Trim, type text}
+				    }),
+				    Typed = Table.TransformColumnTypes(Trimmed, {{"event_timestamp", type datetimezone}, {"received_at", type datetimezone}}),
+				    NormalizedSeverity = Table.TransformColumns(Typed, {{"severity", fxNormalizeSeverity, type text}}),
+				    Normalized = Table.TransformColumns(NormalizedSeverity, {{"asset_id", each if _ = null or Text.Trim(_) = "" then "UNKNOWN" else Text.Trim(_), type text}}),
+				    ValidRows = Table.SelectRows(Normalized, each [event_id] <> null and [event_timestamp] <> null and [severity] <> null),
+				    Deduplicated = Table.Distinct(Table.Sort(ValidRows, {{"received_at", Order.Ascending}}), {"event_id"}),
+				    WithEventKey = Table.AddColumn(Deduplicated, "EventKey", each Number.FromText(Text.AfterDelimiter([event_id], "-")), Int64.Type),
+				    MergeSource = Table.NestedJoin(WithEventKey, {"source_product", "source_system"}, DimSourceProduct, {"SourceProduct", "SourceSystem"}, "Source", JoinKind.LeftOuter),
+				    ExpandSource = Table.ExpandTableColumn(MergeSource, "Source", {"SourceProductKey"}, {"SourceProductKey"}),
+				    MergeAsset = Table.NestedJoin(ExpandSource, {"asset_id"}, DimAsset, {"AssetId"}, "Asset", JoinKind.LeftOuter),
+				    ExpandAsset = Table.ExpandTableColumn(MergeAsset, "Asset", {"AssetKey"}, {"AssetKey"}),
+				    MergeRule = Table.NestedJoin(ExpandAsset, {"rule_id"}, DimDetectionRule, {"RuleId"}, "Rule", JoinKind.LeftOuter),
+				    ExpandRule = Table.ExpandTableColumn(MergeRule, "Rule", {"DetectionRuleKey"}, {"DetectionRuleKey"}),
+				    MergeSeverity = Table.NestedJoin(ExpandRule, {"severity"}, DimSeverity, {"Severity"}, "SeverityDim", JoinKind.LeftOuter),
+				    ExpandSeverity = Table.ExpandTableColumn(MergeSeverity, "SeverityDim", {"SeverityKey"}, {"SeverityKey"}),
+				    AddDateKey = Table.AddColumn(ExpandSeverity, "EventDateKey", each Number.FromText(Date.ToText(Date.From([event_timestamp]), "yyyyMMdd")), Int64.Type),
+				    AddTimeKey = Table.AddColumn(AddDateKey, "EventTimeKey", each Time.Hour(Time.From([event_timestamp])) * 100 + Number.IntegerDivide(Time.Minute(Time.From([event_timestamp])), 5) * 5, Int64.Type),
+				    AddCount = Table.AddColumn(AddTimeKey, "EventCount", each 1, Int64.Type),
+				    AddDelay = Table.AddColumn(AddCount, "IngestionDelaySeconds", each Duration.TotalSeconds([received_at] - [event_timestamp]), type number),
+				    AddDuplicateFlag = Table.AddColumn(AddDelay, "IsDuplicate", each false, type logical),
+				    AddRejectedFlag = Table.AddColumn(AddDuplicateFlag, "IsRejected", each false, type logical),
+				    Renamed = Table.RenameColumns(AddRejectedFlag, {{"event_id", "EventId"}, {"event_timestamp", "EventTimestampUTC"}, {"received_at", "ReceivedAtUTC"}, {"data_classification", "DataClassification"}}),
+				    Final = Table.SelectColumns(Renamed, {"EventKey", "EventId", "EventTimestampUTC", "ReceivedAtUTC", "EventDateKey", "EventTimeKey", "SourceProductKey", "AssetKey", "DetectionRuleKey", "SeverityKey", "EventCount", "IngestionDelaySeconds", "IsDuplicate", "IsRejected", "DataClassification"})
+				in
+				    Final
+	annotation PBI_ResultType = Table

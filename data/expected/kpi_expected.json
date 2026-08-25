@@ -1,0 +1,14 @@
+{
+  "Total Events": 120000,
+  "Total Alerts": 18000,
+  "Total Incidents": 3200,
+  "Active Incidents": 253,
+  "Closed Incidents": 2947,
+  "Critical Active Incidents": 7,
+  "Alert to Incident Conversion": 0.177778,
+  "False Positive Rate": 0.518889,
+  "SLA Compliance": 0.862187,
+  "MTTD Minutes": 11.8332,
+  "MTTA Minutes": 27.2855,
+  "MTTR Resolution Minutes": 411.7703
+}

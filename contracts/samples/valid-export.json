@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "1.0.0",
+  "exportId": "EXP-20260824-A1B2C3",
+  "generatedAt": "2026-08-24T12:00:00-03:00",
+  "sourceProduct": "EDY SIEM",
+  "dataClassification": "SYNTHETIC_DEMO_DATA",
+  "records": [
+    {
+      "recordId": "INC-00000001",
+      "recordType": "Incident",
+      "occurredAt": "2026-08-24T09:00:00-03:00",
+      "severity": "High",
+      "status": "Active",
+      "sourceProduct": "EDY SIEM",
+      "sourceSystem": "Synthetic Correlation Engine",
+      "assetId": "AST-0001",
+      "ruleId": "RUL-001",
+      "mitreTechniqueIds": ["T1078"],
+      "isFalsePositive": false,
+      "safeSummary": "Atividade sintética correlacionada para demonstração analítica."
+    }
+  ]
+}
+

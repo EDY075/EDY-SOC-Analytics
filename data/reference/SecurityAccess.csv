@@ -1,0 +1,5 @@
+AccessKey,UPN,Team,RoleName,IsSynthetic
+1,analyst.blue-a@example.invalid,Blue-A,SOC_Analyst,True
+2,analyst.blue-b@example.invalid,Blue-B,SOC_Analyst,True
+3,analyst.blue-c@example.invalid,Blue-C,SOC_Analyst,True
+4,manager.soc@example.invalid,ALL,SOC_Manager,True

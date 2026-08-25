@@ -1,0 +1,219 @@
+table _Measures
+	lineageTag: f228e7e6-8eb8-5aa8-acc2-e24b6e4c864e
+
+	measure 'Total de eventos' = SUM ( FactSecurityEvents[EventCount] )
+		formatString: #,0
+		displayFolder: 01 Volume
+		lineageTag: 1e576589-138f-5624-9fd8-2c91324dd5d6
+
+	measure 'Total de alertas' = SUM ( FactAlerts[AlertCount] )
+		formatString: #,0
+		displayFolder: 01 Volume
+		lineageTag: 647aa31a-18ff-56df-b378-64998745b760
+
+	measure 'Total de incidentes' = SUM ( FactIncidents[IncidentCount] )
+		formatString: #,0
+		displayFolder: 01 Volume
+		lineageTag: e809640d-67eb-5485-826e-b4ea79b63dc3
+
+	measure 'Incidentes novos' = CALCULATE ( [Total de incidentes], KEEPFILTERS ( DimStatus[Status] = "New" ) )
+		formatString: #,0
+		displayFolder: 02 Operações
+		lineageTag: b55baca1-d490-50ec-9f0b-8886d5d9e767
+
+	measure 'Incidentes ativos' = CALCULATE ( [Total de incidentes], KEEPFILTERS ( DimStatus[IsOpen] = TRUE () ) )
+		formatString: #,0
+		displayFolder: 02 Operações
+		lineageTag: 193aecd1-78c8-5eeb-9153-c8750cedd5c8
+
+	measure 'Incidentes fechados' = CALCULATE ( [Total de incidentes], KEEPFILTERS ( DimStatus[IsOpen] = FALSE () ) )
+		formatString: #,0
+		displayFolder: 02 Operações
+		lineageTag: 2aa91806-ac68-5488-b9c0-021a84d55c55
+
+	measure 'Incidentes críticos ativos' = CALCULATE ( [Total de incidentes], KEEPFILTERS ( DimStatus[IsOpen] = TRUE () ), KEEPFILTERS ( DimSeverity[Severity] = "Critical" ) )
+		formatString: #,0
+		displayFolder: 02 Operações
+		lineageTag: 52967f4a-f1c6-520f-9cc8-7de1d9f5a670
+
+	measure Backlog = [Incidentes ativos]
+		formatString: #,0
+		displayFolder: 02 Operações
+		lineageTag: a269c835-d2c5-5ba3-8ba0-35679d74f91a
+
+	measure 'Data de referência' = MAX ( FactSecurityEvents[EventTimestampUTC] )
+		formatString: dd/MM/yyyy HH:mm
+		displayFolder: 05 Tendência
+		lineageTag: 1aeef8bf-f5ed-5609-a852-f09622105cfd
+
+	measure 'Backlog envelhecido' = VAR Limite = [Data de referência] - 7 RETURN CALCULATE ( [Total de incidentes], KEEPFILTERS ( DimStatus[IsOpen] = TRUE () ), FactIncidents[CreatedAtUTC] < Limite )
+		formatString: #,0
+		displayFolder: 02 Operações
+		lineageTag: 905cd93b-4e16-5ddb-8854-50a93aba2b69
+
+	measure 'Taxa de fechamento' = DIVIDE ( [Incidentes fechados], [Total de incidentes] )
+		formatString: 0.0%
+		displayFolder: 02 Operações
+		lineageTag: 29e3e9b3-4fef-56d3-80ca-d973579c28fa
+
+	measure 'Taxa de escalonamento' = DIVIDE ( CALCULATE ( [Total de incidentes], FactIncidents[IsEscalated] = TRUE () ), [Total de incidentes] )
+		formatString: 0.0%
+		displayFolder: 02 Operações
+		lineageTag: d2f50625-b11e-5418-8e26-b1eaa5438c0c
+
+	measure 'Taxa de reabertura' = DIVIDE ( CALCULATE ( [Total de incidentes], FactIncidents[IsReopened] = TRUE () ), [Incidentes fechados] )
+		formatString: 0.0%
+		displayFolder: 02 Operações
+		lineageTag: 485f3ef4-0f1c-515c-a007-bd17671a125f
+
+	measure 'Taxa de falsos positivos' = DIVIDE ( CALCULATE ( [Total de alertas], FactAlerts[IsFalsePositive] = TRUE () ), [Total de alertas] )
+		formatString: 0.0%
+		displayFolder: 04 Qualidade
+		lineageTag: 207cbafc-4291-57f4-a6fd-a596436b5fea
+
+	measure 'Conversão alerta para incidente' = DIVIDE ( CALCULATE ( [Total de alertas], FactAlerts[BecameIncident] = TRUE () ), [Total de alertas] )
+		formatString: 0.0%
+		displayFolder: 02 Operações
+		lineageTag: 586f47eb-cf05-5cbb-8697-939f83f413d0
+
+	measure 'Incidentes por 1.000 alertas' = DIVIDE ( [Total de incidentes] * 1000, [Total de alertas] )
+		formatString: 0.0
+		displayFolder: 02 Operações
+		lineageTag: 728eb2e4-85ce-5900-b67e-cdabe53bb3b4
+
+	measure 'Cumprimento de SLA' = DIVIDE ( CALCULATE ( COUNTROWS ( FactSLA ), FactSLA[OverallMet] = TRUE () ), COUNTROWS ( FactSLA ) )
+		formatString: 0.0%
+		displayFolder: 02 Operações
+		lineageTag: c7893fcf-f71c-5e6a-8f1b-780e21d8608f
+
+	measure 'Violações de SLA' = CALCULATE ( COUNTROWS ( FactSLA ), FactSLA[OverallMet] = FALSE () )
+		formatString: #,0
+		displayFolder: 02 Operações
+		lineageTag: a50265f7-753a-5d30-8aa9-08ce81193485
+
+	measure 'MTTD (min)' = AVERAGE ( FactAlerts[DetectionMinutes] )
+		formatString: 0.0
+		displayFolder: 03 Tempos
+		lineageTag: ed744f26-98e1-52d0-a985-855ba1f104e3
+
+	measure 'MTTA (min)' = AVERAGE ( FactIncidents[AcknowledgementMinutes] )
+		formatString: 0.0
+		displayFolder: 03 Tempos
+		lineageTag: bed72480-a75b-5e19-a763-4e22299beaa5
+
+	measure 'Tempo médio de triagem (min)' = AVERAGE ( FactIncidents[TriageMinutes] )
+		formatString: 0.0
+		displayFolder: 03 Tempos
+		lineageTag: 29bb98ec-1347-5f44-9d4b-efdc872850cc
+
+	measure 'Tempo médio de contenção (min)' = AVERAGE ( FactIncidents[ContainmentMinutes] )
+		formatString: 0.0
+		displayFolder: 03 Tempos
+		lineageTag: ca464ec4-089c-5a2c-b39c-f2d39c9d676d
+
+	measure 'MTTR resolução (min)' = AVERAGE ( FactIncidents[ResolutionMinutes] )
+		formatString: 0.0
+		displayFolder: 03 Tempos
+		lineageTag: 3c6654be-fbc2-5682-81d7-ee2272e79d9b
+
+	measure 'Tempo médio de recuperação (min)' = AVERAGE ( FactIncidents[RecoveryMinutes] )
+		formatString: 0.0
+		displayFolder: 03 Tempos
+		lineageTag: 6ed3a1e3-225f-59a0-a70e-7037cfee063f
+
+	measure 'Idade média do backlog (dias)' = VAR Referencia = [Data de referência] RETURN AVERAGEX ( FILTER ( FactIncidents, RELATED ( DimStatus[IsOpen] ) = TRUE () ), DIVIDE ( DATEDIFF ( FactIncidents[CreatedAtUTC], Referencia, HOUR ), 24 ) )
+		formatString: 0.0
+		displayFolder: 03 Tempos
+		lineageTag: e8ca0031-9558-5aa8-848e-e3536e139495
+
+	measure 'Incidentes mês anterior' = CALCULATE ( [Total de incidentes], DATEADD ( DimDate[Date], -1, MONTH ) )
+		formatString: #,0
+		displayFolder: 05 Tendência
+		lineageTag: bc57d28c-c863-5671-9e39-82c741bcc19e
+
+	measure 'Variação mensal de incidentes' = [Total de incidentes] - [Incidentes mês anterior]
+		formatString: +#,0;-#,0;0
+		displayFolder: 05 Tendência
+		lineageTag: fd45dcab-b268-5f26-8b41-fa1108a665bc
+
+	measure 'Variação mensal de incidentes %' = DIVIDE ( [Variação mensal de incidentes], [Incidentes mês anterior] )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 05 Tendência
+		lineageTag: d9bb382f-7a7c-5b62-a135-3439cd81ef2b
+
+	measure 'MTTR mês anterior' = CALCULATE ( [MTTR resolução (min)], DATEADD ( DimDate[Date], -1, MONTH ) )
+		formatString: 0.0
+		displayFolder: 05 Tendência
+		lineageTag: a88829da-6637-5180-80bb-530f99fa3207
+
+	measure 'Variação MTTR %' = DIVIDE ( [MTTR resolução (min)] - [MTTR mês anterior], [MTTR mês anterior] )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 05 Tendência
+		lineageTag: 1dd03973-0168-57f6-9cc5-aee7740ff8d1
+
+	measure 'Técnicas MITRE observadas' = DISTINCTCOUNT ( BridgeIncidentTechnique[AttackTechniqueKey] )
+		formatString: #,0
+		displayFolder: 06 Contexto
+		lineageTag: 4582aa3b-3aa7-51de-b945-176f82666218
+
+	measure 'Cobertura MITRE observada' = DIVIDE ( [Técnicas MITRE observadas], CALCULATE ( COUNTROWS ( DimAttackTechnique ), REMOVEFILTERS ( DimAttackTechnique ) ) )
+		formatString: 0.0%
+		displayFolder: 06 Contexto
+		lineageTag: 1113aebe-8321-59b6-b3f4-02d64228ca26
+
+	measure 'Risco acumulado do ativo' = SUM ( FactIncidents[RiskScore] )
+		formatString: #,0.0
+		displayFolder: 06 Contexto
+		lineageTag: c686c1da-3f63-5295-80b2-e8e3d77f4089
+
+	measure 'Ativos de alto risco' = COUNTROWS ( FILTER ( VALUES ( DimAsset[AssetKey] ), [Risco acumulado do ativo] >= 250 ) )
+		formatString: #,0
+		displayFolder: 06 Contexto
+		lineageTag: 75d479d3-6577-588b-ab2d-64ffb6ddb446
+
+	measure 'Ruído por 1.000 alertas' = DIVIDE ( CALCULATE ( [Total de alertas], FactAlerts[IsFalsePositive] = TRUE () ) * 1000, [Total de alertas] )
+		formatString: 0.0
+		displayFolder: 04 Qualidade
+		lineageTag: 9ff53548-70f7-5fa9-8c0f-1bc0abd0d678
+
+	measure 'Fidelidade da fonte' = 1 - [Taxa de falsos positivos]
+		formatString: 0.0%
+		displayFolder: 04 Qualidade
+		lineageTag: 25ef2e4f-ed64-590b-a295-d5d3348fb11e
+
+	measure 'Taxa regra para incidente' = DIVIDE ( CALCULATE ( [Total de alertas], FactAlerts[BecameIncident] = TRUE () ), [Total de alertas] )
+		formatString: 0.0%
+		displayFolder: 04 Qualidade
+		lineageTag: dbf15113-8ba5-59b7-bc92-4c195fc1f910
+
+	measure 'Peso de complexidade resolvida' = SUMX ( FILTER ( FactIncidents, RELATED ( DimStatus[IsOpen] ) = FALSE () ), RELATED ( DimSeverity[RiskWeight] ) * ( 1 + DIVIDE ( FactIncidents[RiskScore], 100 ) ) )
+		formatString: #,0.0
+		displayFolder: 06 Contexto
+		lineageTag: 124dbdce-e8e5-5512-8784-99ac3dc5eb5c
+
+	measure 'Índice contextual de resolução' = VAR Complexidade = [Peso de complexidade resolvida] VAR Tempo = [MTTR resolução (min)] VAR SLA = [Cumprimento de SLA] RETURN DIVIDE ( Complexidade * ( 0.5 + SLA ), 1 + DIVIDE ( Tempo, 60 ) )
+		formatString: #,0.0
+		displayFolder: 06 Contexto
+		lineageTag: 072bd487-66c8-5c5b-a933-9264cf0e70dd
+
+	measure 'Registros rejeitados' = COALESCE ( COUNTROWS ( DQ_RejectedRows ), 0 )
+		formatString: #,0
+		displayFolder: 04 Qualidade
+		lineageTag: 41510749-01eb-5104-975c-3fa793fbf36a
+
+	measure 'Última atualização UTC' = MAX ( FactSecurityEvents[ReceivedAtUTC] )
+		formatString: dd/MM/yyyy HH:mm
+		displayFolder: 04 Qualidade
+		lineageTag: 03142f22-c849-5144-9a41-9ae435298c5e
+
+	column Value
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: Value
+
+	partition _Measures = calculated
+		mode: import
+		source = DATATABLE ( "Value", INTEGER, { { 0 } } )
+
+	annotation PBI_Id = 6f7786ec7a684f4c99b28c39b77c1075

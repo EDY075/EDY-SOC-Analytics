@@ -1,0 +1,35 @@
+table DimClassification
+	lineageTag: ed6c9423-b585-564c-9b8d-11e9c286e953
+	column ClassificationKey
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: 35bb0f7a-1e40-536e-bdcf-25e939f2ca96
+		summarizeBy: none
+		sourceColumn: ClassificationKey
+	column Classification
+		dataType: string
+		lineageTag: 4b705d89-dcbd-5880-b76f-117a675a1a80
+		summarizeBy: none
+		sourceColumn: Classification
+	column ClassificationPT
+		dataType: string
+		lineageTag: 8d768bdf-db49-5e2b-a5eb-b6c39d85389b
+		summarizeBy: none
+		sourceColumn: ClassificationPT
+	column IsFalsePositive
+		dataType: boolean
+		lineageTag: 61eb2ad4-71ed-5355-9c3e-09e6ebaeadc0
+		summarizeBy: none
+		sourceColumn: IsFalsePositive
+	partition DimClassification = m
+		mode: import
+		source =
+				let
+				    Source = fxCsv("data/reference/DimClassification.csv"),
+				    Selected = Table.SelectColumns(Source, {"ClassificationKey", "Classification", "ClassificationPT", "IsFalsePositive"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"ClassificationKey", Int64.Type}, {"Classification", type text}, {"ClassificationPT", type text}, {"IsFalsePositive", type logical}})
+				in
+				    Typed
+	annotation PBI_ResultType = Table

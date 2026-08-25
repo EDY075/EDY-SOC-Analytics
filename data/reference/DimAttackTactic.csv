@@ -1,0 +1,14 @@
+AttackTacticKey,TacticId,TacticName,TacticNamePT,Framework,Domain,AttackVersion,RetrievedAt
+1,TA0043,Reconnaissance,Reconhecimento,MITRE ATT&CK,Enterprise,19.1,2026-08-24
+2,TA0001,Initial Access,Acesso inicial,MITRE ATT&CK,Enterprise,19.1,2026-08-24
+3,TA0002,Execution,Execução,MITRE ATT&CK,Enterprise,19.1,2026-08-24
+4,TA0003,Persistence,Persistência,MITRE ATT&CK,Enterprise,19.1,2026-08-24
+5,TA0004,Privilege Escalation,Escalonamento de privilégio,MITRE ATT&CK,Enterprise,19.1,2026-08-24
+6,TA0005,Defense Evasion,Evasão de defesa,MITRE ATT&CK,Enterprise,19.1,2026-08-24
+7,TA0006,Credential Access,Acesso a credenciais,MITRE ATT&CK,Enterprise,19.1,2026-08-24
+8,TA0007,Discovery,Descoberta,MITRE ATT&CK,Enterprise,19.1,2026-08-24
+9,TA0008,Lateral Movement,Movimento lateral,MITRE ATT&CK,Enterprise,19.1,2026-08-24
+10,TA0009,Collection,Coleta,MITRE ATT&CK,Enterprise,19.1,2026-08-24
+11,TA0011,Command and Control,Comando e controle,MITRE ATT&CK,Enterprise,19.1,2026-08-24
+12,TA0010,Exfiltration,Exfiltração,MITRE ATT&CK,Enterprise,19.1,2026-08-24
+13,TA0040,Impact,Impacto,MITRE ATT&CK,Enterprise,19.1,2026-08-24

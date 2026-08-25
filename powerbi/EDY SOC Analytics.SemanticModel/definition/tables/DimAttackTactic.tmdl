@@ -1,0 +1,56 @@
+table DimAttackTactic
+	lineageTag: 480cdb12-c31f-50cd-8c00-d5122f425fe7
+	column AttackTacticKey
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: 43023bde-05cf-5faa-a3e0-1ef723d45e04
+		summarizeBy: none
+		sourceColumn: AttackTacticKey
+	column TacticId
+		dataType: string
+		lineageTag: 498dc448-bf79-5ec9-888d-4e55d958dbcb
+		summarizeBy: none
+		sourceColumn: TacticId
+	column TacticName
+		dataType: string
+		lineageTag: 3273c4ca-4eff-5cb0-84d4-b9711b5f4261
+		summarizeBy: none
+		sourceColumn: TacticName
+	column TacticNamePT
+		dataType: string
+		lineageTag: a0dd993f-ad5e-578d-bef9-1d5474367120
+		summarizeBy: none
+		sourceColumn: TacticNamePT
+	column Framework
+		dataType: string
+		lineageTag: a9989521-2cfb-5b7e-8878-13171c0eaa71
+		summarizeBy: none
+		sourceColumn: Framework
+	column Domain
+		dataType: string
+		lineageTag: 261d1892-1c02-5f56-b4ab-6f65ceb750a5
+		summarizeBy: none
+		sourceColumn: Domain
+	column AttackVersion
+		dataType: double
+		formatString: 0.00
+		lineageTag: f0f196ba-c964-59a3-9441-46db88aa6910
+		summarizeBy: none
+		sourceColumn: AttackVersion
+	column RetrievedAt
+		dataType: string
+		lineageTag: e055a3bf-23ff-52bf-9a1e-2721bebaf6b5
+		summarizeBy: none
+		sourceColumn: RetrievedAt
+	partition DimAttackTactic = m
+		mode: import
+		source =
+				let
+				    Source = fxCsv("data/reference/DimAttackTactic.csv"),
+				    Selected = Table.SelectColumns(Source, {"AttackTacticKey", "TacticId", "TacticName", "TacticNamePT", "Framework", "Domain", "AttackVersion", "RetrievedAt"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"AttackTacticKey", Int64.Type}, {"TacticId", type text}, {"TacticName", type text}, {"TacticNamePT", type text}, {"Framework", type text}, {"Domain", type text}, {"AttackVersion", type number}, {"RetrievedAt", type text}})
+				in
+				    Typed
+	annotation PBI_ResultType = Table

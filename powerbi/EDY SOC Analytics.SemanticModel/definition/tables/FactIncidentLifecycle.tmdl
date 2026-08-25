@@ -1,0 +1,69 @@
+table FactIncidentLifecycle
+	lineageTag: 3bbafa5b-63f0-5b6a-adb0-74b83a94fd94
+	column LifecycleKey
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: 2ebd3918-aeb4-54f5-9b02-3112e5a5bb11
+		summarizeBy: none
+		sourceColumn: LifecycleKey
+	column IncidentKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 86e0d773-9641-5c08-b5a6-e4949056e0d1
+		summarizeBy: none
+		sourceColumn: IncidentKey
+	column Stage
+		dataType: string
+		lineageTag: 4212a276-726a-5fd9-8928-efd30400616e
+		summarizeBy: none
+		sourceColumn: Stage
+	column StageOrder
+		dataType: int64
+		formatString: 0
+		lineageTag: 8202a8df-5851-5845-844e-bde10b8368d8
+		summarizeBy: none
+		sourceColumn: StageOrder
+	column StageAtUTC
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm:ss
+		lineageTag: 71ea9918-927c-589d-b331-cf6d634b5504
+		summarizeBy: none
+		sourceColumn: StageAtUTC
+	column StageDateKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 75850c2a-1e5f-50fb-be3d-5bc32d4601f3
+		summarizeBy: none
+		sourceColumn: StageDateKey
+	column AnalystKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 87143974-7c92-562c-80a8-4c0680b21f65
+		summarizeBy: none
+		sourceColumn: AnalystKey
+	column MinutesFromPreviousStage
+		dataType: double
+		formatString: 0.00
+		lineageTag: b6ce6b29-c8eb-5b8e-a36d-badcfdc2b736
+		summarizeBy: none
+		sourceColumn: MinutesFromPreviousStage
+	column SafeAction
+		dataType: string
+		lineageTag: 6dbdf760-fc01-518d-b22e-4538b3874b3d
+		summarizeBy: none
+		sourceColumn: SafeAction
+	partition FactIncidentLifecycle = m
+		mode: import
+		source =
+				let
+				    Source = fxCsv("data/expected/FactIncidentLifecycle.csv"),
+				    Selected = Table.SelectColumns(Source, {"LifecycleKey", "IncidentKey", "Stage", "StageOrder", "StageAtUTC", "StageDateKey", "AnalystKey", "MinutesFromPreviousStage", "SafeAction"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"LifecycleKey", Int64.Type}, {"IncidentKey", Int64.Type}, {"Stage", type text}, {"StageOrder", Int64.Type}, {"StageAtUTC", type datetimezone}, {"StageDateKey", Int64.Type}, {"AnalystKey", Int64.Type}, {"MinutesFromPreviousStage", type number}, {"SafeAction", type text}})
+				in
+				    Typed
+	annotation PBI_ResultType = Table

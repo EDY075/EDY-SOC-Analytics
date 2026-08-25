@@ -1,0 +1,90 @@
+table FactSLA
+	lineageTag: e2b36192-41e5-56fd-8194-4ef0c05a12e3
+	column SLAFactKey
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: 2a0323c9-2f4b-556a-8d0f-f4fbd016519e
+		summarizeBy: none
+		sourceColumn: SLAFactKey
+	column IncidentKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 87db14cc-656d-5721-a0a1-1d7f4308b38c
+		summarizeBy: none
+		sourceColumn: IncidentKey
+	column SLAKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 346f80da-cf6f-538a-a5b0-8c741236e1af
+		summarizeBy: none
+		sourceColumn: SLAKey
+	column AcknowledgeTargetMinutes
+		dataType: int64
+		formatString: 0
+		lineageTag: cb0b1b5c-3719-55dc-b81f-d75572921525
+		summarizeBy: none
+		sourceColumn: AcknowledgeTargetMinutes
+	column AcknowledgeActualMinutes
+		dataType: double
+		formatString: 0.00
+		lineageTag: fa81247c-eae9-5878-8793-a910cb8d9137
+		summarizeBy: none
+		sourceColumn: AcknowledgeActualMinutes
+	column AcknowledgeMet
+		dataType: boolean
+		lineageTag: 40c9fa95-536b-50a8-ae83-4a5da8e463e5
+		summarizeBy: none
+		sourceColumn: AcknowledgeMet
+	column ContainTargetMinutes
+		dataType: int64
+		formatString: 0
+		lineageTag: 69fafad8-ecc6-5467-9a64-6742121faf03
+		summarizeBy: none
+		sourceColumn: ContainTargetMinutes
+	column ContainActualMinutes
+		dataType: double
+		formatString: 0.00
+		lineageTag: a340775f-2060-5c37-88ea-7032fad1130d
+		summarizeBy: none
+		sourceColumn: ContainActualMinutes
+	column ContainMet
+		dataType: boolean
+		lineageTag: e71c66aa-2af2-5f9d-bc11-abcbe6dcda2b
+		summarizeBy: none
+		sourceColumn: ContainMet
+	column ResolveTargetMinutes
+		dataType: int64
+		formatString: 0
+		lineageTag: 9a69d8eb-8c53-5051-93a0-17fae97bf9d7
+		summarizeBy: none
+		sourceColumn: ResolveTargetMinutes
+	column ResolveActualMinutes
+		dataType: double
+		formatString: 0.00
+		lineageTag: a09de7a2-d554-588f-b4ce-9b39440d6ce1
+		summarizeBy: none
+		sourceColumn: ResolveActualMinutes
+	column ResolveMet
+		dataType: boolean
+		lineageTag: 7e934f5b-3c41-538e-a6f1-832daf6573c6
+		summarizeBy: none
+		sourceColumn: ResolveMet
+	column OverallMet
+		dataType: boolean
+		lineageTag: ace9bf3e-59fe-51c7-bd32-e807c04d9424
+		summarizeBy: none
+		sourceColumn: OverallMet
+	partition FactSLA = m
+		mode: import
+		source =
+				let
+				    Source = fxCsv("data/expected/FactSLA.csv"),
+				    Selected = Table.SelectColumns(Source, {"SLAFactKey", "IncidentKey", "SLAKey", "AcknowledgeTargetMinutes", "AcknowledgeActualMinutes", "AcknowledgeMet", "ContainTargetMinutes", "ContainActualMinutes", "ContainMet", "ResolveTargetMinutes", "ResolveActualMinutes", "ResolveMet", "OverallMet"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"SLAFactKey", Int64.Type}, {"IncidentKey", Int64.Type}, {"SLAKey", Int64.Type}, {"AcknowledgeTargetMinutes", Int64.Type}, {"AcknowledgeActualMinutes", type number}, {"AcknowledgeMet", type logical}, {"ContainTargetMinutes", Int64.Type}, {"ContainActualMinutes", type number}, {"ContainMet", type logical}, {"ResolveTargetMinutes", Int64.Type}, {"ResolveActualMinutes", type number}, {"ResolveMet", type logical}, {"OverallMet", type logical}})
+				in
+				    Typed
+	annotation PBI_ResultType = Table

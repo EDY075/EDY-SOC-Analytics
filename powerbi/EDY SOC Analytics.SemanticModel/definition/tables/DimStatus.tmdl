@@ -1,0 +1,41 @@
+table DimStatus
+	lineageTag: b9e8e9b4-84f9-5938-a461-616f08614a9e
+	column StatusKey
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: 4c29f892-7c79-5214-8895-295f59b13ac2
+		summarizeBy: none
+		sourceColumn: StatusKey
+	column Status
+		dataType: string
+		lineageTag: 115c3e31-e965-59d8-bef1-5398e09e0ecb
+		summarizeBy: none
+		sourceColumn: Status
+	column StatusPT
+		dataType: string
+		lineageTag: 0be8eb0f-0007-5ab2-bb08-ebd3dcf014e2
+		summarizeBy: none
+		sourceColumn: StatusPT
+	column StatusOrder
+		dataType: int64
+		formatString: 0
+		lineageTag: 8d8055be-e719-5f32-b8f5-c98ef6a58996
+		summarizeBy: none
+		sourceColumn: StatusOrder
+	column IsOpen
+		dataType: boolean
+		lineageTag: 12b9f026-6244-5d6f-abf3-92923dd8f668
+		summarizeBy: none
+		sourceColumn: IsOpen
+	partition DimStatus = m
+		mode: import
+		source =
+				let
+				    Source = fxCsv("data/reference/DimStatus.csv"),
+				    Selected = Table.SelectColumns(Source, {"StatusKey", "Status", "StatusPT", "StatusOrder", "IsOpen"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"StatusKey", Int64.Type}, {"Status", type text}, {"StatusPT", type text}, {"StatusOrder", Int64.Type}, {"IsOpen", type logical}})
+				in
+				    Typed
+	annotation PBI_ResultType = Table

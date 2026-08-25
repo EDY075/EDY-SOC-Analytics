@@ -1,0 +1,6 @@
+SLAKey,SeverityKey,AcknowledgeMinutes,ContainMinutes,ResolveMinutes
+1,1,240,1440,4320
+2,2,120,720,2880
+3,3,60,360,1440
+4,4,30,180,720
+5,5,15,60,240

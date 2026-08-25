@@ -1,0 +1,35 @@
+{
+  "name": "EDY SOC Analytics — Signal Grid",
+  "dataColors": ["#39C6E6", "#7D8CFF", "#F2B84B", "#9FAEC4", "#46C78C", "#F27C4A", "#E5484D", "#60718A"],
+  "background": "#0D1118",
+  "foreground": "#E8EEF7",
+  "tableAccent": "#39C6E6",
+  "good": "#46C78C",
+  "neutral": "#F2B84B",
+  "bad": "#E5484D",
+  "maximum": "#E5484D",
+  "center": "#F2B84B",
+  "minimum": "#39C6E6",
+  "textClasses": {
+    "callout": {"fontFace": "Segoe UI Semibold", "fontSize": 26, "color": "#F5F8FC"},
+    "title": {"fontFace": "Segoe UI Semibold", "fontSize": 14, "color": "#E8EEF7"},
+    "header": {"fontFace": "Segoe UI Semibold", "fontSize": 12, "color": "#C9D5E6"},
+    "label": {"fontFace": "Segoe UI", "fontSize": 11, "color": "#AEBBD0"}
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [{"show": true, "color": {"solid": {"color": "#141B25"}}, "transparency": 0}],
+        "border": [{"show": true, "color": {"solid": {"color": "#273244"}}, "radius": 6}],
+        "title": [{"show": true, "fontFamily": "Segoe UI Semibold", "fontSize": 12, "fontColor": {"solid": {"color": "#E8EEF7"}}, "alignment": "left"}],
+        "visualHeader": [{"show": true, "foreground": {"solid": {"color": "#AEBBD0"}}, "background": {"solid": {"color": "#141B25"}}, "transparency": 0}]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [{"color": {"solid": {"color": "#0D1118"}}, "transparency": 0}],
+        "outspace": [{"color": {"solid": {"color": "#080B10"}}, "transparency": 0}]
+      }
+    }
+  }
+}

@@ -1,0 +1,39 @@
+table BridgeIncidentTechnique
+	lineageTag: 68d59765-78a0-5b61-829f-320d9f48ca3c
+	column IncidentTechniqueKey
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: 72903846-3012-54c4-a5f0-f6779b9d89e8
+		summarizeBy: none
+		sourceColumn: IncidentTechniqueKey
+	column IncidentKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0f065bd8-9c24-55d3-baee-4e9a762274a7
+		summarizeBy: none
+		sourceColumn: IncidentKey
+	column AttackTechniqueKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0fcce4b1-6f4a-58bf-97db-186d8904ad7b
+		summarizeBy: none
+		sourceColumn: AttackTechniqueKey
+	column IsPrimary
+		dataType: boolean
+		lineageTag: 29a2487f-3ea2-5dd9-be96-f09a23bdb270
+		summarizeBy: none
+		sourceColumn: IsPrimary
+	partition BridgeIncidentTechnique = m
+		mode: import
+		source =
+				let
+				    Source = fxCsv("data/expected/BridgeIncidentTechnique.csv"),
+				    Selected = Table.SelectColumns(Source, {"IncidentTechniqueKey", "IncidentKey", "AttackTechniqueKey", "IsPrimary"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"IncidentTechniqueKey", Int64.Type}, {"IncidentKey", Int64.Type}, {"AttackTechniqueKey", Int64.Type}, {"IsPrimary", type logical}})
+				in
+				    Typed
+	annotation PBI_ResultType = Table

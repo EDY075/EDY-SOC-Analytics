@@ -1,0 +1,27 @@
+name: Safe validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Regenerate deterministic dataset
+        run: python generator/generate_dataset.py
+      - name: Run safe tests
+        run: python -m unittest discover -s tests -v
+      - name: Verify clean reproducible tree
+        run: git diff --exit-code
+

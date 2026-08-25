@@ -1,0 +1,90 @@
+{
+  "measuredAt": "2026-08-24T23:01:20.5445872-03:00",
+  "hostScope": "Local Power BI Desktop; DAX engine timings only",
+  "desktopPid": 33476,
+  "warmBudgetMs": 2000,
+  "iterations": 5,
+  "measurements": [
+    {
+      "query": "CommandCenter",
+      "returnedRows": 1,
+      "coldMs": 7.98,
+      "warmRunsMs": [
+        5.66,
+        5.44,
+        4.96,
+        4.93,
+        5.07
+      ],
+      "warmP50Ms": 5.07,
+      "warmP95Ms": 5.66,
+      "warmMaxMs": 5.66,
+      "withinWarmBudget": true
+    },
+    {
+      "query": "MonthlyTrend",
+      "returnedRows": 18,
+      "coldMs": 3.98,
+      "warmRunsMs": [
+        3.19,
+        2.67,
+        2.8,
+        2.65,
+        2.8
+      ],
+      "warmP50Ms": 2.8,
+      "warmP95Ms": 3.19,
+      "warmMaxMs": 3.19,
+      "withinWarmBudget": true
+    },
+    {
+      "query": "MitreCoverage",
+      "returnedRows": 20,
+      "coldMs": 3.36,
+      "warmRunsMs": [
+        3.19,
+        2.93,
+        3.36,
+        3.24,
+        3.93
+      ],
+      "warmP50Ms": 3.24,
+      "warmP95Ms": 3.93,
+      "warmMaxMs": 3.93,
+      "withinWarmBudget": true
+    },
+    {
+      "query": "DetectionRules",
+      "returnedRows": 20,
+      "coldMs": 3.81,
+      "warmRunsMs": [
+        3.35,
+        3.98,
+        8.16,
+        3.7,
+        4.73
+      ],
+      "warmP50Ms": 3.98,
+      "warmP95Ms": 8.16,
+      "warmMaxMs": 8.16,
+      "withinWarmBudget": true
+    },
+    {
+      "query": "IncidentDetail",
+      "returnedRows": 101,
+      "coldMs": 6.98,
+      "warmRunsMs": [
+        5.92,
+        5.69,
+        5.37,
+        5.99,
+        6.39
+      ],
+      "warmP50Ms": 5.92,
+      "warmP95Ms": 6.39,
+      "warmMaxMs": 6.39,
+      "withinWarmBudget": true
+    }
+  ],
+  "status": "passed"
+}

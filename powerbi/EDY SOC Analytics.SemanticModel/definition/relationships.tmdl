@@ -1,0 +1,108 @@
+relationship 6170905a-1c3f-5a68-b383-c6d332a88cab
+	fromColumn: FactSecurityEvents.EventDateKey
+	toColumn: DimDate.DateKey
+
+relationship 7b1f069d-5fd0-5603-9689-8a82e5fb5128
+	fromColumn: FactSecurityEvents.EventTimeKey
+	toColumn: DimTime.TimeKey
+
+relationship a0691ced-5dff-5f90-a38a-35b220e525aa
+	fromColumn: FactSecurityEvents.AssetKey
+	toColumn: DimAsset.AssetKey
+
+relationship 72ee4f83-f900-5490-9326-ecb05d8ded66
+	fromColumn: FactSecurityEvents.SourceProductKey
+	toColumn: DimSourceProduct.SourceProductKey
+
+relationship b03dbfa9-fd3a-5e62-8a17-5a624674ae1d
+	fromColumn: FactSecurityEvents.SeverityKey
+	toColumn: DimSeverity.SeverityKey
+
+relationship c39f7da7-3b95-5d04-9aa3-83c8220c7d52
+	fromColumn: FactSecurityEvents.DetectionRuleKey
+	toColumn: DimDetectionRule.DetectionRuleKey
+
+relationship 17c22a26-5f96-52e3-ad47-a0ce7dd16b3a
+	fromColumn: FactAlerts.AlertDateKey
+	toColumn: DimDate.DateKey
+
+relationship 9401c24d-bd7f-54ac-b513-84d3615a5bf1
+	fromColumn: FactAlerts.AlertTimeKey
+	toColumn: DimTime.TimeKey
+
+relationship cd142eaa-7a10-5b7d-9a02-61ec240f934b
+	fromColumn: FactAlerts.AssetKey
+	toColumn: DimAsset.AssetKey
+
+relationship 61df0f22-c596-51a2-86e5-175aae1d47ca
+	fromColumn: FactAlerts.SourceProductKey
+	toColumn: DimSourceProduct.SourceProductKey
+
+relationship 8cfc3ad6-3f0f-5f4d-9af9-ecf928fd5f9e
+	fromColumn: FactAlerts.SeverityKey
+	toColumn: DimSeverity.SeverityKey
+
+relationship dd5dc253-b2c1-5f64-98df-6639f05316a9
+	fromColumn: FactAlerts.DetectionRuleKey
+	toColumn: DimDetectionRule.DetectionRuleKey
+
+relationship 2270c830-450c-5d31-b5a7-9916c2ffde50
+	fromColumn: FactIncidents.CreatedDateKey
+	toColumn: DimDate.DateKey
+
+relationship 8e1ab69c-8502-55b7-b97b-0aba3d66900c
+	fromColumn: FactIncidents.CreatedTimeKey
+	toColumn: DimTime.TimeKey
+
+relationship 20a93bfc-0772-593a-bb2a-84fe4b2d9a61
+	fromColumn: FactIncidents.AssetKey
+	toColumn: DimAsset.AssetKey
+
+relationship 1825ca7c-95d8-5d60-a6fb-1948c6db6bfa
+	fromColumn: FactIncidents.SourceProductKey
+	toColumn: DimSourceProduct.SourceProductKey
+
+relationship 1621c450-8197-566e-9807-b437bfcbd855
+	fromColumn: FactIncidents.SeverityKey
+	toColumn: DimSeverity.SeverityKey
+
+relationship 7f685aa1-5239-50ed-8eee-4074661d82de
+	fromColumn: FactIncidents.StatusKey
+	toColumn: DimStatus.StatusKey
+
+relationship a1742ebb-aec9-580c-97c8-3d583c7827bc
+	fromColumn: FactIncidents.DetectionRuleKey
+	toColumn: DimDetectionRule.DetectionRuleKey
+
+relationship 76f5147c-0ef8-5a73-91eb-099b8279192e
+	fromColumn: FactIncidents.AnalystKey
+	toColumn: DimAnalyst.AnalystKey
+
+relationship 7308e1de-1ab7-5867-9233-2555652b98a7
+	fromColumn: FactIncidents.ClassificationKey
+	toColumn: DimClassification.ClassificationKey
+
+relationship 5b7f2201-52ed-5600-834a-5d62f757f880
+	fromColumn: FactIncidents.SLAKey
+	toColumn: DimSLA.SLAKey
+
+relationship 49f04a61-847c-562b-8e56-30a1cbbf96dd
+	fromColumn: FactIncidentLifecycle.IncidentKey
+	toColumn: FactIncidents.IncidentKey
+
+relationship 2a2c0da2-9c19-5a03-8540-c410ce1032ce
+	fromColumn: FactSLA.IncidentKey
+	toColumn: FactIncidents.IncidentKey
+
+relationship ca3a983d-915f-53b9-b95c-b0176bdea68a
+	fromColumn: BridgeIncidentTechnique.IncidentKey
+	toColumn: FactIncidents.IncidentKey
+	crossFilteringBehavior: bothDirections
+
+relationship 09a450a2-7337-563f-abf0-2e30a81762ac
+	fromColumn: BridgeIncidentTechnique.AttackTechniqueKey
+	toColumn: DimAttackTechnique.AttackTechniqueKey
+
+relationship 4d514d18-e9b6-578c-96f8-acad93f4892d
+	fromColumn: DimAttackTechnique.AttackTacticKey
+	toColumn: DimAttackTactic.AttackTacticKey

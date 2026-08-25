@@ -1,0 +1,11 @@
+[project]
+name = "edy-soc-analytics"
+version = "1.0.0"
+description = "Deterministic synthetic SOC analytics dataset, contracts and Power BI assets"
+requires-python = ">=3.11"
+authors = [{ name = "Edmilson Gomes" }]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+

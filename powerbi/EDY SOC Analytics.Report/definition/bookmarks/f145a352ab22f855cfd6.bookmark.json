@@ -1,0 +1,488 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/2.1.0/schema.json",
+  "displayName": "Estado padrão SOC Operations",
+  "name": "f145a352ab22f855cfd6",
+  "options": {
+    "targetVisualNames": []
+  },
+  "explorationState": {
+    "version": "1.0",
+    "activeSection": "SOCOperations",
+    "sections": {
+      "SOCOperations": {
+        "visualContainers": {
+          "13299eb6514956cca1f3": {
+            "singleVisual": {
+              "visualType": "pageNavigator",
+              "objects": {}
+            }
+          },
+          "2e3343965ebd51848523": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "b846731a941ac837865e",
+                  "type": "Advanced",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DimDate"
+                        }
+                      },
+                      "Property": "Year"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {
+                "merge": {
+                  "data": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "'Dropdown'"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DimDate"
+                        }
+                      },
+                      "Property": "Year"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "6186be7be4125667b237": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "dec22ecc6a90aada9b08",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DimDate"
+                        }
+                      },
+                      "Property": "YearMonth"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "bd299f87f26174fbf463",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Measures"
+                        }
+                      },
+                      "Property": "Total de alertas"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "626477aa77b947864804",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Measures"
+                        }
+                      },
+                      "Property": "Total de incidentes"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "lineChart",
+              "objects": {},
+              "activeProjections": {
+                "Category": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DimDate"
+                        }
+                      },
+                      "Property": "YearMonth"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "6f9865d0a6c159b6be3f": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "b4b0cc77e2d0e47e435a",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DimSourceProduct"
+                        }
+                      },
+                      "Property": "SourceProduct"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "20fde519c8ef40d088b3",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Measures"
+                        }
+                      },
+                      "Property": "Total de alertas"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "clusteredBarChart",
+              "objects": {},
+              "activeProjections": {
+                "Category": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DimSourceProduct"
+                        }
+                      },
+                      "Property": "SourceProduct"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "733f4a474277505dbc28": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "af4f7384a245c7b389c0",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Measures"
+                        }
+                      },
+                      "Property": "Total de eventos"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "564cc0c060f74372dbc8",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Measures"
+                        }
+                      },
+                      "Property": "Total de alertas"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "a40d5ab9d92e2d49faad",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Measures"
+                        }
+                      },
+                      "Property": "Total de incidentes"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "cardVisual",
+              "objects": {}
+            }
+          },
+          "884e1bcecc345bbd8219": {
+            "singleVisual": {
+              "visualType": "textbox",
+              "objects": {}
+            }
+          },
+          "9c45d1ac5cd05dd4a797": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "66320e8d54bc3dd50a50",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DimSourceProduct"
+                        }
+                      },
+                      "Property": "SourceProduct"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "25977162038c843dbafd",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Measures"
+                        }
+                      },
+                      "Property": "Total de alertas"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "acf4e99aafc55a4145e5",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Measures"
+                        }
+                      },
+                      "Property": "Taxa de falsos positivos"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "21ea4c2e2e89e2d0d5b1",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Measures"
+                        }
+                      },
+                      "Property": "Fidelidade da fonte"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "tableEx",
+              "objects": {}
+            }
+          },
+          "bde3f12b14945d49946e": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "89868b6a4172986c62c8",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DimDetectionRule"
+                        }
+                      },
+                      "Property": "RuleName"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "425614def35aa02f192b",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Measures"
+                        }
+                      },
+                      "Property": "Total de alertas"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "clusteredBarChart",
+              "objects": {},
+              "activeProjections": {
+                "Category": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DimDetectionRule"
+                        }
+                      },
+                      "Property": "RuleName"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "dec3efcdc88d594aae13": {
+            "singleVisual": {
+              "visualType": "textbox",
+              "objects": {}
+            }
+          },
+          "f2130585b9905c1b9fc3": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "5d8f5d666cb99c18cc0f",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DimSeverity"
+                        }
+                      },
+                      "Property": "SeverityPT"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {
+                "merge": {
+                  "data": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "'Dropdown'"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "DimSeverity"
+                        }
+                      },
+                      "Property": "SeverityPT"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "fabb1d2296f953d79da8": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "04220972e3450f936ef7",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Measures"
+                        }
+                      },
+                      "Property": "Conversão alerta para incidente"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "e12c41e449667797a29b",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Measures"
+                        }
+                      },
+                      "Property": "Taxa de falsos positivos"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "cardVisual",
+              "objects": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}

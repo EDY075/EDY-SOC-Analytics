@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "EDY SOC Analytics"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "61918ceb-7c8e-40f2-95dd-d38e985a7a7a"
+  }
+}

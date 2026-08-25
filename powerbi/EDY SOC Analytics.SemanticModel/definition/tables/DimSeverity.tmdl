@@ -1,0 +1,47 @@
+table DimSeverity
+	lineageTag: d032e4ca-1742-54f4-b871-fddf2ab3450a
+	column SeverityKey
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: 9d983a4d-f1f5-5895-80d6-17c8bb843684
+		summarizeBy: none
+		sourceColumn: SeverityKey
+	column Severity
+		dataType: string
+		lineageTag: cd06668b-2093-567d-be7d-9f201ab91835
+		summarizeBy: none
+		sourceColumn: Severity
+	column SeverityPT
+		dataType: string
+		lineageTag: 6ddc694a-184d-5c5e-995d-ed6b0741feb2
+		summarizeBy: none
+		sourceColumn: SeverityPT
+	column SeverityOrder
+		dataType: int64
+		formatString: 0
+		lineageTag: a6de531a-3c58-54d5-aea5-bf8bbf41c90a
+		summarizeBy: none
+		sourceColumn: SeverityOrder
+	column RiskWeight
+		dataType: double
+		formatString: 0.00
+		lineageTag: 543f7e18-d15a-537a-a92b-c87b20a5383a
+		summarizeBy: none
+		sourceColumn: RiskWeight
+	column ColorHex
+		dataType: string
+		lineageTag: 53d47c43-875c-50e0-b5fa-c9edeff9b786
+		summarizeBy: none
+		sourceColumn: ColorHex
+	partition DimSeverity = m
+		mode: import
+		source =
+				let
+				    Source = fxCsv("data/reference/DimSeverity.csv"),
+				    Selected = Table.SelectColumns(Source, {"SeverityKey", "Severity", "SeverityPT", "SeverityOrder", "RiskWeight", "ColorHex"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"SeverityKey", Int64.Type}, {"Severity", type text}, {"SeverityPT", type text}, {"SeverityOrder", Int64.Type}, {"RiskWeight", type number}, {"ColorHex", type text}})
+				in
+				    Typed
+	annotation PBI_ResultType = Table

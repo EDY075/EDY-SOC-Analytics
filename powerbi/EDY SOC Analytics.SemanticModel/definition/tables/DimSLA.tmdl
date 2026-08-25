@@ -1,0 +1,45 @@
+table DimSLA
+	lineageTag: b570a677-0aef-5e72-b8d5-b231911dad32
+	column SLAKey
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: e03742c0-5394-58d7-94ef-b7925ccd887e
+		summarizeBy: none
+		sourceColumn: SLAKey
+	column SeverityKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 68d1c27d-82ad-52a4-82d1-3d59ffdc7c3f
+		summarizeBy: none
+		sourceColumn: SeverityKey
+	column AcknowledgeMinutes
+		dataType: int64
+		formatString: 0
+		lineageTag: ff1fe336-f478-52bf-8b7f-f9399fea43b3
+		summarizeBy: none
+		sourceColumn: AcknowledgeMinutes
+	column ContainMinutes
+		dataType: int64
+		formatString: 0
+		lineageTag: 63a85851-9bbf-5c1b-9232-16c61e778a4a
+		summarizeBy: none
+		sourceColumn: ContainMinutes
+	column ResolveMinutes
+		dataType: int64
+		formatString: 0
+		lineageTag: c640d007-3ab3-53dc-9b83-f4c095b1603d
+		summarizeBy: none
+		sourceColumn: ResolveMinutes
+	partition DimSLA = m
+		mode: import
+		source =
+				let
+				    Source = fxCsv("data/reference/DimSLA.csv"),
+				    Selected = Table.SelectColumns(Source, {"SLAKey", "SeverityKey", "AcknowledgeMinutes", "ContainMinutes", "ResolveMinutes"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"SLAKey", Int64.Type}, {"SeverityKey", Int64.Type}, {"AcknowledgeMinutes", Int64.Type}, {"ContainMinutes", Int64.Type}, {"ResolveMinutes", Int64.Type}})
+				in
+				    Typed
+	annotation PBI_ResultType = Table

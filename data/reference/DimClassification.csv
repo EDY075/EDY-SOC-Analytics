@@ -1,0 +1,6 @@
+ClassificationKey,Classification,ClassificationPT,IsFalsePositive
+0,Not applicable,Não aplicável,False
+1,True positive,Verdadeiro positivo,False
+2,Benign positive,Positivo benigno,True
+3,False positive,Falso positivo,True
+4,Undetermined,Indeterminado,False

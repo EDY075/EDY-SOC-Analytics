@@ -1,0 +1,124 @@
+table FactAlerts
+	lineageTag: ec7da301-80d7-551a-a1d0-07c1108f6bee
+	column AlertKey
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: bde7c457-caab-562e-9a24-b44dac34c05f
+		summarizeBy: none
+		sourceColumn: AlertKey
+	column AlertId
+		dataType: string
+		isHidden
+		lineageTag: eb0088e4-2cf1-5b13-aae6-4ae049242ac7
+		summarizeBy: none
+		sourceColumn: AlertId
+	column EventId
+		dataType: string
+		isHidden
+		lineageTag: 66a49e2a-9c9c-5229-92e1-4a2f58dadabb
+		summarizeBy: none
+		sourceColumn: EventId
+	column DetectedAtUTC
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm:ss
+		lineageTag: 74a0448c-a0ea-52f6-9419-6753f9cf4f17
+		summarizeBy: none
+		sourceColumn: DetectedAtUTC
+	column AlertDateKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 583e6c10-38e6-5fc9-ba2e-4bc39aa15015
+		summarizeBy: none
+		sourceColumn: AlertDateKey
+	column AlertTimeKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e634ef86-0db5-5bc1-b7b9-124a5db3f4ab
+		summarizeBy: none
+		sourceColumn: AlertTimeKey
+	column SourceProductKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e1df52dd-5be0-50ae-ac69-0605e35460b7
+		summarizeBy: none
+		sourceColumn: SourceProductKey
+	column AssetKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 2c845586-11a4-566a-bef6-167ee0f6cac3
+		summarizeBy: none
+		sourceColumn: AssetKey
+	column DetectionRuleKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 897c5d33-32ec-5939-94f4-b6e1ed3f59e2
+		summarizeBy: none
+		sourceColumn: DetectionRuleKey
+	column SeverityKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: da7ed76d-fac4-5de3-b50f-75d3ecf8b4a3
+		summarizeBy: none
+		sourceColumn: SeverityKey
+	column AlertCount
+		dataType: int64
+		formatString: 0
+		lineageTag: 58fa4788-eba9-5787-94a7-881c52d9f139
+		summarizeBy: none
+		sourceColumn: AlertCount
+	column DetectionMinutes
+		dataType: double
+		formatString: 0.00
+		lineageTag: 605e0a7c-9303-5d81-b5f1-6daf97fa4968
+		summarizeBy: none
+		sourceColumn: DetectionMinutes
+	column IsFalsePositive
+		dataType: boolean
+		lineageTag: 1b875a9b-952e-5b9a-a567-ba3ac0861cd1
+		summarizeBy: none
+		sourceColumn: IsFalsePositive
+	column BecameIncident
+		dataType: boolean
+		lineageTag: b200fbd7-7105-546a-9d65-9b4221940c84
+		summarizeBy: none
+		sourceColumn: BecameIncident
+	column DataClassification
+		dataType: string
+		isHidden
+		lineageTag: 54ccc09f-f12c-515b-bbdc-b9a2b31cc49f
+		summarizeBy: none
+		sourceColumn: DataClassification
+	partition FactAlerts = m
+		mode: import
+		source =
+				let
+				    Source = fxCsv("data/raw/alerts_raw.csv"),
+				    Selected = Table.SelectColumns(Source, {"alert_id", "event_id", "detected_at", "source_product", "asset_id", "rule_id", "severity", "false_positive", "data_classification"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"detected_at", type datetimezone}}),
+				    Normalized = Table.TransformColumns(Typed, {{"severity", fxNormalizeSeverity, type text}, {"false_positive", each Text.Upper(Text.Trim(_)) = "TRUE", type logical}}),
+				    Valid = Table.SelectRows(Normalized, each [alert_id] <> null and [detected_at] <> null and [severity] <> null),
+				    Deduplicated = Table.Distinct(Valid, {"alert_id"}),
+				    WithAlertKey = Table.AddColumn(Deduplicated, "AlertKey", each Number.FromText(Text.AfterDelimiter([alert_id], "-")), Int64.Type),
+				    MergeEvent = Table.NestedJoin(WithAlertKey, {"event_id"}, FactSecurityEvents, {"EventId"}, "Event", JoinKind.Inner),
+				    Expanded = Table.ExpandTableColumn(MergeEvent, "Event", {"EventTimestampUTC", "SourceProductKey", "AssetKey", "DetectionRuleKey"}, {"EventTimestampUTC", "SourceProductKey", "AssetKey", "DetectionRuleKey"}),
+				    MergeSeverity = Table.NestedJoin(Expanded, {"severity"}, DimSeverity, {"Severity"}, "SeverityDim", JoinKind.LeftOuter),
+				    WithSeverity = Table.ExpandTableColumn(MergeSeverity, "SeverityDim", {"SeverityKey"}, {"SeverityKey"}),
+				    AddDateKey = Table.AddColumn(WithSeverity, "AlertDateKey", each Number.FromText(Date.ToText(Date.From([detected_at]), "yyyyMMdd")), Int64.Type),
+				    AddTimeKey = Table.AddColumn(AddDateKey, "AlertTimeKey", each Time.Hour(Time.From([detected_at])) * 100 + Number.IntegerDivide(Time.Minute(Time.From([detected_at])), 5) * 5, Int64.Type),
+				    AddCount = Table.AddColumn(AddTimeKey, "AlertCount", each 1, Int64.Type),
+				    AddDetection = Table.AddColumn(AddCount, "DetectionMinutes", each Duration.TotalMinutes([detected_at] - [EventTimestampUTC]), type number),
+				    IncidentAlertIds = List.Buffer(List.Distinct(fxCsv("data/raw/incidents_raw.csv")[alert_id])),
+				    AddIncidentFlag = Table.AddColumn(AddDetection, "BecameIncident", each List.Contains(IncidentAlertIds, [alert_id]), type logical),
+				    Renamed = Table.RenameColumns(AddIncidentFlag, {{"alert_id", "AlertId"}, {"event_id", "EventId"}, {"detected_at", "DetectedAtUTC"}, {"false_positive", "IsFalsePositive"}, {"data_classification", "DataClassification"}}),
+				    Final = Table.SelectColumns(Renamed, {"AlertKey", "AlertId", "EventId", "DetectedAtUTC", "AlertDateKey", "AlertTimeKey", "SourceProductKey", "AssetKey", "DetectionRuleKey", "SeverityKey", "AlertCount", "DetectionMinutes", "IsFalsePositive", "BecameIncident", "DataClassification"})
+				in
+				    Final
+	annotation PBI_ResultType = Table

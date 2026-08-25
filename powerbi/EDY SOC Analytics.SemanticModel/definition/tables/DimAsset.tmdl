@@ -1,0 +1,62 @@
+table DimAsset
+	lineageTag: 52dc075f-c88f-5dc3-928d-0b39fb8bd447
+	column AssetKey
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: 8009949c-6ca3-5c78-a6bc-a787e5df877a
+		summarizeBy: none
+		sourceColumn: AssetKey
+	column AssetId
+		dataType: string
+		lineageTag: 0a170e34-c9bf-5079-b38e-46cebcd73c6c
+		summarizeBy: none
+		sourceColumn: AssetId
+	column AssetLabel
+		dataType: string
+		lineageTag: e86bc074-4023-5d78-a60f-4cf43c731205
+		summarizeBy: none
+		sourceColumn: AssetLabel
+	column AssetType
+		dataType: string
+		lineageTag: ea1ace9e-098c-5ad4-ab66-242739bf82d9
+		summarizeBy: none
+		sourceColumn: AssetType
+	column BusinessUnit
+		dataType: string
+		lineageTag: 2633f443-a2c2-53f2-a77b-b4c4178eac45
+		summarizeBy: none
+		sourceColumn: BusinessUnit
+	column Environment
+		dataType: string
+		lineageTag: b28b2fad-848a-5f92-85f6-f1ef77bcae2f
+		summarizeBy: none
+		sourceColumn: Environment
+	column Criticality
+		dataType: int64
+		formatString: 0
+		lineageTag: c81e71d2-e3f8-5ac0-aeb7-f64cdfd2dc10
+		summarizeBy: none
+		sourceColumn: Criticality
+	column NetworkAddress
+		dataType: string
+		isHidden
+		lineageTag: a235cc12-ff86-59b1-81d8-c0ec66bfe478
+		summarizeBy: none
+		sourceColumn: NetworkAddress
+	column IsSynthetic
+		dataType: boolean
+		lineageTag: 238c0ed6-c4f7-5f24-bc70-3dad585afd8a
+		summarizeBy: none
+		sourceColumn: IsSynthetic
+	partition DimAsset = m
+		mode: import
+		source =
+				let
+				    Source = fxCsv("data/reference/DimAsset.csv"),
+				    Selected = Table.SelectColumns(Source, {"AssetKey", "AssetId", "AssetLabel", "AssetType", "BusinessUnit", "Environment", "Criticality", "NetworkAddress", "IsSynthetic"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"AssetKey", Int64.Type}, {"AssetId", type text}, {"AssetLabel", type text}, {"AssetType", type text}, {"BusinessUnit", type text}, {"Environment", type text}, {"Criticality", Int64.Type}, {"NetworkAddress", type text}, {"IsSynthetic", type logical}})
+				in
+				    Typed
+	annotation PBI_ResultType = Table

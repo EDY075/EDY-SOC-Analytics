@@ -1,0 +1,8 @@
+SourceProductKey,SourceProduct,SourceSystem,ExpectedFidelity,VolumeFactor,DataClassification
+1,EDY Shield,Endpoint Integrity,0.78,1.05,SYNTHETIC_DEMO_DATA
+2,EDY Sentinel,Cloud Detection,0.86,0.85,SYNTHETIC_DEMO_DATA
+3,EDY SIEM,Correlation Hub,0.91,1.0,SYNTHETIC_DEMO_DATA
+4,EDY RECON,Exposure Intelligence,0.72,0.55,SYNTHETIC_DEMO_DATA
+5,External Synthetic,Identity Provider,0.82,0.75,SYNTHETIC_DEMO_DATA
+6,External Synthetic,Network Sensor,0.68,1.35,SYNTHETIC_DEMO_DATA
+7,External Synthetic,Cloud Audit,0.88,0.9,SYNTHETIC_DEMO_DATA

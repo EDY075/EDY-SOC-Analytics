@@ -1,0 +1,6 @@
+SeverityKey,Severity,SeverityPT,SeverityOrder,RiskWeight,ColorHex
+1,Informational,Informativo,1,0.5,#6B7A90
+2,Low,Baixo,2,1.0,#3AA0D8
+3,Medium,Médio,3,2.0,#F2B84B
+4,High,Alto,4,3.5,#F27C4A
+5,Critical,Crítico,5,5.0,#E5484D

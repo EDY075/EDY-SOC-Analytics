@@ -1,0 +1,42 @@
+table DimTime
+	lineageTag: bffb3a18-065f-5f50-bc48-f0a696db5719
+	column TimeKey
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: 7b16c299-1037-52ab-845f-9163cc60283a
+		summarizeBy: none
+		sourceColumn: TimeKey
+	column Hour
+		dataType: int64
+		formatString: 0
+		lineageTag: 465fd786-1c79-5f40-9bec-1cc8c15fdd5f
+		summarizeBy: none
+		sourceColumn: Hour
+	column Minute
+		dataType: int64
+		formatString: 0
+		lineageTag: 653105ed-4724-56dc-bb51-4c7294bdc467
+		summarizeBy: none
+		sourceColumn: Minute
+	column HourLabel
+		dataType: string
+		lineageTag: d36d81f4-026a-57b5-a567-873b16ca3d67
+		summarizeBy: none
+		sourceColumn: HourLabel
+	column Period
+		dataType: string
+		lineageTag: 49e16313-a393-5d5f-b1c5-f504a2ce1f27
+		summarizeBy: none
+		sourceColumn: Period
+	partition DimTime = m
+		mode: import
+		source =
+				let
+				    Source = fxCsv("data/reference/DimTime.csv"),
+				    Selected = Table.SelectColumns(Source, {"TimeKey", "Hour", "Minute", "HourLabel", "Period"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"TimeKey", Int64.Type}, {"Hour", Int64.Type}, {"Minute", Int64.Type}, {"HourLabel", type text}, {"Period", type text}})
+				in
+				    Typed
+	annotation PBI_ResultType = Table

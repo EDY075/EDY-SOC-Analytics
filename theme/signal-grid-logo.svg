@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="160" viewBox="0 0 640 160" role="img" aria-labelledby="title desc">
+  <title id="title">EDY SOC Analytics</title>
+  <desc id="desc">Símbolo abstrato de grade de sinais com três pulsos em ciano, violeta e âmbar.</desc>
+  <rect width="640" height="160" rx="18" fill="#0D1118"/>
+  <g transform="translate(30 28)">
+    <rect x="0" y="0" width="104" height="104" rx="16" fill="#141B25" stroke="#273244"/>
+    <path d="M18 72h17l9-27 14 48 12-38 9 17h9" fill="none" stroke="#39C6E6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="35" cy="72" r="4" fill="#7D8CFF"/><circle cx="88" cy="72" r="4" fill="#F2B84B"/>
+  </g>
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <text x="164" y="76" fill="#F5F8FC" font-size="42" font-weight="650">EDY SOC</text>
+    <text x="164" y="116" fill="#AEBBD0" font-size="27" letter-spacing="6">ANALYTICS</text>
+  </g>
+</svg>
+

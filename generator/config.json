@@ -1,0 +1,13 @@
+{
+  "seed": 75075,
+  "timezone": "America/Sao_Paulo",
+  "period_start": "2025-02-01T00:00:00-03:00",
+  "period_end": "2026-08-01T00:00:00-03:00",
+  "event_count": 120000,
+  "alert_count": 18000,
+  "incident_count": 3200,
+  "raw_duplicate_rate": 0.006,
+  "raw_null_rate": 0.012,
+  "dataset_label": "SYNTHETIC_DEMO_DATA"
+}
+

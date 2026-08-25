@@ -1,0 +1,40 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: pt-BR
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+	annotation PBIDesktopVersion = 2.157.879.0 (26.08)
+	annotation __PBI_TimeIntelligenceEnabled = 0
+
+ref table DimAnalyst
+ref table DimAsset
+ref table DimAttackTactic
+ref table DimAttackTechnique
+ref table DimClassification
+ref table DimDate
+ref table DimDetectionRule
+ref table DimSeverity
+ref table DimSLA
+ref table DimSourceProduct
+ref table DimStatus
+ref table DimTime
+ref table SecurityAccess
+ref table BridgeIncidentTechnique
+ref table FactAlerts
+ref table FactIncidentLifecycle
+ref table FactIncidents
+ref table FactSecurityEvents
+ref table FactSLA
+ref table DQ_RejectedRows
+ref table _Measures
+
+ref expression pProjectRoot
+ref expression fxCsv
+ref expression fxNormalizeSeverity
+ref expression fxNormalizeStatus
+
+ref role SOC_Analyst
+ref role SOC_Manager

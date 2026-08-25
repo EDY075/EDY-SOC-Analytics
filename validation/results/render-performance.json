@@ -1,0 +1,9 @@
+{
+  "measuredAt": "2026-08-24T22:28:00-03:00",
+  "scope": "Power BI Desktop Bridge screenshot-all wall-clock; includes navigation, settle and PNG capture overhead",
+  "pages": 10,
+  "totalMilliseconds": 17400.69,
+  "averagePerPageMilliseconds": 1740.07,
+  "budgetAveragePerPageMilliseconds": 2000,
+  "withinBudget": true
+}

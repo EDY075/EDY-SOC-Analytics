@@ -1,0 +1,63 @@
+table DimAttackTechnique
+	lineageTag: 19ae570d-42b9-5d8d-8b5e-ad24f07fd301
+	column AttackTechniqueKey
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: 6ffac588-84a6-5683-af88-4f795f5c2bd2
+		summarizeBy: none
+		sourceColumn: AttackTechniqueKey
+	column TechniqueId
+		dataType: string
+		lineageTag: 3e5c26ca-aecd-59bc-a6e8-4e7a519d7426
+		summarizeBy: none
+		sourceColumn: TechniqueId
+	column TechniqueName
+		dataType: string
+		lineageTag: 6f0a10b8-2512-52db-933a-9e99baff29bb
+		summarizeBy: none
+		sourceColumn: TechniqueName
+	column AttackTacticKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8dda62ee-648c-5ce6-b125-94dcb897753c
+		summarizeBy: none
+		sourceColumn: AttackTacticKey
+	column Framework
+		dataType: string
+		lineageTag: 0d2c3f4d-1c73-5e25-8911-ab12520d9f57
+		summarizeBy: none
+		sourceColumn: Framework
+	column Domain
+		dataType: string
+		lineageTag: 88605c43-09ca-5c33-87a0-78d56602f9ea
+		summarizeBy: none
+		sourceColumn: Domain
+	column AttackVersion
+		dataType: double
+		formatString: 0.00
+		lineageTag: e083ff41-b8e4-5c2e-8d22-a2f9afa4f409
+		summarizeBy: none
+		sourceColumn: AttackVersion
+	column RetrievedAt
+		dataType: string
+		lineageTag: d7da99ec-a9ae-5764-9849-a54f716ef70a
+		summarizeBy: none
+		sourceColumn: RetrievedAt
+	column IsDeprecated
+		dataType: boolean
+		lineageTag: 62005c72-21aa-5401-b218-a0a00b75ab83
+		summarizeBy: none
+		sourceColumn: IsDeprecated
+	partition DimAttackTechnique = m
+		mode: import
+		source =
+				let
+				    Source = fxCsv("data/reference/DimAttackTechnique.csv"),
+				    Selected = Table.SelectColumns(Source, {"AttackTechniqueKey", "TechniqueId", "TechniqueName", "AttackTacticKey", "Framework", "Domain", "AttackVersion", "RetrievedAt", "IsDeprecated"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"AttackTechniqueKey", Int64.Type}, {"TechniqueId", type text}, {"TechniqueName", type text}, {"AttackTacticKey", Int64.Type}, {"Framework", type text}, {"Domain", type text}, {"AttackVersion", type number}, {"RetrievedAt", type text}, {"IsDeprecated", type logical}})
+				in
+				    Typed
+	annotation PBI_ResultType = Table

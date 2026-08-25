@@ -1,0 +1,20 @@
+AnalystKey,AnalystId,AnalystLabel,Team,Region,ExperienceBand,IsSynthetic
+0,UNKNOWN,Não atribuído,Unassigned,Não informado,Não informado,True
+1,ANL-001,Analista sintético 01,Blue-A,Sul,Sênior,True
+2,ANL-002,Analista sintético 02,Blue-B,Sudeste,Pleno,True
+3,ANL-003,Analista sintético 03,Blue-C,Centro,Júnior,True
+4,ANL-004,Analista sintético 04,Blue-A,Sul,Sênior,True
+5,ANL-005,Analista sintético 05,Blue-B,Sudeste,Pleno,True
+6,ANL-006,Analista sintético 06,Blue-C,Centro,Júnior,True
+7,ANL-007,Analista sintético 07,Blue-A,Sul,Sênior,True
+8,ANL-008,Analista sintético 08,Blue-B,Sudeste,Pleno,True
+9,ANL-009,Analista sintético 09,Blue-C,Centro,Júnior,True
+10,ANL-010,Analista sintético 10,Blue-A,Sul,Sênior,True
+11,ANL-011,Analista sintético 11,Blue-B,Sudeste,Pleno,True
+12,ANL-012,Analista sintético 12,Blue-C,Centro,Júnior,True
+13,ANL-013,Analista sintético 13,Blue-A,Sul,Sênior,True
+14,ANL-014,Analista sintético 14,Blue-B,Sudeste,Pleno,True
+15,ANL-015,Analista sintético 15,Blue-C,Centro,Júnior,True
+16,ANL-016,Analista sintético 16,Blue-A,Sul,Sênior,True
+17,ANL-017,Analista sintético 17,Blue-B,Sudeste,Pleno,True
+18,ANL-018,Analista sintético 18,Blue-C,Centro,Júnior,True

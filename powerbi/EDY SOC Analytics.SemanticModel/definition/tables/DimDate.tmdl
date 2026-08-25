@@ -1,0 +1,75 @@
+table DimDate
+	lineageTag: fbbe6106-77f0-52f7-9e5a-1e158574e2ed
+	column DateKey
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: d3c5414b-298c-5d5b-867b-dbd590baffc9
+		summarizeBy: none
+		sourceColumn: DateKey
+	column Date
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: 52990c78-166d-5202-b58c-9d2f7ca29858
+		summarizeBy: none
+		sourceColumn: Date
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 2717d57d-4cda-51dd-86a1-f7cb8d4697d4
+		summarizeBy: none
+		sourceColumn: Year
+	column Quarter
+		dataType: string
+		lineageTag: cc998237-5682-5274-9ca0-510c8c0aa1e8
+		summarizeBy: none
+		sourceColumn: Quarter
+	column MonthNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: 603541cc-693b-5bcf-8754-06918c4140c7
+		summarizeBy: none
+		sourceColumn: MonthNumber
+	column MonthName
+		dataType: string
+		lineageTag: c20231da-2785-5a85-80c0-e52c6dd47831
+		summarizeBy: none
+		sourceColumn: MonthName
+	column YearMonth
+		dataType: string
+		lineageTag: f5b8ecc5-e1a7-5859-8da3-9ff200fe6319
+		summarizeBy: none
+		sourceColumn: YearMonth
+	column Day
+		dataType: int64
+		formatString: 0
+		lineageTag: 854bc613-eb9c-51cf-82f4-9ea2e671a77b
+		summarizeBy: none
+		sourceColumn: Day
+	column WeekdayNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: d5f0ea78-daaf-55bc-8dd1-fe170d811171
+		summarizeBy: none
+		sourceColumn: WeekdayNumber
+	column WeekdayName
+		dataType: string
+		lineageTag: 020f85a4-54d3-5e32-95e4-95df51b73534
+		summarizeBy: none
+		sourceColumn: WeekdayName
+	column IsWeekend
+		dataType: boolean
+		lineageTag: 787eece6-69b4-5141-9f62-b3240b71d6a9
+		summarizeBy: none
+		sourceColumn: IsWeekend
+	partition DimDate = m
+		mode: import
+		source =
+				let
+				    Source = fxCsv("data/reference/DimDate.csv"),
+				    Selected = Table.SelectColumns(Source, {"DateKey", "Date", "Year", "Quarter", "MonthNumber", "MonthName", "YearMonth", "Day", "WeekdayNumber", "WeekdayName", "IsWeekend"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"DateKey", Int64.Type}, {"Date", type date}, {"Year", Int64.Type}, {"Quarter", type text}, {"MonthNumber", Int64.Type}, {"MonthName", type text}, {"YearMonth", type text}, {"Day", Int64.Type}, {"WeekdayNumber", Int64.Type}, {"WeekdayName", type text}, {"IsWeekend", type logical}})
+				in
+				    Typed
+	annotation PBI_ResultType = Table

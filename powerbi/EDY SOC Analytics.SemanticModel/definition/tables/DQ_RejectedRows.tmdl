@@ -1,0 +1,37 @@
+table DQ_RejectedRows
+	lineageTag: 1c52a823-f1b9-540d-b345-c222f1232c6c
+	column event_id
+		dataType: string
+		lineageTag: ad65e552-6ce1-5790-92f0-ea44c3ba83e0
+		summarizeBy: none
+		sourceColumn: event_id
+	column source_product
+		dataType: string
+		lineageTag: 616e25e1-1349-5921-b26e-2f75ba9df02c
+		summarizeBy: none
+		sourceColumn: source_product
+	column QualityIssue
+		dataType: string
+		lineageTag: c2600f30-8393-56b5-8fb9-100c9aac407d
+		summarizeBy: none
+		sourceColumn: QualityIssue
+	column data_classification
+		dataType: string
+		lineageTag: ff25d791-47d5-5684-8551-a08689e8917a
+		summarizeBy: none
+		sourceColumn: data_classification
+	partition DQ_RejectedRows = m
+		mode: import
+		source =
+				let
+				    Source = fxCsv("data/raw/security_events_raw.csv"),
+				    WithIssue = Table.AddColumn(Source, "QualityIssue", each
+				        if [event_id] = null or Text.Trim([event_id]) = "" then "Missing event_id"
+				        else if (try DateTimeZone.FromText([event_timestamp]))[HasError] then "Invalid event_timestamp"
+				        else if fxNormalizeSeverity([severity]) = null then "Invalid severity"
+				        else null, type text),
+				    InvalidRows = Table.SelectRows(WithIssue, each [QualityIssue] <> null),
+				    SafeProjection = Table.SelectColumns(InvalidRows, {"event_id", "source_product", "QualityIssue", "data_classification"})
+				in
+				    SafeProjection
+	annotation PBI_ResultType = Table

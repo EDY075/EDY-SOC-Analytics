@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "IncidentDrillthrough",
+  "displayName": "9. Incident Drillthrough",
+  "displayOption": "FitToPage",
+  "width": 1280,
+  "height": 720,
+  "annotations": [
+    {
+      "name": "purpose",
+      "value": "9. Incident Drillthrough"
+    }
+  ],
+  "type": "Drillthrough",
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "Filterea1c661c00886000514cd880",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "FactIncidents"
+              }
+            },
+            "Property": "IncidentId"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "Drillthrough"
+      }
+    ]
+  },
+  "pageBinding": {
+    "name": "Pod",
+    "type": "Drillthrough",
+    "parameters": [
+      {
+        "name": "Param_Filterea1c661c00886000514cd880",
+        "boundFilter": "Filterea1c661c00886000514cd880",
+        "fieldExpr": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "FactIncidents"
+              }
+            },
+            "Property": "IncidentId"
+          }
+        }
+      }
+    ]
+  }
+}

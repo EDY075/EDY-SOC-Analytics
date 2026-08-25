@@ -1,0 +1,12 @@
+role SOC_Analyst
+	modelPermission: read
+
+	tablePermission DimAnalyst
+		filterExpression =
+				VAR CurrentUPN = LOWER ( USERPRINCIPALNAME () )
+				RETURN
+				    DimAnalyst[Team]
+				        IN CALCULATETABLE (
+				            VALUES ( SecurityAccess[Team] ),
+				            FILTER ( SecurityAccess, LOWER ( SecurityAccess[UPN] ) = CurrentUPN )
+				        )

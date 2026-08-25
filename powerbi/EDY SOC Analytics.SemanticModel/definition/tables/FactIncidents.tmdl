@@ -1,0 +1,240 @@
+table FactIncidents
+	lineageTag: f76e4d80-7af3-5cc4-9dcb-253e5c3874fc
+	column IncidentKey
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: ab96d6df-75f5-552e-b9ea-3ec960f5026c
+		summarizeBy: none
+		sourceColumn: IncidentKey
+	column IncidentId
+		dataType: string
+		isHidden
+		lineageTag: 8569a32c-655b-58dc-a0be-9dce833754e8
+		summarizeBy: none
+		sourceColumn: IncidentId
+	column CreatedAtUTC
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm:ss
+		lineageTag: 1368df80-c02f-5c7d-9cd8-74b6deb8a795
+		summarizeBy: none
+		sourceColumn: CreatedAtUTC
+	column AcknowledgedAtUTC
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm:ss
+		lineageTag: bb1974d1-10c0-58a4-a67d-775771ea9978
+		summarizeBy: none
+		sourceColumn: AcknowledgedAtUTC
+	column TriagedAtUTC
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm:ss
+		lineageTag: a4e384b9-0e6e-52e9-882a-0e3e950d892c
+		summarizeBy: none
+		sourceColumn: TriagedAtUTC
+	column ContainedAtUTC
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm:ss
+		lineageTag: cbc555cd-e00d-53f1-9a57-fb9fc5553304
+		summarizeBy: none
+		sourceColumn: ContainedAtUTC
+	column ResolvedAtUTC
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm:ss
+		lineageTag: 38a8cec5-a088-515a-9d48-e920ca0f8174
+		summarizeBy: none
+		sourceColumn: ResolvedAtUTC
+	column ClosedAtUTC
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm:ss
+		lineageTag: b97f04f3-feed-525e-93ba-654b3e0e0e09
+		summarizeBy: none
+		sourceColumn: ClosedAtUTC
+	column CreatedDateKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a6fe3263-dfc1-53fc-a8bc-e0f209e6a427
+		summarizeBy: none
+		sourceColumn: CreatedDateKey
+	column CreatedTimeKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 474006aa-dfbc-504b-acdb-56e93672436d
+		summarizeBy: none
+		sourceColumn: CreatedTimeKey
+	column SourceProductKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d92cf5cb-8b41-50be-bc45-bfe8e5b7bd16
+		summarizeBy: none
+		sourceColumn: SourceProductKey
+	column AssetKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a0ccc1a1-be50-5596-ab8e-ba5fdaeb7e1e
+		summarizeBy: none
+		sourceColumn: AssetKey
+	column DetectionRuleKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: cd5880a0-7b6c-55cf-a045-889031edc2b7
+		summarizeBy: none
+		sourceColumn: DetectionRuleKey
+	column SeverityKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e7871b05-942c-5b18-bcbb-0dcd4fb2dd58
+		summarizeBy: none
+		sourceColumn: SeverityKey
+	column StatusKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1611e75b-c49c-5f04-bca2-40f3fe7b682a
+		summarizeBy: none
+		sourceColumn: StatusKey
+	column AnalystKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ce58e4fd-9758-5edd-b47e-7f9bab6750b9
+		summarizeBy: none
+		sourceColumn: AnalystKey
+	column ClassificationKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 750f1e88-e351-5dfc-96c7-414b55f3d4bf
+		summarizeBy: none
+		sourceColumn: ClassificationKey
+	column SLAKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b49d596b-2ad3-53a7-9b34-725a79190f6d
+		summarizeBy: none
+		sourceColumn: SLAKey
+	column AlertKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 02f1b9eb-57cc-58da-aca0-334b4de912a3
+		summarizeBy: none
+		sourceColumn: AlertKey
+	column IncidentCount
+		dataType: int64
+		formatString: 0
+		lineageTag: a594352f-f816-5a2c-8fdc-0596af33c6a0
+		summarizeBy: none
+		sourceColumn: IncidentCount
+	column RiskScore
+		dataType: double
+		formatString: 0.00
+		lineageTag: 1c9a7241-26ec-5638-9f7f-f7452330751b
+		summarizeBy: none
+		sourceColumn: RiskScore
+	column AcknowledgementMinutes
+		dataType: double
+		formatString: 0.00
+		lineageTag: e43c74e7-3644-5784-8753-e7e870241003
+		summarizeBy: none
+		sourceColumn: AcknowledgementMinutes
+	column TriageMinutes
+		dataType: double
+		formatString: 0.00
+		lineageTag: 2b7d788b-40d1-5f2c-9fc1-04f92a96ac3f
+		summarizeBy: none
+		sourceColumn: TriageMinutes
+	column ContainmentMinutes
+		dataType: double
+		formatString: 0.00
+		lineageTag: dfda60c0-e3be-5cd6-9491-a88261079981
+		summarizeBy: none
+		sourceColumn: ContainmentMinutes
+	column ResolutionMinutes
+		dataType: double
+		formatString: 0.00
+		lineageTag: 8d763258-1139-5990-9d47-cf0b42392151
+		summarizeBy: none
+		sourceColumn: ResolutionMinutes
+	column RecoveryMinutes
+		dataType: double
+		formatString: 0.00
+		lineageTag: 83cc2507-272c-5759-aa8e-3e2e53883a01
+		summarizeBy: none
+		sourceColumn: RecoveryMinutes
+	column IsEscalated
+		dataType: boolean
+		lineageTag: e48c794f-0aa7-5de4-9945-db5f5b5d1bea
+		summarizeBy: none
+		sourceColumn: IsEscalated
+	column IsReopened
+		dataType: boolean
+		lineageTag: 17937632-8af4-50d5-b0b3-5ec7b0f27b16
+		summarizeBy: none
+		sourceColumn: IsReopened
+	column IsFalsePositive
+		dataType: boolean
+		lineageTag: 2de951ae-1d9c-5033-ab8a-b3f6195040a8
+		summarizeBy: none
+		sourceColumn: IsFalsePositive
+	column SLAOverallMet
+		dataType: boolean
+		lineageTag: 50ac0d71-c70c-5cc5-ad42-70101d02470b
+		summarizeBy: none
+		sourceColumn: SLAOverallMet
+	column DataClassification
+		dataType: string
+		isHidden
+		lineageTag: 6d39115f-fa8a-516f-9c33-4937acf22589
+		summarizeBy: none
+		sourceColumn: DataClassification
+	partition FactIncidents = m
+		mode: import
+		source =
+				let
+				    Source = fxCsv("data/raw/incidents_raw.csv"),
+				    Selected = Table.SelectColumns(Source, {"incident_id", "alert_id", "created_at", "acknowledged_at", "triaged_at", "contained_at", "resolved_at", "closed_at", "source_product", "source_system", "asset_id", "rule_id", "severity", "status", "analyst_id", "classification_key", "risk_score", "is_escalated", "is_reopened", "data_classification"}),
+				    NormalizeLabels = Table.TransformColumns(Selected, {{"severity", fxNormalizeSeverity, type text}, {"status", fxNormalizeStatus, type text}, {"analyst_id", each if _ = null or Text.Trim(_) = "" then "UNKNOWN" else Text.Trim(_), type text}}),
+				    Typed = Table.TransformColumnTypes(NormalizeLabels, {{"created_at", type datetimezone}, {"acknowledged_at", type datetimezone}, {"triaged_at", type datetimezone}, {"contained_at", type datetimezone}, {"resolved_at", type datetimezone}, {"closed_at", type datetimezone}, {"classification_key", Int64.Type}, {"risk_score", type number}, {"is_escalated", type logical}, {"is_reopened", type logical}}),
+				    Deduplicated = Table.Distinct(Table.SelectRows(Typed, each [incident_id] <> null and [created_at] <> null and [severity] <> null and [status] <> null), {"incident_id"}),
+				    WithIncidentKey = Table.AddColumn(Deduplicated, "IncidentKey", each Number.FromText(Text.AfterDelimiter([incident_id], "-")), Int64.Type),
+				    AlertLookup = Table.AddColumn(Table.Distinct(Table.SelectColumns(fxCsv("data/raw/alerts_raw.csv"), {"alert_id"})), "AlertKey", each Number.FromText(Text.AfterDelimiter([alert_id], "-")), Int64.Type),
+				    MergeAlert = Table.NestedJoin(WithIncidentKey, {"alert_id"}, AlertLookup, {"alert_id"}, "Alert", JoinKind.LeftOuter),
+				    ExpandAlert = Table.ExpandTableColumn(MergeAlert, "Alert", {"AlertKey"}, {"AlertKey"}),
+				    MergeSource = Table.NestedJoin(ExpandAlert, {"source_product", "source_system"}, DimSourceProduct, {"SourceProduct", "SourceSystem"}, "Source", JoinKind.LeftOuter),
+				    ExpandSource = Table.ExpandTableColumn(MergeSource, "Source", {"SourceProductKey"}, {"SourceProductKey"}),
+				    MergeAsset = Table.NestedJoin(ExpandSource, {"asset_id"}, DimAsset, {"AssetId"}, "Asset", JoinKind.LeftOuter),
+				    ExpandAsset = Table.ExpandTableColumn(MergeAsset, "Asset", {"AssetKey"}, {"AssetKey"}),
+				    MergeRule = Table.NestedJoin(ExpandAsset, {"rule_id"}, DimDetectionRule, {"RuleId"}, "Rule", JoinKind.LeftOuter),
+				    ExpandRule = Table.ExpandTableColumn(MergeRule, "Rule", {"DetectionRuleKey"}, {"DetectionRuleKey"}),
+				    MergeSeverity = Table.NestedJoin(ExpandRule, {"severity"}, DimSeverity, {"Severity"}, "SeverityDim", JoinKind.LeftOuter),
+				    ExpandSeverity = Table.ExpandTableColumn(MergeSeverity, "SeverityDim", {"SeverityKey"}, {"SeverityKey"}),
+				    MergeStatus = Table.NestedJoin(ExpandSeverity, {"status"}, DimStatus, {"Status"}, "StatusDim", JoinKind.LeftOuter),
+				    ExpandStatus = Table.ExpandTableColumn(MergeStatus, "StatusDim", {"StatusKey"}, {"StatusKey"}),
+				    MergeAnalyst = Table.NestedJoin(ExpandStatus, {"analyst_id"}, DimAnalyst, {"AnalystId"}, "Analyst", JoinKind.LeftOuter),
+				    ExpandAnalyst = Table.ExpandTableColumn(MergeAnalyst, "Analyst", {"AnalystKey"}, {"AnalystKey"}),
+				    AddDateKey = Table.AddColumn(ExpandAnalyst, "CreatedDateKey", each Number.FromText(Date.ToText(Date.From([created_at]), "yyyyMMdd")), Int64.Type),
+				    AddTimeKey = Table.AddColumn(AddDateKey, "CreatedTimeKey", each Time.Hour(Time.From([created_at])) * 100 + Number.IntegerDivide(Time.Minute(Time.From([created_at])), 5) * 5, Int64.Type),
+				    AddAck = Table.AddColumn(AddTimeKey, "AcknowledgementMinutes", each if [acknowledged_at] = null then null else Duration.TotalMinutes([acknowledged_at]-[created_at]), type number),
+				    AddTriage = Table.AddColumn(AddAck, "TriageMinutes", each if [triaged_at] = null then null else Duration.TotalMinutes([triaged_at]-[created_at]), type number),
+				    AddContain = Table.AddColumn(AddTriage, "ContainmentMinutes", each if [contained_at] = null then null else Duration.TotalMinutes([contained_at]-[created_at]), type number),
+				    AddResolve = Table.AddColumn(AddContain, "ResolutionMinutes", each if [resolved_at] = null then null else Duration.TotalMinutes([resolved_at]-[created_at]), type number),
+				    AddRecovery = Table.AddColumn(AddResolve, "RecoveryMinutes", each if [closed_at] = null or [resolved_at] = null then null else Duration.TotalMinutes([closed_at]-[resolved_at]), type number),
+				    AddCount = Table.AddColumn(AddRecovery, "IncidentCount", each 1, Int64.Type),
+				    AddSLAKey = Table.AddColumn(AddCount, "SLAKey", each [SeverityKey], Int64.Type),
+				    MergeSLA = Table.NestedJoin(AddSLAKey, {"SLAKey"}, DimSLA, {"SLAKey"}, "SLADim", JoinKind.LeftOuter),
+				    ExpandSLA = Table.ExpandTableColumn(MergeSLA, "SLADim", {"AcknowledgeMinutes", "ContainMinutes", "ResolveMinutes"}, {"AcknowledgeTarget", "ContainTarget", "ResolveTarget"}),
+				    AddSLAOverall = Table.AddColumn(ExpandSLA, "SLAOverallMet", each [AcknowledgementMinutes] <> null and [ContainmentMinutes] <> null and [ResolutionMinutes] <> null and [AcknowledgementMinutes] <= [AcknowledgeTarget] and [ContainmentMinutes] <= [ContainTarget] and [ResolutionMinutes] <= [ResolveTarget], type logical),
+				    AddFalsePositive = Table.AddColumn(AddSLAOverall, "IsFalsePositive", each List.Contains({2, 3}, [classification_key]), type logical),
+				    Renamed = Table.RenameColumns(AddFalsePositive, {{"incident_id", "IncidentId"}, {"created_at", "CreatedAtUTC"}, {"acknowledged_at", "AcknowledgedAtUTC"}, {"triaged_at", "TriagedAtUTC"}, {"contained_at", "ContainedAtUTC"}, {"resolved_at", "ResolvedAtUTC"}, {"closed_at", "ClosedAtUTC"}, {"classification_key", "ClassificationKey"}, {"risk_score", "RiskScore"}, {"is_escalated", "IsEscalated"}, {"is_reopened", "IsReopened"}, {"data_classification", "DataClassification"}}),
+				    Final = Table.SelectColumns(Renamed, {"IncidentKey", "IncidentId", "CreatedAtUTC", "AcknowledgedAtUTC", "TriagedAtUTC", "ContainedAtUTC", "ResolvedAtUTC", "ClosedAtUTC", "CreatedDateKey", "CreatedTimeKey", "SourceProductKey", "AssetKey", "DetectionRuleKey", "SeverityKey", "StatusKey", "AnalystKey", "ClassificationKey", "SLAKey", "AlertKey", "IncidentCount", "RiskScore", "AcknowledgementMinutes", "TriageMinutes", "ContainmentMinutes", "ResolutionMinutes", "RecoveryMinutes", "IsEscalated", "IsReopened", "IsFalsePositive", "SLAOverallMet", "DataClassification"})
+				in
+				    Final
+	annotation PBI_ResultType = Table

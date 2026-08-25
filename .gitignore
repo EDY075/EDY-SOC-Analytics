@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+
+# Power BI local and transient files
+*.pbix.autosave
+*.pbit.autosave
+**/.pbi/cache.abf
+**/.pbi/localSettings.json
+**/.pbi/workspace/
+**/.pbi/editorSettings.json
+
+# Secrets and private data
+.env
+.env.*
+!.env.example
+*.secret
+*.token
+credentials*.json
+
+# Operating systems and editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Logs and temporary artifacts
+*.log
+tmp/
+temp/
+archive/
+output/pdf/rendered/
+
+# Superseded and diagnostic evidence
+screenshots/desktop/
+screenshots/mobile/
+screenshots/mobile-final/
+screenshots/rls-dialog*.png
+screenshots/desktop-contact-sheet.png

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "IncidentLifecycle",
+  "displayName": "3. Incident Lifecycle",
+  "displayOption": "FitToPage",
+  "width": 1280,
+  "height": 720,
+  "annotations": [
+    {
+      "name": "purpose",
+      "value": "3. Incident Lifecycle"
+    }
+  ]
+}
