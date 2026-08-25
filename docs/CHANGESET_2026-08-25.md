@@ -28,7 +28,6 @@ Este manifesto lista exatamente os arquivos adicionados e modificados em rela√ß√
 - `validation/resolve_powerbi_workspace.ps1`
 - `validation/validate_live_rls.ps1`
 - `validation/verify_clean_tree.py`
-
 ## Modificados (69)
 
 - `.github/workflows/ci.yml`
@@ -100,4 +99,3 @@ Este manifesto lista exatamente os arquivos adicionados e modificados em rela√ß√
 - `tests/test_security.py`
 - `validation/measure_performance.ps1`
 - `validation/validate_live_model.ps1`
-
