@@ -98,3 +98,9 @@ Todas as mudanças relevantes do EDY SOC Analytics serão registradas neste arqu
 
 - Construção, testes, evidências e documentação concluídos.
 - Git ainda não inicializado; próximo gate é a auditoria de segredos/PII e do inventário staged antes da publicação.
+
+### CI portability fix — 2026-08-24
+
+- Geração JSON alterada para bytes UTF-8 com LF explícito, eliminando tradução de newline dependente do sistema operacional.
+- Ordenação dos hashes do manifesto normalizada por `casefold`, preservando a mesma ordem em Windows e Linux.
+- CSVs declarados com CRLF explícito no Git para corresponder ao `csv.DictWriter` em todos os runners.

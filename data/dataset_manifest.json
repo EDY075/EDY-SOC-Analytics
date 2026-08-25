@@ -62,6 +62,6 @@
     "data/expected/FactIncidents.csv": "3bb0a33f62530c0994382791692ab961ba5467e89d1b3d513c8adad092740ce7",
     "data/expected/FactSecurityEvents.csv": "aa111bd51a208d22e45af6287b50645ee10d364a8bf16ab30908c461069fe1bd",
     "data/expected/FactSLA.csv": "31e899a8bdeb1bba1376dfa7537f8aee2219e7409ad56d7d416e697e03f7d714",
-    "data/expected/kpi_expected.json": "6001deb75275d7cf058a737ccb02ce7be84f6dba21fe1e19844c0cbea9155890"
+    "data/expected/kpi_expected.json": "0ff4c1f847e37d8b59485b9d11dc118c1bc33a6771f6e8c34ec29ceb076efee3"
   }
 }

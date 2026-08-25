@@ -456,11 +456,11 @@ def generate() -> dict[str, Any]:
         "MTTA Minutes": round(sum(float(row["AcknowledgementMinutes"]) for row in clean_incidents if row["AcknowledgementMinutes"] != "") / max(1, sum(1 for row in clean_incidents if row["AcknowledgementMinutes"] != "")), 4),
         "MTTR Resolution Minutes": round(sum(float(row["ResolutionMinutes"]) for row in clean_incidents if row["ResolutionMinutes"] != "") / max(1, sum(1 for row in clean_incidents if row["ResolutionMinutes"] != "")), 4),
     }
-    (EXPECTED / "kpi_expected.json").write_text(json.dumps(kpis, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    (EXPECTED / "kpi_expected.json").write_bytes((json.dumps(kpis, ensure_ascii=False, indent=2) + "\n").encode("utf-8"))
 
     file_hashes = {}
     for folder in (RAW, REFERENCE, EXPECTED):
-        for path in sorted(folder.glob("*")):
+        for path in sorted(folder.glob("*"), key=lambda item: item.name.casefold()):
             if path.is_file() and path.name != "dataset_manifest.json":
                 file_hashes[str(path.relative_to(ROOT)).replace("\\", "/")] = hashlib.sha256(path.read_bytes()).hexdigest()
     manifest = {
@@ -472,7 +472,7 @@ def generate() -> dict[str, Any]:
             "labelVariants": "deterministic modulus rules documented in generator"
         }, "sha256": file_hashes,
     }
-    (ROOT / "data" / "dataset_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    (ROOT / "data" / "dataset_manifest.json").write_bytes((json.dumps(manifest, ensure_ascii=False, indent=2) + "\n").encode("utf-8"))
     return manifest
 
 
