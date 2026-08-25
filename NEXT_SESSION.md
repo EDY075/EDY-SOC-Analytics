@@ -21,8 +21,7 @@ Leia primeiro:
 2. Atualizar o modelo e executar modelo vivo, RLS e performance em uma sessão com acesso ao engine local.
 3. Inspecionar e recapturar todas as páginas desktop/mobile pós-hardening.
 4. Validar teclado e, manualmente, alto contraste/leitor de tela.
-5. Corrigir somente falhas demonstradas e repetir os gates.
-6. Criar commits locais pequenos; não publicar.
+5. Corrigir somente falhas demonstradas e repetir os gates; não publicar sem autorização.
 
 ## Comandos portáteis
 

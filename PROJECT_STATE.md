@@ -10,6 +10,7 @@ Atualizado em: 2026-08-25 (America/Sao_Paulo)
 - Main local e remota não foram reescritas.
 - Nenhum push, merge, release ou publicação foi realizado nesta revisão.
 - Nenhum arquivo de licença foi adicionado.
+- Cinco commits funcionais e um ajuste de checkpoint foram criados somente na branch local.
 
 ## Inventário atual
 
@@ -55,8 +56,7 @@ Atualizado em: 2026-08-25 (America/Sao_Paulo)
 - repetir `validate_live_model.ps1`, `validate_live_rls.ps1` e performance em uma sessão com autenticação local ao engine ADOMD;
 - validar PBIR com schemas oficiais quando a rede permitir;
 - recapturar e reinspecionar as 10 páginas desktop/mobile pós-hardening;
-- validar teclado novamente e executar alto contraste/leitor de tela manualmente;
-- criar commits locais pequenos após todos os gates.
+- validar teclado novamente e executar alto contraste/leitor de tela manualmente.
 
 ## Limitações confirmadas
 
