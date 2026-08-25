@@ -37,21 +37,18 @@ Os resultados estruturados estão em `validation/results/`; as capturas desktop 
 
 Uma nova instância limpa foi aberta no PBIP desta reconciliação, confirmada pelo bridge com `hasUnsavedChanges: false`, e recarregou somente os arquivos externos desta branch. Não houve novo refresh. Oito páginas afetadas foram recapturadas em `screenshots/reconcile-final-2026-08-25/`; a ausência de dados na instância limpa é indicada pelos banners do Desktop e não foi interpretada como regressão visual.
 
-O acabamento de rótulos permanece parcialmente pendente: títulos de slicer e aliases PBIR estão amigáveis, porém o Desktop continua renderizando captions técnicas em alguns cabeçalhos de tabelas (`AnalystLabel`, `ExperienceBand`, `SourceProduct` etc.). Corrigi-los integralmente exigiria alterar captions do modelo semântico ou reconstruir as tabelas; isso excede o escopo visual seguro desta etapa e acionaria nova validação live.
+O acabamento de rótulos foi concluído no PBIR sem alterar o modelo semântico. O gerador agora usa `displayName`, propriedade específica de apresentação do schema, em todas as projeções de coluna e agregação. A recaptura viva confirmou cabeçalhos como `Incidente`, `Severidade`, `Status`, `Ativo`, `Risco`, `Analista`, `Equipe`, `Experiência`, `Produto-fonte`, `Sistema-fonte`, `Classificação`, `Etapa`, `Data/hora UTC` e `ID da técnica`. Um teste independente contém o mapa esperado em português e impede a volta das captions técnicas.
 
 ## Evidência interativa final
 
-O arquivo `validation/results/interaction-validation.json` registra origem, ação, resultado esperado, observado, evidência e status das seis interações. A navegação real entre páginas foi aprovada pelo Desktop bridge e pelas capturas correspondentes. Drillthrough, cross-filter, bookmark, reset de filtros e foco visível por teclado ficaram inconclusivos: a instância limpa não possuía linhas carregadas e o driver de entrada atingiu o limite combinado de uma abordagem por acessibilidade e uma alternativa por captura. Nenhuma interação foi aprovada apenas pelo contrato estático.
+O arquivo `validation/results/interaction-validation.json` registra origem, ação, resultado esperado, observado, evidência e status das seis interações. O refresh vivo carregou 20/20 tabelas em 29,07 s e a navegação real entre as dez páginas foi aprovada pelo Desktop bridge. Drillthrough, cross-filter, bookmark, reset de filtros e foco visível por teclado permaneceram inconclusivos mesmo com dados: o driver reconheceu linhas, barras e botões na árvore acessível, mas não forneceu geometria para cliques; as alternativas seguras também não acionaram os controles. Nenhuma interação foi aprovada apenas pelo contrato estático. A instância ficou aberta com `hasUnsavedChanges: true` e não foi salva após o refresh.
 
-Gates finais: `tests.test_project_quality` aprovou 7/7; `tests.test_security` aprovou 5/5; PBIR estrutural e schema oficial retornaram 0 erros/0 avisos; a suíte completa aprovou 26/26 em 41,388 s. Após o último ajuste de cabeçalho de slicer, o teste afetado e os dois gates PBIR foram repetidos e permaneceram aprovados; a suíte completa não foi executada uma segunda vez.
+Gates finais: `tests.test_project_quality` aprovou 8/8; `tests.test_security` aprovou 5/5; PBIR estrutural e schema oficial retornaram 0 erros/0 avisos; a suíte completa desta rodada foi executada uma única vez e aprovou 27/27 em 47,242 s. O teste novo valida independentemente todos os `displayName` usados nos cabeçalhos das tabelas.
 
 ## Limitações registradas sem sobredeclaração
 
 - O driver de entrada do Windows não conseguiu executar com segurança cliques no Power BI Desktop. Drillthrough, bookmark, navegação por teclado, reset e cross-filter foram confirmados apenas por contrato PBIR, não por interação automatizada nesta sessão.
-- As capturas mobile são evidências do hardening já preservado; o editor mobile não foi recapturado ao vivo nesta sessão.
-- A correção de tamanho do timestamp de Data Quality mobile foi validada estruturalmente, mas não recapturada com um valor vivo porque a instância limpa não foi atualizada.
-- Methodology desktop foi recapturada com o contraste novo; a confirmação mobile viva permanece manual.
-- Alguns nomes técnicos continuam visíveis somente em cabeçalhos de tabelas; os cabeçalhos técnicos dos slicers foram removidos.
+- A recaptura mobile viva não foi possível porque o driver reconheceu o botão `Layout móvel`, mas não conseguiu acioná-lo; os 91 estados mobile e as correções de tamanho/cor permanecem aprovados estruturalmente.
 - RLS no Power BI Service, associação de grupos e comportamento por licença continuam dependentes de um tenant autorizado.
 
 ## Próxima decisão

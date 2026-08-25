@@ -42,6 +42,7 @@ Todos superam 4,5:1 para texto normal. O cálculo de cor não substitui inspeç�
 - [x] Ações principais de navegação, voltar, limpar e bookmark possuem rótulo e alt text.
 - [x] Não há sobreposição nos layouts mobile versionados.
 - [x] Oito páginas afetadas foram recapturadas após os acabamentos finais; os slicers exibem apenas títulos amigáveis e Data Quality/Methodology preservam o layout desktop.
+- [x] Dez páginas foram recapturadas com dados após o refresh final; os cabeçalhos de tabelas usam `displayName` amigável e o estado vazio de Data Quality permanece explícito.
 - [ ] Recapturar e reinspecionar as dez páginas após as alterações de ordenação, rótulos e Methodology mobile.
 
 Problemas encontrados na evidência-base:
@@ -51,7 +52,7 @@ Problemas encontrados na evidência-base:
 - a captura de Incident Drillthrough estava sem um único incidente filtrado;
 - as capturas desktop mantinham uma faixa estreita do painel lateral do Desktop.
 
-Os três primeiros receberam correção de definição. As páginas desktop afetadas foram recapturadas em `screenshots/reconcile-final-2026-08-25/`; a aprovação mobile final ainda depende de recaptura real no editor com dados carregados.
+Os três primeiros receberam correção de definição. As páginas desktop afetadas foram recapturadas com dados em `screenshots/reconcile-final-2026-08-25/`; a aprovação mobile final ainda depende de recaptura real no editor, pois o driver não conseguiu acionar `Layout móvel`.
 
 ## Checklist manual exato
 
@@ -93,3 +94,14 @@ Esta revisão não altera configurações globais do Windows automaticamente e n
 ## Critério de conclusão
 
 O projeto só pode afirmar acessibilidade manual completa quando teclado, alto contraste, leitor de tela e recaptura pós-hardening tiverem data, versão do Desktop, evidência visual e resultado registrado. Até lá, a afirmação correta é: **acessibilidade estrutural aprovada; validações assistivas finais pendentes**.
+
+## Checklist final para envio
+
+- [x] 27/27 testes automatizados aprovados.
+- [x] PBIR estrutural e schema oficial com zero erros e zero avisos.
+- [x] Scanner sem segredos, PII, `.env` ou banco local versionado.
+- [x] Cabeçalhos de tabelas recapturados com nomes amigáveis em português.
+- [x] Refresh vivo de 20/20 tabelas aprovado sem salvar o estado em memória.
+- [x] Limitações de interação e recaptura mobile documentadas sem aprovação indevida.
+
+Decisão técnica desta revisão: **pronto para push quando houver autorização explícita**. Isso não equivale a acessibilidade manual completa nem autoriza publicação, merge ou release.

@@ -2,14 +2,14 @@
   "runDate": "2026-08-25",
   "affected": {
     "projectQuality": {
-      "tests": 7,
+      "tests": 8,
       "result": "passed",
-      "secondsFinalRun": 0.167
+      "secondsFinalAffectedRun": 3.813
     },
     "security": {
       "tests": 5,
       "result": "passed",
-      "secondsFinalCombinedRun": 3.696
+      "secondsFinalCombinedRun": 3.813
     },
     "pbirStructural": {
       "errors": 0,
@@ -24,12 +24,18 @@
   },
   "fullSuite": {
     "runs": 1,
-    "tests": 26,
+    "tests": 27,
     "failures": 0,
     "errors": 0,
-    "seconds": 41.388,
+    "seconds": 47.242,
+    "result": "passed"
+  },
+  "liveRefresh": {
+    "tables": 20,
+    "passed": 20,
+    "seconds": 29.07,
     "result": "passed"
   },
   "semanticLiveGatesRepeated": false,
-  "reason": "Only PBIR visual definitions, tests, evidence, and reconciliation documentation changed. Previously approved live refresh, DAX, RLS, and performance gates were not repeated."
+  "reason": "The requested live refresh was repeated and passed. DAX, RLS, and performance gates were not repeated because no semantic-model object changed."
 }
