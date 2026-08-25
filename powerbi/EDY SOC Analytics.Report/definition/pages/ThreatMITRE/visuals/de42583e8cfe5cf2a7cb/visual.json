@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "DimAttackTactic.TacticNamePT",
-              "nativeQueryRef": "Tática"
+              "nativeQueryRef": "DimAttackTactic.TacticNamePT",
+              "displayName": "Tática"
             }
           ]
         }

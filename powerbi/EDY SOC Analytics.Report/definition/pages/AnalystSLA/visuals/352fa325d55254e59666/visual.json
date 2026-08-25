@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "DimAnalyst.Team",
-              "nativeQueryRef": "Equipe",
+              "nativeQueryRef": "DimAnalyst.Team",
+              "displayName": "Equipe",
               "active": true
             }
           ]

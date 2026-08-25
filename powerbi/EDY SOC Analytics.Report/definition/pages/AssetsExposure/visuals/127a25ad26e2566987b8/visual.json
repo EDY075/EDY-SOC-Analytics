@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "DimAsset.AssetLabel",
-              "nativeQueryRef": "Ativo",
+              "nativeQueryRef": "DimAsset.AssetLabel",
+              "displayName": "Ativo",
               "active": true
             }
           ]

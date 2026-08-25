@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "DimDate.Year",
-              "nativeQueryRef": "Ano"
+              "nativeQueryRef": "DimDate.Year",
+              "displayName": "Ano"
             }
           ]
         }

@@ -80,10 +80,12 @@ FRIENDLY_COLUMN_LABELS = {
 
 
 def column(table: str, name: str, active: bool = False) -> dict[str, Any]:
+    display_name = FRIENDLY_COLUMN_LABELS.get(name, name)
     result: dict[str, Any] = {
         "field": {"Column": {"Expression": {"SourceRef": {"Entity": table}}, "Property": name}},
         "queryRef": f"{table}.{name}",
-        "nativeQueryRef": FRIENDLY_COLUMN_LABELS.get(name, name),
+        "nativeQueryRef": f"{table}.{name}",
+        "displayName": display_name,
     }
     if active:
         result["active"] = True
@@ -111,7 +113,8 @@ def aggregation(table: str, name: str, function: int) -> dict[str, Any]:
             }
         },
         "queryRef": f"{label}({table}.{name})",
-        "nativeQueryRef": f"{native} de {friendly_name}",
+        "nativeQueryRef": f"{label}({table}.{name})",
+        "displayName": f"{native} de {friendly_name}",
     }
 
 

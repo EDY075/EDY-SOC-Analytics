@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "DQ_RejectedRows.source_product",
-              "nativeQueryRef": "Produto-fonte"
+              "nativeQueryRef": "DQ_RejectedRows.source_product",
+              "displayName": "Produto-fonte"
             },
             {
               "field": {
@@ -41,7 +42,8 @@
                 }
               },
               "queryRef": "DQ_RejectedRows.QualityIssue",
-              "nativeQueryRef": "Motivo da rejeição"
+              "nativeQueryRef": "DQ_RejectedRows.QualityIssue",
+              "displayName": "Motivo da rejeição"
             },
             {
               "field": {
@@ -55,7 +57,8 @@
                 }
               },
               "queryRef": "DQ_RejectedRows.data_classification",
-              "nativeQueryRef": "Classificação"
+              "nativeQueryRef": "DQ_RejectedRows.data_classification",
+              "displayName": "Classificação"
             }
           ]
         }

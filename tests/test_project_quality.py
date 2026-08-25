@@ -18,6 +18,38 @@ from validation.project_inventory import (  # noqa: E402
 
 MARKDOWN_LINK = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
 
+EXPECTED_FRIENDLY_COLUMN_LABELS = {
+    "Year": "Ano",
+    "YearMonth": "Ano/mês",
+    "Team": "Equipe",
+    "SeverityPT": "Severidade",
+    "StatusPT": "Status",
+    "BusinessUnit": "Unidade de negócio",
+    "TacticNamePT": "Tática",
+    "TechniqueId": "ID da técnica",
+    "TechniqueName": "Técnica",
+    "RuleName": "Regra",
+    "RuleFamily": "Família da regra",
+    "SourceProduct": "Produto-fonte",
+    "SourceSystem": "Sistema-fonte",
+    "DataClassification": "Classificação",
+    "AnalystLabel": "Analista",
+    "ExperienceBand": "Experiência",
+    "AssetLabel": "Ativo",
+    "AssetType": "Tipo de ativo",
+    "Criticality": "Criticidade",
+    "Environment": "Ambiente",
+    "Stage": "Etapa",
+    "StageAtUTC": "Data/hora UTC",
+    "MinutesFromPreviousStage": "Minutos desde etapa anterior",
+    "SafeAction": "Ação sintética",
+    "IncidentId": "Incidente",
+    "RiskScore": "Risco",
+    "source_product": "Produto-fonte",
+    "QualityIssue": "Motivo da rejeição",
+    "data_classification": "Classificação",
+}
+
 
 class ProjectQualityTests(unittest.TestCase):
     def test_public_pbir_tmdl_inventory(self):
@@ -140,7 +172,7 @@ class ProjectQualityTests(unittest.TestCase):
                 for projection in bucket.get("projections", []):
                     column_field = projection.get("field", {}).get("Column", {})
                     property_name = column_field.get("Property")
-                    if property_name and projection.get("nativeQueryRef") == property_name:
+                    if property_name and projection.get("displayName") == property_name:
                         technical_aliases.append(
                             f"{visual_path.relative_to(ROOT)} -> {property_name}"
                         )
@@ -199,6 +231,35 @@ class ProjectQualityTests(unittest.TestCase):
                 "paragraphs"
             ][0]["textRuns"][0]["textStyle"]
             self.assertEqual(text_style["color"], expected_color)
+
+    def test_table_headers_use_friendly_portuguese_display_names(self):
+        pages = (
+            ROOT
+            / "powerbi"
+            / "EDY SOC Analytics.Report"
+            / "definition"
+            / "pages"
+        )
+        checked = 0
+        for visual_path in sorted(pages.glob("*/visuals/*/visual.json")):
+            payload = read_json(visual_path)
+            visual = payload.get("visual", {})
+            if visual.get("visualType") != "tableEx":
+                continue
+            projections = visual["query"]["queryState"]["Values"]["projections"]
+            for projection in projections:
+                column_field = projection.get("field", {}).get("Column", {})
+                property_name = column_field.get("Property")
+                if not property_name:
+                    continue
+                checked += 1
+                self.assertIn(property_name, EXPECTED_FRIENDLY_COLUMN_LABELS)
+                self.assertEqual(
+                    projection.get("displayName"),
+                    EXPECTED_FRIENDLY_COLUMN_LABELS[property_name],
+                    f"{visual_path.relative_to(ROOT)} -> {property_name}",
+                )
+        self.assertGreater(checked, 0)
 
 
 if __name__ == "__main__":

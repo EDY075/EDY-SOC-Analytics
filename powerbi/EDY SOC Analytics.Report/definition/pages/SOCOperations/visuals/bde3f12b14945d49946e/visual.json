@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "DimDetectionRule.RuleName",
-              "nativeQueryRef": "Regra",
+              "nativeQueryRef": "DimDetectionRule.RuleName",
+              "displayName": "Regra",
               "active": true
             }
           ]

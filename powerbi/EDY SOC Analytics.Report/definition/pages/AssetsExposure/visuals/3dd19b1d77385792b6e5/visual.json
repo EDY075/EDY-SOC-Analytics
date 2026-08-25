@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "DimAsset.AssetLabel",
-              "nativeQueryRef": "Ativo"
+              "nativeQueryRef": "DimAsset.AssetLabel",
+              "displayName": "Ativo"
             },
             {
               "field": {
@@ -41,7 +42,8 @@
                 }
               },
               "queryRef": "DimAsset.AssetType",
-              "nativeQueryRef": "Tipo de ativo"
+              "nativeQueryRef": "DimAsset.AssetType",
+              "displayName": "Tipo de ativo"
             },
             {
               "field": {
@@ -55,7 +57,8 @@
                 }
               },
               "queryRef": "DimAsset.Criticality",
-              "nativeQueryRef": "Criticidade"
+              "nativeQueryRef": "DimAsset.Criticality",
+              "displayName": "Criticidade"
             },
             {
               "field": {
@@ -69,7 +72,8 @@
                 }
               },
               "queryRef": "DimAsset.Environment",
-              "nativeQueryRef": "Ambiente"
+              "nativeQueryRef": "DimAsset.Environment",
+              "displayName": "Ambiente"
             },
             {
               "field": {

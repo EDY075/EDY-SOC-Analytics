@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "DimSourceProduct.SourceProduct",
-              "nativeQueryRef": "Produto-fonte"
+              "nativeQueryRef": "DimSourceProduct.SourceProduct",
+              "displayName": "Produto-fonte"
             },
             {
               "field": {
@@ -41,7 +42,8 @@
                 }
               },
               "queryRef": "DimSourceProduct.SourceSystem",
-              "nativeQueryRef": "Sistema-fonte"
+              "nativeQueryRef": "DimSourceProduct.SourceSystem",
+              "displayName": "Sistema-fonte"
             },
             {
               "field": {
@@ -55,7 +57,8 @@
                 }
               },
               "queryRef": "DimSourceProduct.DataClassification",
-              "nativeQueryRef": "Classificação"
+              "nativeQueryRef": "DimSourceProduct.DataClassification",
+              "displayName": "Classificação"
             },
             {
               "field": {
