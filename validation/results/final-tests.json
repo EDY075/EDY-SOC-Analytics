@@ -1,0 +1,65 @@
+{
+  "runDate": "2026-08-25",
+  "affected": {
+    "projectQuality": {
+      "tests": 9,
+      "result": "passed",
+      "secondsFinalAffectedRun": 3.34
+    },
+    "security": {
+      "tests": 5,
+      "result": "passed",
+      "secondsFinalCombinedRun": 3.34
+    },
+    "pbirStructural": {
+      "errors": 0,
+      "warnings": 0,
+      "result": "passed"
+    },
+    "pbirOfficialSchema": {
+      "errors": 0,
+      "warnings": 0,
+      "result": "passed"
+    }
+  },
+  "fullSuite": {
+    "attemptedRuns": 1,
+    "conclusiveRuns": 1,
+    "tests": 28,
+    "failures": 0,
+    "errors": 0,
+    "seconds": 38.765,
+    "result": "passed",
+    "note": "Single conclusive pre-merge run completed with exit code 0."
+  },
+  "releaseCandidateGate": {
+    "combinedSeconds": 59.138,
+    "datasetRegeneration": "passed_no_diff",
+    "inventory": {
+      "pages": 10,
+      "visuals": 101,
+      "mobileStates": 91,
+      "tables": 21,
+      "measures": 41,
+      "roles": 2,
+      "relationships": 27
+    },
+    "daxStatic": "passed",
+    "rlsStatic": "passed",
+    "altTextAndTabOrder": "passed",
+    "linksAndImages": "passed",
+    "secretsAndPii": "passed",
+    "pbirStructural": "passed_0_errors_0_warnings",
+    "pbirOfficialSchema": "passed_0_errors_0_warnings",
+    "manualInteractionsApproved": 9,
+    "result": "passed"
+  },
+  "liveRefresh": {
+    "tables": 20,
+    "passed": 20,
+    "seconds": 29.07,
+    "result": "passed"
+  },
+  "semanticLiveGatesRepeated": false,
+  "reason": "Nine manual results were approved. The final local release gate revalidated deterministic data, static DAX/RLS, report inventory, accessibility structure, security, and official PBIR schemas without reopening Power BI Desktop."
+}

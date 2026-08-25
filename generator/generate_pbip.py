@@ -129,7 +129,7 @@ MEASURES = [
     ("Peso de complexidade resolvida", "SUMX ( FILTER ( FactIncidents, RELATED ( DimStatus[IsOpen] ) = FALSE () ), RELATED ( DimSeverity[RiskWeight] ) * ( 1 + DIVIDE ( FactIncidents[RiskScore], 100 ) ) )", "#,0.0", "06 Contexto"),
     ("Índice contextual de resolução", "VAR Complexidade = [Peso de complexidade resolvida] VAR Tempo = [MTTR resolução (min)] VAR SLA = [Cumprimento de SLA] RETURN DIVIDE ( Complexidade * ( 0.5 + SLA ), 1 + DIVIDE ( Tempo, 60 ) )", "#,0.0", "06 Contexto"),
     ("Registros rejeitados", "COALESCE ( COUNTROWS ( DQ_RejectedRows ), 0 )", "#,0", "04 Qualidade"),
-    ("Última atualização UTC", "MAX ( FactSecurityEvents[ReceivedAtUTC] )", "dd/MM/yyyy HH:mm", "04 Qualidade"),
+    ("Última atualização UTC", "MAX ( FactSecurityEvents[ReceivedAtUTC] )", 'dd/MM/yy HH:mm "UTC"', "04 Qualidade"),
 ]
 
 
@@ -165,6 +165,17 @@ PRIMARY_KEYS = {
     "BridgeIncidentTechnique": "IncidentTechniqueKey",
 }
 
+SORT_BY_COLUMNS = {
+    ("DimDate", "MonthName"): "MonthNumber",
+    ("DimDate", "WeekdayName"): "WeekdayNumber",
+    ("DimTime", "HourLabel"): "Hour",
+    ("DimSeverity", "Severity"): "SeverityOrder",
+    ("DimSeverity", "SeverityPT"): "SeverityOrder",
+    ("DimStatus", "Status"): "StatusOrder",
+    ("DimStatus", "StatusPT"): "StatusOrder",
+    ("FactIncidentLifecycle", "Stage"): "StageOrder",
+}
+
 
 def make_table(name: str, path: Path, relative: str, custom_m: str | None = None) -> str:
     columns, sample = read_csv_meta(path)
@@ -178,6 +189,8 @@ def make_table(name: str, path: Path, relative: str, custom_m: str | None = None
         if col.endswith("Key") or col in {"EventId", "AlertId", "IncidentId", "DataClassification", "NetworkAddress"}:
             lines.append("\t\tisHidden")
         if fmt: lines.append(f"\t\tformatString: {fmt}")
+        if (name, col) in SORT_BY_COLUMNS:
+            lines.append(f"\t\tsortByColumn: {q(SORT_BY_COLUMNS[(name, col)])}")
         lines.extend([f"\t\tlineageTag: {guid('column:'+name+':'+col)}", "\t\tsummarizeBy: none", f"\t\tsourceColumn: {q(col)}", ""])
     source = custom_m or direct_csv_m(relative, columns, types)
     lines.extend([f"\tpartition {q(name)} = m", "\t\tmode: import", "\t\tsource ="])
@@ -277,7 +290,7 @@ def generate_model() -> None:
     expressions = [
         f'expression pProjectRoot = "{ROOT}" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]',
         f"\tlineageTag: {guid('expression:pProjectRoot')}", "\tannotation PBI_ResultType = Text", "",
-        "expression fxCsv =", "\t\t(relativePath as text) as table =>", "\t\tlet", "\t\t    Slash = Character.FromNumber(92),", "\t\t    NormalizedRoot = Text.TrimEnd(pProjectRoot, {Slash, \"/\"}),", "\t\t    FullPath = NormalizedRoot & Slash & Text.Replace(relativePath, \"/\", Slash),", "\t\t    Source = Csv.Document(File.Contents(FullPath), [Delimiter=\",\", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),", "\t\t    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true])", "\t\tin", "\t\t    Headers", f"\tlineageTag: {guid('expression:fxCsv')}", "\tannotation PBI_ResultType = Function", "",
+        "expression fxCsv =", "\t\t(relativePath as text) as table =>", "\t\tlet", "\t\t    Slash = Character.FromNumber(92),", "\t\t    NormalizedRoot = Text.TrimEnd(pProjectRoot, {Slash, \"/\"}),", "\t\t    DataRoot = NormalizedRoot & Slash & \"data\",", "\t\t    FullPath = NormalizedRoot & Slash & Text.Replace(relativePath, \"/\", Slash),", "\t\t    Files = Folder.Files(DataRoot),", "\t\t    Matches = Table.SelectRows(Files, each Text.Lower(Text.TrimEnd([Folder Path], {Slash, \"/\"}) & Slash & [Name]) = Text.Lower(FullPath)),", "\t\t    Content = if Table.RowCount(Matches) = 1 then Matches{0}[Content] else error Error.Record(\"fxCsv\", \"CSV path did not resolve uniquely\", [Path=FullPath, Matches=Table.RowCount(Matches)]),", "\t\t    Source = Csv.Document(Content, [Delimiter=\",\", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),", "\t\t    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=true])", "\t\tin", "\t\t    Headers", f"\tlineageTag: {guid('expression:fxCsv')}", "\tannotation PBI_ResultType = Function", "",
         "expression fxNormalizeSeverity =", "\t\t(value as nullable text) as nullable text =>", "\t\tlet", "\t\t    Clean = if value = null then null else Text.Lower(Text.Trim(value)),", "\t\t    Result = if List.Contains({\"info\",\"informational\"}, Clean) then \"Informational\" else if List.Contains({\"low\",\"baixo\"}, Clean) then \"Low\" else if List.Contains({\"medium\",\"medio\",\"médio\"}, Clean) then \"Medium\" else if List.Contains({\"high\",\"alto\"}, Clean) then \"High\" else if List.Contains({\"critical\",\"critico\",\"crítico\"}, Clean) then \"Critical\" else null", "\t\tin", "\t\t    Result", f"\tlineageTag: {guid('expression:fxNormalizeSeverity')}", "\tannotation PBI_ResultType = Function", "",
         "expression fxNormalizeStatus =", "\t\t(value as nullable text) as nullable text =>", "\t\tlet", "\t\t    Clean = if value = null then null else Text.Lower(Text.Trim(value)),", "\t\t    Result = if List.Contains({\"new\",\"novo\"}, Clean) then \"New\" else if List.Contains({\"active\",\"ativo\"}, Clean) then \"Active\" else if List.Contains({\"contained\",\"contido\"}, Clean) then \"Contained\" else if List.Contains({\"resolved\",\"resolvido\"}, Clean) then \"Resolved\" else if List.Contains({\"closed\",\"fechado\"}, Clean) then \"Closed\" else null", "\t\tin", "\t\t    Result", f"\tlineageTag: {guid('expression:fxNormalizeStatus')}", "\tannotation PBI_ResultType = Function", ""
     ]

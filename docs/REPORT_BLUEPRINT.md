@@ -1,43 +1,65 @@
 # Blueprint funcional do relatório
 
-## Narrativa e páginas
+Este documento descreve o PBIR versionado, não um backlog de visuais planejados. O detalhamento operacional das dez páginas está em `docs/PAGES_GUIDE.md`.
 
-| Página | Pergunta | Visuais nativos principais | Interações |
+## Narrativa e páginas implementadas
+
+| Página | Pergunta | Visuais nativos existentes | Filtros e ações existentes |
 |---|---|---|---|
-| 1. Command Center | O que exige atenção agora? | KPIs, linha 12 meses, barras críticas, tabela de prioridades | slicers sincronizados, reset, drillthrough |
-| 2. SOC Operations | O volume e a conversão estão saudáveis? | combo chart, severidade/status, heatmap dia×hora, top fontes/regras | cross-filter, tooltip, foco |
-| 3. Incident Lifecycle | Onde o fluxo desacelera? | funil, barras por etapa, aging bands, SLA por severidade | seleção por severidade, drillthrough |
-| 4. Threat & MITRE | Quais comportamentos se repetem? | matriz tática×técnica, barras, dispersão risco×frequência | drillthrough e tabela acessível |
-| 5. Assets & Exposure | Onde o risco se concentra? | Pareto, treemap moderado, linha, tabela de ativos | filtro por unidade/ambiente |
-| 6. Detection Engineering | Quais regras geram sinal ou ruído? | quadrante volume×fidelidade, barras, tabela de ações | tooltip e filtro por família |
-| 7. Analyst & SLA | A carga está equilibrada no contexto? | distribuição, severidade, SLA, small multiples | sem ranking ordinal simplista |
-| 8. Data Quality | Os dados são confiáveis? | completude, rejeições, duplicidade, qualidade por fonte, atualização | tabela de motivos segura |
-| 9. Incident Drillthrough | O que ocorreu neste incidente sintético? | resumo, timeline, ativo/regra/MITRE/SLA | voltar; filtro IncidentId mantido |
-| 10. Methodology | Como interpretar o relatório? | cartões textuais, tabela de definições e fontes | navegação e links seguros |
+| 1. Command Center | O que exige atenção agora? | 3 cards, linha mensal, barras por severidade, tabela de prioridades | slicer Ano, `Limpar filtros`, navegação para Methodology, page navigator, cross-filter e drillthrough pela linha de incidente |
+| 2. SOC Operations | Qual é o fluxo de eventos, alertas e incidentes? | 2 cards, linha temporal, 2 barras, tabela por fonte | slicers Ano e Severidade, bookmark `Estado padrão`, page navigator e cross-filter |
+| 3. Incident Lifecycle | Onde o ciclo desacelera e viola SLA? | 2 cards, 3 barras e tabela de backlog/SLA | page navigator e cross-filter por estágio/severidade |
+| 4. Threat & MITRE | Quais táticas e técnicas aparecem nos incidentes? | card, 2 barras e tabela MITRE acessível | slicer Tática, `Limpar filtros`, page navigator e cross-filter |
+| 5. Assets & Exposure | Em quais ativos, unidades e ambientes o risco se concentra? | card, 2 barras e tabela de exposição | slicers Ambiente e Unidade, `Limpar filtros`, page navigator e cross-filter |
+| 6. Detection Engineering | Quais regras geram volume, sinal e falso positivo? | 2 cards, 2 barras e matriz de ajuste em tabela | slicer Família de regra, `Limpar filtros`, page navigator e cross-filter |
+| 7. Analyst & SLA | Como carga, SLA, complexidade e tempo variam por equipe? | 2 cards, 2 barras e tabela contextual | slicer Equipe, `Limpar filtros`, page navigator e cross-filter |
+| 8. Data Quality | A camada analítica está completa, classificada e atualizada? | 2 cards, 2 barras e 2 tabelas | slicer Produto-fonte, `Limpar filtros`, page navigator e cross-filter |
+| 9. Incident Drillthrough | O que ocorreu no incidente selecionado? | 2 cards e 3 tabelas de contexto, timeline e MITRE | filtro drillthrough por `IncidentId`, botão de retorno ao Command Center e page navigator |
+| 10. Methodology | Como ler, limitar e reproduzir a análise? | 8 caixas de texto | page navigator |
 
-## Slicers sincronizados
+Todos os 101 visuais são nativos. Não existem heatmap, funil, dispersão, Pareto, treemap, small multiples ou páginas dedicadas de tooltip no PBIR atual.
 
-Período, produto-fonte, severidade, status e ambiente. A página de drillthrough não sincroniza `IncidentId` para evitar estado inesperado.
+## Filtros e sincronização
 
-## Bookmarks funcionais
+Os slicers existentes são locais às páginas:
 
-- `Reset_Global`: limpa filtros permitidos e retorna ao estado padrão.
-- `View_Executive`: reduz detalhes operacionais no Command Center.
-- `View_Operational`: expande a fila de prioridades.
-- `Show_Definitions`: exibe/oculta painel metodológico contextual.
+- Command Center: Ano;
+- SOC Operations: Ano e Severidade;
+- Threat & MITRE: Tática;
+- Assets & Exposure: Ambiente e Unidade;
+- Detection Engineering: Família de regra;
+- Analyst & SLA: Equipe;
+- Data Quality: Produto-fonte.
 
-## Tooltips
+O PBIR não declara uma coleção de slicers sincronizados globalmente. O page navigator permite deslocamento entre as dez páginas, mas cada página conserva apenas seu próprio contexto compatível. `IncidentId` é um filtro de drillthrough da página 9, não um slicer global.
 
-- `Tooltip_KPI`: definição, relógio, unidade e período anterior.
-- `Tooltip_Rule`: volume, conversão, falso positivo e última atividade.
-- `Tooltip_Asset`: criticidade, incidentes, risco e fontes.
+## Bookmark e reset implementados
 
-Informação essencial nunca depende somente de tooltip, pois leitores de tela não leem todos os report tooltips.
+Existe um bookmark real: `Estado padrão SOC Operations`. O botão `Estado padrão` da página 2 aponta para esse bookmark e restaura o estado registrado. A evidência funcional anterior reduziu alertas de 18 mil para 2 mil por seleção e restaurou 18 mil pelo bookmark.
 
-## Estados
+Os botões `Limpar filtros` usam a ação nativa `ClearAllSlicers` nas páginas 1, 4, 5, 6, 7 e 8. O Command Center também possui navegação por ação para Methodology; a página de drillthrough possui retorno por navegação para Command Center. Incident Lifecycle e Methodology não têm botão de reset porque não possuem slicer local.
 
-- Carregamento: skeleton não existe nativamente; usar título “Atualizando…” somente quando medido via estado de refresh.
-- Vazio: medida retorna mensagem “Nenhum registro para os filtros selecionados”.
-- Erro: queries de qualidade expõem contagem e razão segura; não mostram payload.
-- Sucesso: verde reservado para SLA cumprido, qualidade aprovada ou redução confirmada.
+Não existem os bookmarks `Reset_Global`, `View_Executive`, `View_Operational` ou `Show_Definitions` descritos em versões preliminares deste documento.
 
+## Tooltips implementados
+
+O relatório habilita `useEnhancedTooltips` e utiliza os tooltips padrão/enriquecidos dos visuais nativos. Não existem páginas de report tooltip ou artefatos chamados `Tooltip_KPI`, `Tooltip_Rule` ou `Tooltip_Asset`.
+
+Informação essencial está nos títulos, rótulos, cards e tabelas; nenhum fluxo depende exclusivamente de hover. Isso preserva acesso por teclado e evita que uma definição crítica exista apenas em tooltip.
+
+## Interações verificadas
+
+- cross-filter no Command Center: incidentes ativos variaram de 253 para 7 e voltaram a 253 após limpeza;
+- drillthrough: uma linha de incidente abriu a página 9 filtrada para um único `IncidentId`;
+- bookmark: uma seleção reduziu alertas de 18 mil para 2 mil e `Estado padrão` restaurou 18 mil;
+- navegação por ação e teclado: Command Center → Methodology.
+
+As demais interações seguem o comportamento nativo de seleção cruzada; elas não devem ser anunciadas como testes manuais individuais sem nova evidência.
+
+## Estados e comunicação
+
+- carregamento é o estado nativo do Power BI; não há skeleton customizado;
+- filtros sem correspondência produzem cards em branco/zero conforme a semântica da medida e visuais sem linhas;
+- `DQ_RejectedRows` expõe somente motivo seguro e classificação, nunca payload bruto;
+- verde é reservado para cumprimento/resultado favorável, âmbar para atenção e vermelho para criticidade;
+- a cobertura de RLS é parcial por desenho: incidentes respeitam equipe, eventos e alertas permanecem globais. Consulte `docs/RLS_SECURITY.md`.

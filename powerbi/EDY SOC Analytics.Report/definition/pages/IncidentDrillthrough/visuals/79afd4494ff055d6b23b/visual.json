@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "FactIncidentLifecycle.Stage",
-              "nativeQueryRef": "Stage"
+              "nativeQueryRef": "FactIncidentLifecycle.Stage",
+              "displayName": "Etapa"
             },
             {
               "field": {
@@ -41,7 +42,8 @@
                 }
               },
               "queryRef": "FactIncidentLifecycle.StageAtUTC",
-              "nativeQueryRef": "StageAtUTC"
+              "nativeQueryRef": "FactIncidentLifecycle.StageAtUTC",
+              "displayName": "Data/hora UTC"
             },
             {
               "field": {
@@ -55,7 +57,8 @@
                 }
               },
               "queryRef": "FactIncidentLifecycle.MinutesFromPreviousStage",
-              "nativeQueryRef": "MinutesFromPreviousStage"
+              "nativeQueryRef": "FactIncidentLifecycle.MinutesFromPreviousStage",
+              "displayName": "Minutos desde etapa anterior"
             },
             {
               "field": {
@@ -69,7 +72,8 @@
                 }
               },
               "queryRef": "FactIncidentLifecycle.SafeAction",
-              "nativeQueryRef": "SafeAction"
+              "nativeQueryRef": "FactIncidentLifecycle.SafeAction",
+              "displayName": "Ação sintética"
             }
           ]
         }

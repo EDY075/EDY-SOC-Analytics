@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "FactIncidents.IncidentId",
-              "nativeQueryRef": "IncidentId"
+              "nativeQueryRef": "FactIncidents.IncidentId",
+              "displayName": "Incidente"
             },
             {
               "field": {
@@ -41,7 +42,8 @@
                 }
               },
               "queryRef": "DimSeverity.SeverityPT",
-              "nativeQueryRef": "SeverityPT"
+              "nativeQueryRef": "DimSeverity.SeverityPT",
+              "displayName": "Severidade"
             },
             {
               "field": {
@@ -55,7 +57,8 @@
                 }
               },
               "queryRef": "DimStatus.StatusPT",
-              "nativeQueryRef": "StatusPT"
+              "nativeQueryRef": "DimStatus.StatusPT",
+              "displayName": "Status"
             },
             {
               "field": {
@@ -69,7 +72,8 @@
                 }
               },
               "queryRef": "DimAsset.AssetLabel",
-              "nativeQueryRef": "AssetLabel"
+              "nativeQueryRef": "DimAsset.AssetLabel",
+              "displayName": "Ativo"
             },
             {
               "field": {
@@ -83,7 +87,8 @@
                 }
               },
               "queryRef": "DimDetectionRule.RuleName",
-              "nativeQueryRef": "RuleName"
+              "nativeQueryRef": "DimDetectionRule.RuleName",
+              "displayName": "Regra"
             },
             {
               "field": {
@@ -97,7 +102,8 @@
                 }
               },
               "queryRef": "FactIncidents.RiskScore",
-              "nativeQueryRef": "RiskScore"
+              "nativeQueryRef": "FactIncidents.RiskScore",
+              "displayName": "Risco"
             }
           ]
         }

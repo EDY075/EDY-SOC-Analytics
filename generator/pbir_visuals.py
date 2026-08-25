@@ -12,7 +12,11 @@ from typing import Any
 VISUAL_SCHEMA = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json"
 MOBILE_SCHEMA = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainerMobileState/2.4.0/schema.json"
 PAGE_SCHEMA = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json"
+BOOKMARK_SCHEMA = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/2.1.0/schema.json"
+BOOKMARKS_METADATA_SCHEMA = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmarksMetadata/1.0.0/schema.json"
 NAMESPACE = uuid.UUID("68e18ef0-e292-47ef-9de7-fc2b573aa4c1")
+SOC_OPERATIONS_BOOKMARK = "f145a352ab22f855cfd6"
+COMMAND_CENTER_BOOKMARK = "0eec5555eec8573e85e1"
 
 
 def visual_id(page: str, label: str) -> str:
@@ -46,11 +50,46 @@ def position(x: int, y: int, width: int, height: int, order: int) -> dict[str, A
     return {"x": x, "y": y, "z": order, "height": height, "width": width, "tabOrder": order}
 
 
+FRIENDLY_COLUMN_LABELS = {
+    "Year": "Ano",
+    "YearMonth": "Ano/mês",
+    "Team": "Equipe",
+    "SeverityPT": "Severidade",
+    "StatusPT": "Status",
+    "BusinessUnit": "Unidade de negócio",
+    "TacticNamePT": "Tática",
+    "TechniqueId": "ID da técnica",
+    "TechniqueName": "Técnica",
+    "RuleName": "Regra",
+    "RuleFamily": "Família da regra",
+    "SourceProduct": "Produto-fonte",
+    "SourceSystem": "Sistema-fonte",
+    "DataClassification": "Classificação",
+    "AnalystLabel": "Analista",
+    "ExperienceBand": "Experiência",
+    "AssetLabel": "Ativo",
+    "AssetType": "Tipo de ativo",
+    "Criticality": "Criticidade",
+    "Environment": "Ambiente",
+    "Stage": "Etapa",
+    "StageAtUTC": "Data/hora UTC",
+    "MinutesFromPreviousStage": "Minutos desde etapa anterior",
+    "SafeAction": "Ação sintética",
+    "IncidentId": "Incidente",
+    "RiskScore": "Risco",
+    "source_product": "Produto-fonte",
+    "QualityIssue": "Motivo da rejeição",
+    "data_classification": "Classificação",
+}
+
+
 def column(table: str, name: str, active: bool = False) -> dict[str, Any]:
+    display_name = FRIENDLY_COLUMN_LABELS.get(name, name)
     result: dict[str, Any] = {
         "field": {"Column": {"Expression": {"SourceRef": {"Entity": table}}, "Property": name}},
         "queryRef": f"{table}.{name}",
-        "nativeQueryRef": name,
+        "nativeQueryRef": f"{table}.{name}",
+        "displayName": display_name,
     }
     if active:
         result["active"] = True
@@ -68,7 +107,8 @@ def measure(name: str) -> dict[str, Any]:
 def aggregation(table: str, name: str, function: int) -> dict[str, Any]:
     labels = {0: "Sum", 1: "Average", 2: "Count", 3: "Min", 4: "Max", 5: "CountNonNull", 6: "Median", 7: "StandardDeviation", 8: "Variance"}
     label = labels[function]
-    native = {0: "Sum", 1: "Average", 2: "Count", 3: "Minimum", 4: "Maximum", 5: "Count", 6: "Median", 7: "Standard deviation", 8: "Variance"}[function]
+    native = {0: "Soma", 1: "Média", 2: "Contagem", 3: "Mínimo", 4: "Máximo", 5: "Contagem", 6: "Mediana", 7: "Desvio padrão", 8: "Variância"}[function]
+    friendly_name = FRIENDLY_COLUMN_LABELS.get(name, name)
     return {
         "field": {
             "Aggregation": {
@@ -77,7 +117,8 @@ def aggregation(table: str, name: str, function: int) -> dict[str, Any]:
             }
         },
         "queryRef": f"{label}({table}.{name})",
-        "nativeQueryRef": f"{native} of {name}",
+        "nativeQueryRef": f"{label}({table}.{name})",
+        "displayName": f"{native} de {friendly_name}",
     }
 
 
@@ -102,7 +143,7 @@ def vco(title: str, alt_text: str, *, title_visible: bool = True) -> dict[str, A
     }
 
 
-def textbox(page: str, label: str, text: str, x: int, y: int, width: int, height: int, order: int, *, size: int = 18, color_hex: str = "#E8EEF7", weight: str = "Segoe UI Semibold") -> dict[str, Any]:
+def textbox(page: str, label: str, text: str, x: int, y: int, width: int, height: int, order: int, *, size: int = 18, color_hex: str = "#E8EEF7", weight: str = "Segoe UI Semibold", panel: bool = False) -> dict[str, Any]:
     name = visual_id(page, label)
     return {
         "$schema": VISUAL_SCHEMA,
@@ -113,9 +154,9 @@ def textbox(page: str, label: str, text: str, x: int, y: int, width: int, height
             "objects": {"general": [{"properties": {"paragraphs": [{"textRuns": [{"value": text, "textStyle": {"fontFamily": weight, "fontSize": f"{size}px", "color": color_hex}}], "horizontalTextAlignment": "left"}]}}]},
             "visualContainerObjects": {
                 "general": [{"properties": {"altText": lit_string(text)}}],
-                "background": [{"properties": {"show": lit_bool(False)}}],
-                "border": [{"properties": {"show": lit_bool(False)}}],
-                "padding": [{"properties": {"top": lit_num(0), "bottom": lit_num(0), "left": lit_num(0), "right": lit_num(0)}}],
+                "background": [{"properties": ({"show": lit_bool(True), "color": color("#141B25"), "transparency": lit_num(0)} if panel else {"show": lit_bool(False)})}],
+                "border": [{"properties": ({"show": lit_bool(True), "color": color("#273244"), "radius": lit_num(6), "width": lit_num(1)} if panel else {"show": lit_bool(False)})}],
+                "padding": [{"properties": ({"top": lit_num(10), "bottom": lit_num(10), "left": lit_num(12), "right": lit_num(12)} if panel else {"top": lit_num(0), "bottom": lit_num(0), "left": lit_num(0), "right": lit_num(0)})}],
             },
         },
     }
@@ -139,7 +180,7 @@ def navigator(page: str, order: int = 20) -> dict[str, Any]:
     }
 
 
-def card(page: str, label: str, title: str, measures: list[str], x: int, y: int, width: int, height: int, order: int) -> dict[str, Any]:
+def card(page: str, label: str, title: str, measures: list[str], x: int, y: int, width: int, height: int, order: int, *, value_font_size: int = 16) -> dict[str, Any]:
     name = visual_id(page, label)
     return {
         "$schema": VISUAL_SCHEMA,
@@ -149,7 +190,7 @@ def card(page: str, label: str, title: str, measures: list[str], x: int, y: int,
             "visualType": "cardVisual",
             "query": {"queryState": {"Data": {"projections": [measure(item) for item in measures]}}},
             "objects": {
-                "value": [{"properties": {"fontColor": color("#F5F8FC"), "fontSize": lit_num(16), "bold": lit_bool(True)}, "selector": {"id": "default"}}],
+                "value": [{"properties": {"fontColor": color("#F5F8FC"), "fontSize": lit_num(value_font_size), "bold": lit_bool(True)}, "selector": {"id": "default"}}],
                 "label": [{"properties": {"show": lit_bool(True), "fontColor": color("#AEBBD0"), "fontSize": lit_num(9), "textWrap": lit_bool(True)}, "selector": {"id": "default"}}],
                 "cardCalloutArea": [{"properties": {"show": lit_bool(True), "paddingUniform": lit_num(6), "rectangleRoundedCurve": lit_num(4), "backgroundFillColor": color("#111823"), "backgroundTransparency": lit_num(0)}}],
                 "layout": [{"properties": {"autoGrid": lit_bool(True), "style": lit_string("Cards"), "cellPadding": lit_num(6, "L")}, "selector": {"id": "default"}}],
@@ -202,7 +243,12 @@ def slicer(page: str, label: str, title: str, field: tuple[str, str], x: int, y:
     visual: dict[str, Any] = {
         "visualType": "slicer",
         "query": {"queryState": {"Values": {"projections": [column(field[0], field[1])]}}},
-        "objects": {"data": [{"properties": {"mode": lit_string("Dropdown")}}]},
+        "objects": {
+            "data": [{"properties": {"mode": lit_string("Dropdown")}}],
+            # The report title already supplies the accessible Portuguese label.
+            # Hide Power BI's raw model-column header (for example, Year/Team).
+            "header": [{"properties": {"show": lit_bool(False)}}],
+        },
         "visualContainerObjects": vco(title, f"Filtro {title}. Permite uma ou múltiplas seleções."),
     }
     if sync_group:
@@ -257,14 +303,16 @@ def action_button(
     }
 
 
-def page_header(page: str, title: str, subtitle: str, *, reset: str | None = None) -> list[dict[str, Any]]:
+def page_header(page: str, title: str, subtitle: str, *, reset: str | None = None, subtitle_color: str = "#8FA0B8") -> list[dict[str, Any]]:
     visuals = [
         textbox(page, "title", title, 24, 12, 760, 40, 1, size=22),
-        textbox(page, "subtitle", subtitle, 800, 18, 300 if reset else 456, 26, 2, size=11, color_hex="#8FA0B8", weight="Segoe UI"),
+        textbox(page, "subtitle", subtitle, 800, 18, 300 if reset else 456, 26, 2, size=11, color_hex=subtitle_color, weight="Segoe UI"),
         navigator(page, 10),
     ]
     if reset == "bookmark":
-        visuals.append(action_button(page, "reset-bookmark", "Estado padrão", "f145a352ab22f855cfd6", 1116, 14, 140, 34, 3, action_type="Bookmark"))
+        visuals.append(action_button(page, "reset-bookmark", "Estado padrão", SOC_OPERATIONS_BOOKMARK, 1116, 14, 140, 34, 3, action_type="Bookmark"))
+    elif reset == "command-bookmark":
+        visuals.append(action_button(page, "reset-filters", "Limpar filtros", COMMAND_CENTER_BOOKMARK, 1116, 14, 140, 34, 3, action_type="Bookmark"))
     elif reset == "clear":
         visuals.append(action_button(page, "reset-filters", "Limpar filtros", None, 1116, 14, 140, 34, 3, action_type="ClearAllSlicers"))
     return visuals
@@ -274,7 +322,7 @@ def build_pages() -> dict[str, list[dict[str, Any]]]:
     pages: dict[str, list[dict[str, Any]]] = {}
 
     p = "CommandCenter"
-    pages[p] = page_header(p, "COMMAND CENTER", "Visão executiva • dados sintéticos • America/Sao_Paulo", reset="clear") + [
+    pages[p] = page_header(p, "COMMAND CENTER", "Visão executiva • dados sintéticos • America/Sao_Paulo", reset="command-bookmark") + [
         card(p, "kpi-primary", "Prioridade agora", ["Incidentes ativos", "Incidentes críticos ativos"], 24, 120, 292, 122, 20),
         card(p, "kpi-backlog", "Backlog e SLA", ["Backlog", "Cumprimento de SLA"], 332, 120, 292, 122, 21),
         card(p, "kpi-time", "Velocidade e tendência", ["MTTD (min)", "MTTR resolução (min)", "Variação mensal de incidentes %"], 640, 120, 616, 122, 22),
@@ -349,11 +397,11 @@ def build_pages() -> dict[str, list[dict[str, Any]]]:
     p = "DataQuality"
     pages[p] = page_header(p, "DATA QUALITY", "Completude, validade, rejeições e linhagem segura", reset="clear") + [
         card(p, "quality-volume", "Estado do dataset", ["Registros rejeitados", "Total de eventos"], 24, 120, 440, 118, 20),
-        card(p, "quality-refresh", "Atualização e fidelidade", ["Última atualização UTC", "Fidelidade da fonte"], 480, 120, 440, 118, 21),
+        card(p, "quality-refresh", "Atualização e fidelidade", ["Última atualização UTC", "Fidelidade da fonte"], 480, 120, 440, 118, 21, value_font_size=10),
         slicer(p, "source", "Produto-fonte", ("DimSourceProduct", "SourceProduct"), 940, 120, 316, 80, 22),
         chart(p, "quality-source", "Eventos por produto-fonte", "clusteredBarChart", ("DimSourceProduct", "SourceProduct"), [measure("Total de eventos")], 24, 254, 610, 242, 30),
         chart(p, "fidelity-source", "Fidelidade por produto-fonte", "clusteredBarChart", ("DimSourceProduct", "SourceProduct"), [measure("Fidelidade da fonte")], 650, 254, 606, 242, 31),
-        table(p, "rejections", "Registros rejeitados (sem payload)", [column("DQ_RejectedRows", "source_product"), column("DQ_RejectedRows", "QualityIssue"), column("DQ_RejectedRows", "data_classification")], 24, 512, 610, 184, 40),
+        table(p, "rejections", "Registros rejeitados — nenhum no período selecionado", [column("DQ_RejectedRows", "source_product"), column("DQ_RejectedRows", "QualityIssue"), column("DQ_RejectedRows", "data_classification")], 24, 512, 610, 184, 40),
         table(p, "lineage", "Classificação e origem", [column("DimSourceProduct", "SourceProduct"), column("DimSourceProduct", "SourceSystem"), column("DimSourceProduct", "DataClassification"), measure("Total de eventos"), measure("Fidelidade da fonte")], 650, 512, 606, 184, 41),
     ]
 
@@ -368,13 +416,13 @@ def build_pages() -> dict[str, list[dict[str, Any]]]:
     ]
 
     p = "Methodology"
-    pages[p] = page_header(p, "METHODOLOGY", "Definições, limites e fontes primárias") + [
-        textbox(p, "scope", "ESCOPO E ÉTICA\nTodos os registros são sintéticos, determinísticos e classificados como SYNTHETIC_DEMO_DATA. Nenhum log, banco, credencial, IP pessoal ou evidência operacional foi usado.", 24, 124, 386, 190, 20, size=13, weight="Segoe UI"),
-        textbox(p, "clocks", "RELÓGIOS DO SOC\nMTTD: evento → detecção. MTTA: criação → reconhecimento. Triagem, contenção, resolução e recuperação são medidos separadamente; MTTR neste relatório significa tempo até resolução.", 426, 124, 402, 190, 21, size=13, weight="Segoe UI"),
-        textbox(p, "security", "SEGURANÇA E ACESSO\nRLS demonstrativa: SOC_Analyst restringe a equipe atribuída; SOC_Manager tem visão completa. A opção de privacidade é limitada a este arquivo e apenas às fontes CSV sintéticas locais.", 844, 124, 412, 190, 22, size=13, weight="Segoe UI"),
-        textbox(p, "sources", "FONTES PRIMÁRIAS\nMicrosoft Learn: PL-300, Power BI, star schema, PBIP/PBIR/TMDL, RLS, acessibilidade, mobile e Performance Analyzer. MITRE ATT&CK Enterprise. NIST CSF 2.0 e SP 800-61 Rev. 3.", 24, 334, 600, 176, 30, size=13, weight="Segoe UI"),
-        textbox(p, "limits", "LIMITAÇÕES\nO dataset representa uma operação fictícia e não estima risco real. Comparações entre analistas são contextualizadas por severidade e complexidade; não constituem avaliação individual. Cobertura MITRE significa técnicas observadas no conjunto sintético.", 640, 334, 616, 176, 31, size=13, weight="Segoe UI"),
-        textbox(p, "usage", "COMO LER\nComece no Command Center, use os filtros por período e severidade, selecione barras para filtrar os detalhes e abra o drillthrough a partir de um incidente. Tabelas oferecem alternativa legível aos gráficos.", 24, 530, 1232, 142, 40, size=13, weight="Segoe UI"),
+    pages[p] = page_header(p, "METHODOLOGY", "Definições, limites e fontes primárias", subtitle_color="#B8C6DA") + [
+        textbox(p, "scope", "ESCOPO E ÉTICA\nTodos os registros são sintéticos, determinísticos e classificados como SYNTHETIC_DEMO_DATA. Nenhum log, banco, credencial, IP pessoal ou evidência operacional foi usado.", 24, 124, 386, 190, 20, size=14, color_hex="#F1F5FA", weight="Segoe UI", panel=True),
+        textbox(p, "clocks", "RELÓGIOS DO SOC\nMTTD: evento → detecção. MTTA: criação → reconhecimento. Triagem, contenção, resolução e recuperação são medidos separadamente; MTTR neste relatório significa tempo até resolução.", 426, 124, 402, 190, 21, size=14, color_hex="#F1F5FA", weight="Segoe UI", panel=True),
+        textbox(p, "security", "SEGURANÇA E ACESSO\nRLS demonstrativa: SOC_Analyst restringe somente o domínio de incidentes da equipe; eventos e alertas permanecem globais. SOC_Manager tem visão completa.", 844, 124, 412, 190, 22, size=14, color_hex="#F1F5FA", weight="Segoe UI", panel=True),
+        textbox(p, "sources", "FONTES PRIMÁRIAS\nMicrosoft Learn: PL-300, Power BI, star schema, PBIP/PBIR/TMDL, RLS, acessibilidade, mobile e Performance Analyzer. MITRE ATT&CK Enterprise. NIST CSF 2.0 e SP 800-61 Rev. 3.", 24, 334, 600, 176, 30, size=14, color_hex="#F1F5FA", weight="Segoe UI", panel=True),
+        textbox(p, "limits", "LIMITAÇÕES\nO dataset representa uma operação fictícia e não estima risco real. Comparações entre analistas são contextualizadas por severidade e complexidade; não constituem avaliação individual. Cobertura MITRE significa técnicas observadas no conjunto sintético.", 640, 334, 616, 176, 31, size=14, color_hex="#F1F5FA", weight="Segoe UI", panel=True),
+        textbox(p, "usage", "COMO LER\nComece no Command Center, use os filtros por período e severidade, selecione barras para filtrar os detalhes e abra o drillthrough a partir de um incidente. Tabelas oferecem alternativa legível aos gráficos.", 24, 530, 1232, 142, 40, size=14, color_hex="#F1F5FA", weight="Segoe UI", panel=True),
     ]
     return pages
 
@@ -385,6 +433,75 @@ def drillthrough_config() -> tuple[dict[str, Any], dict[str, Any]]:
     filter_config = {"filters": [{"name": filter_name, "field": field, "type": "Categorical", "howCreated": "Drillthrough"}]}
     page_binding = {"name": "Pod", "type": "Drillthrough", "parameters": [{"name": "Param_" + filter_name, "boundFilter": filter_name, "fieldExpr": field}]}
     return filter_config, page_binding
+
+
+def _bookmark_visual_state(payload: dict[str, Any]) -> dict[str, Any]:
+    """Capture an explicit no-selection data state for one PBIR visual."""
+    visual = payload["visual"]
+    visual_type = visual["visualType"]
+    single_visual: dict[str, Any] = {"visualType": visual_type, "objects": {}}
+    state: dict[str, Any] = {"singleVisual": single_visual}
+    filters: list[dict[str, Any]] = []
+    active_projections: dict[str, list[dict[str, Any]]] = {}
+
+    query_state = visual.get("query", {}).get("queryState", {})
+    for role, bucket in query_state.items():
+        for index, projection in enumerate(bucket.get("projections", [])):
+            field = projection.get("field")
+            if not field:
+                continue
+            filters.append({
+                "name": hashlib.sha256(
+                    f"bookmark:{payload['name']}:{role}:{index}".encode("utf-8")
+                ).hexdigest()[:20],
+                "type": "Categorical" if "Column" in field else "Advanced",
+                "expression": field,
+                "howCreated": 0,
+            })
+            if "Column" in field:
+                active_projections.setdefault(role, []).append(field)
+
+    if filters:
+        state["filters"] = {"byExpr": filters}
+    if active_projections:
+        single_visual["activeProjections"] = active_projections
+    if visual_type == "slicer":
+        single_visual["objects"] = {
+            "merge": {"data": [{"properties": {"mode": lit_string("Dropdown")}}]}
+        }
+    return state
+
+
+def write_command_center_bookmark(
+    report_definition: Path, visuals: list[dict[str, Any]]
+) -> None:
+    """Persist the default Command Center state used by Limpar filtros."""
+    bookmarks_root = report_definition / "bookmarks"
+    write_json(bookmarks_root / "bookmarks.json", {
+        "$schema": BOOKMARKS_METADATA_SCHEMA,
+        "items": [
+            {"name": SOC_OPERATIONS_BOOKMARK},
+            {"name": COMMAND_CENTER_BOOKMARK},
+        ],
+    })
+    write_json(bookmarks_root / f"{COMMAND_CENTER_BOOKMARK}.bookmark.json", {
+        "$schema": BOOKMARK_SCHEMA,
+        "displayName": "Estado padrão Command Center",
+        "name": COMMAND_CENTER_BOOKMARK,
+        "options": {"targetVisualNames": []},
+        "explorationState": {
+            "version": "1.0",
+            "activeSection": "CommandCenter",
+            "sections": {
+                "CommandCenter": {
+                    "visualContainers": {
+                        payload["name"]: _bookmark_visual_state(payload)
+                        for payload in visuals
+                    }
+                }
+            },
+        },
+    })
 
 
 def generate_visuals(report_definition: Path) -> dict[str, int]:
@@ -430,4 +547,5 @@ def generate_visuals(report_definition: Path) -> dict[str, int]:
             })
             mobile_y += mobile_height + 8
             total += 1
+    write_command_center_bookmark(report_definition, pages["CommandCenter"])
     return {"pages": len(pages), "visuals": total}

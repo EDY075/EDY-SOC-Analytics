@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "DimSeverity.SeverityPT",
-              "nativeQueryRef": "SeverityPT"
+              "nativeQueryRef": "DimSeverity.SeverityPT",
+              "displayName": "Severidade"
             },
             {
               "field": {

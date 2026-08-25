@@ -6,10 +6,13 @@ let
         {"asset_id", Text.Trim, type text}, {"rule_id", Text.Trim, type text},
         {"severity", Text.Trim, type text}
     }),
-    Typed = Table.TransformColumnTypes(Trimmed, {{"event_timestamp", type datetimezone}, {"received_at", type datetimezone}}),
-    NormalizedSeverity = Table.TransformColumns(Typed, {{"severity", fxNormalizeSeverity, type text}}),
+    ParsedTimestamps = Table.TransformColumns(Trimmed, {
+        {"event_timestamp", each try DateTimeZone.FromText(_) otherwise null, type nullable datetimezone},
+        {"received_at", each try DateTimeZone.FromText(_) otherwise null, type nullable datetimezone}
+    }),
+    NormalizedSeverity = Table.TransformColumns(ParsedTimestamps, {{"severity", fxNormalizeSeverity, type text}}),
     Normalized = Table.TransformColumns(NormalizedSeverity, {{"asset_id", each if _ = null or Text.Trim(_) = "" then "UNKNOWN" else Text.Trim(_), type text}}),
-    ValidRows = Table.SelectRows(Normalized, each [event_id] <> null and [event_timestamp] <> null and [severity] <> null),
+    ValidRows = Table.SelectRows(Normalized, each [event_id] <> null and [event_timestamp] <> null and [received_at] <> null and [severity] <> null),
     Deduplicated = Table.Distinct(Table.Sort(ValidRows, {{"received_at", Order.Ascending}}), {"event_id"}),
     WithEventKey = Table.AddColumn(Deduplicated, "EventKey", each Number.FromText(Text.AfterDelimiter([event_id], "-")), Int64.Type),
     MergeSource = Table.NestedJoin(WithEventKey, {"source_product", "source_system"}, DimSourceProduct, {"SourceProduct", "SourceSystem"}, "Source", JoinKind.LeftOuter),

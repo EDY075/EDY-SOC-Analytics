@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "DQ_RejectedRows.source_product",
-              "nativeQueryRef": "source_product"
+              "nativeQueryRef": "DQ_RejectedRows.source_product",
+              "displayName": "Produto-fonte"
             },
             {
               "field": {
@@ -41,7 +42,8 @@
                 }
               },
               "queryRef": "DQ_RejectedRows.QualityIssue",
-              "nativeQueryRef": "QualityIssue"
+              "nativeQueryRef": "DQ_RejectedRows.QualityIssue",
+              "displayName": "Motivo da rejeição"
             },
             {
               "field": {
@@ -55,7 +57,8 @@
                 }
               },
               "queryRef": "DQ_RejectedRows.data_classification",
-              "nativeQueryRef": "data_classification"
+              "nativeQueryRef": "DQ_RejectedRows.data_classification",
+              "displayName": "Classificação"
             }
           ]
         }
@@ -183,7 +186,7 @@
             "altText": {
               "expr": {
                 "Literal": {
-                  "Value": "'Tabela acessível: Registros rejeitados (sem payload).'"
+                  "Value": "'Tabela acessível: Registros rejeitados — nenhum no período selecionado.'"
                 }
               }
             }
@@ -203,7 +206,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Registros rejeitados (sem payload)'"
+                  "Value": "'Registros rejeitados — nenhum no período selecionado'"
                 }
               }
             },

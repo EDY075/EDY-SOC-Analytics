@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "DimAsset.Environment",
-              "nativeQueryRef": "Environment"
+              "nativeQueryRef": "DimAsset.Environment",
+              "displayName": "Ambiente"
             }
           ]
         }
@@ -41,6 +42,19 @@
               "expr": {
                 "Literal": {
                   "Value": "'Dropdown'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "header": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

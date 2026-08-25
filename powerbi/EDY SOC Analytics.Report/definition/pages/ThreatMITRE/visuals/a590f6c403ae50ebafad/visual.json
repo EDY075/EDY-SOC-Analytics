@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "DimAttackTactic.TacticNamePT",
-              "nativeQueryRef": "TacticNamePT",
+              "nativeQueryRef": "DimAttackTactic.TacticNamePT",
+              "displayName": "Tática",
               "active": true
             }
           ]

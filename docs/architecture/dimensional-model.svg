@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1260" role="img" aria-labelledby="title desc">
+  <title id="title">Modelo dimensional do EDY SOC Analytics</title>
+  <desc id="desc">Modelo estrela com seis dimensões conformadas, três fatos principais, quatro dimensões de incidente, detalhes, ponte MITRE bidirecional e dependências lógicas desconectadas. As relações físicas somam 27.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#080c12"/>
+      <stop offset="1" stop-color="#101722"/>
+    </linearGradient>
+    <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#273244" stroke-width="1" opacity="0.2"/>
+    </pattern>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#7d8cff"/>
+    </marker>
+    <marker id="arrowAmber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#f2b84b"/>
+    </marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+    <style><![CDATA[
+      .kicker{font:600 16px 'Segoe UI',Arial,sans-serif;letter-spacing:2px;fill:#39c6e6}
+      .h1{font:700 40px 'Segoe UI',Arial,sans-serif;fill:#f5f8fc}
+      .sub{font:400 18px 'Segoe UI',Arial,sans-serif;fill:#aebbd0}
+      .group-title{font:700 17px 'Segoe UI',Arial,sans-serif;letter-spacing:.6px;fill:#c9d5e6}
+      .node-title{font:700 16px 'Segoe UI',Arial,sans-serif;fill:#f5f8fc}
+      .body{font:400 13px 'Segoe UI',Arial,sans-serif;fill:#aebbd0}
+      .small{font:400 12px 'Segoe UI',Arial,sans-serif;fill:#8fa0b8}
+      .count{font:700 13px 'Segoe UI',Arial,sans-serif;fill:#0d1118}
+      .group{fill:#0f1620;stroke:#273244;stroke-width:1.5}
+      .dim{fill:#14202c;stroke:#39c6e6;stroke-width:2}
+      .fact{fill:#18251f;stroke:#46c78c;stroke-width:2}
+      .bridge{fill:#2b2416;stroke:#f2b84b;stroke-width:3}
+      .helper{fill:#171d2f;stroke:#7d8cff;stroke-width:2;stroke-dasharray:6 5}
+      .rel{fill:none;stroke:#7d8cff;stroke-width:2.3;marker-end:url(#arrow)}
+      .rel-amber{fill:none;stroke:#f2b84b;stroke-width:3;marker-start:url(#arrowAmber);marker-end:url(#arrowAmber)}
+      .logical{fill:none;stroke:#7d8cff;stroke-width:2;stroke-dasharray:7 6;marker-end:url(#arrow)}
+    ]]></style>
+  </defs>
+
+  <rect width="1800" height="1260" fill="url(#bg)"/>
+  <rect width="1800" height="1260" fill="url(#grid)"/>
+
+  <text x="70" y="62" class="kicker">EDY SOC ANALYTICS · TMDL SEMANTIC MODEL</text>
+  <text x="70" y="112" class="h1">Modelo dimensional · 21 tabelas · 27 relações</text>
+  <text x="70" y="148" class="sub">Fluxo de filtro unidirecional por padrão; a ponte incidente–técnica é a única exceção bidirecional</text>
+  <rect x="1518" y="54" width="212" height="44" rx="22" fill="#46c78c"/>
+  <text x="1624" y="81" text-anchor="middle" class="count">IMPORT · STAR SCHEMA</text>
+
+  <!-- Shared dimensions -->
+  <rect x="50" y="190" width="330" height="670" rx="18" class="group"/>
+  <text x="78" y="228" class="group-title">DIMENSÕES CONFORMADAS</text>
+  <text x="78" y="252" class="small">6 dimensões × 3 fatos = 18 relações</text>
+  <g filter="url(#shadow)">
+    <rect x="78" y="280" width="274" height="72" rx="10" class="dim"/>
+    <text x="98" y="308" class="node-title">DimDate</text><text x="98" y="332" class="small">DateKey · 546 dias</text>
+    <rect x="78" y="370" width="274" height="72" rx="10" class="dim"/>
+    <text x="98" y="398" class="node-title">DimTime</text><text x="98" y="422" class="small">TimeKey · intervalos de 5 minutos</text>
+    <rect x="78" y="460" width="274" height="72" rx="10" class="dim"/>
+    <text x="98" y="488" class="node-title">DimAsset</text><text x="98" y="512" class="small">AssetKey · ativo/unidade/ambiente</text>
+    <rect x="78" y="550" width="274" height="72" rx="10" class="dim"/>
+    <text x="98" y="578" class="node-title">DimSourceProduct</text><text x="98" y="602" class="small">SourceProductKey · origem EDY</text>
+    <rect x="78" y="640" width="274" height="72" rx="10" class="dim"/>
+    <text x="98" y="668" class="node-title">DimSeverity</text><text x="98" y="692" class="small">SeverityKey · peso e ordem</text>
+    <rect x="78" y="730" width="274" height="72" rx="10" class="dim"/>
+    <text x="98" y="758" class="node-title">DimDetectionRule</text><text x="98" y="782" class="small">DetectionRuleKey · família e regra</text>
+  </g>
+
+  <!-- Main facts -->
+  <rect x="530" y="190" width="510" height="670" rx="18" class="group"/>
+  <text x="558" y="228" class="group-title">FATOS PRINCIPAIS</text>
+  <g filter="url(#shadow)">
+    <rect x="592" y="274" width="386" height="150" rx="12" class="fact"/>
+    <text x="618" y="306" class="node-title">FactSecurityEvents</text>
+    <text x="618" y="334" class="body">grão: evento canônico · 120.000 linhas</text>
+    <text x="618" y="366" class="small">EventDateKey · EventTimeKey · AssetKey</text>
+    <text x="618" y="390" class="small">SourceProductKey · SeverityKey · DetectionRuleKey</text>
+
+    <rect x="592" y="470" width="386" height="150" rx="12" class="fact"/>
+    <text x="618" y="502" class="node-title">FactAlerts</text>
+    <text x="618" y="530" class="body">grão: alerta derivado · 18.000 linhas</text>
+    <text x="618" y="562" class="small">AlertDateKey · AlertTimeKey · AssetKey</text>
+    <text x="618" y="586" class="small">SourceProductKey · SeverityKey · DetectionRuleKey</text>
+
+    <rect x="592" y="666" width="386" height="170" rx="12" class="fact"/>
+    <text x="618" y="698" class="node-title">FactIncidents</text>
+    <text x="618" y="726" class="body">grão: estado atual · 3.200 linhas</text>
+    <text x="618" y="758" class="small">6 chaves conformadas + StatusKey · AnalystKey</text>
+    <text x="618" y="782" class="small">ClassificationKey · SLAKey</text>
+    <text x="618" y="808" class="small">hub 1:* para lifecycle, SLA e bridge MITRE</text>
+  </g>
+
+  <!-- Aggregate relationship arrows: detailed keys are listed in fact cards and explicit in Mermaid source -->
+  <path d="M352 350 C445 350 486 350 592 350" class="rel"/>
+  <rect x="430" y="330" width="112" height="28" rx="14" fill="#7d8cff"/>
+  <text x="486" y="349" text-anchor="middle" class="count">6 relações</text>
+  <path d="M352 520 C445 520 486 545 592 545" class="rel"/>
+  <rect x="430" y="510" width="112" height="28" rx="14" fill="#7d8cff"/>
+  <text x="486" y="529" text-anchor="middle" class="count">6 relações</text>
+  <path d="M352 690 C445 690 486 750 592 750" class="rel"/>
+  <rect x="430" y="690" width="112" height="28" rx="14" fill="#7d8cff"/>
+  <text x="486" y="709" text-anchor="middle" class="count">6 relações</text>
+
+  <!-- Incident dimensions -->
+  <rect x="1190" y="190" width="330" height="500" rx="18" class="group"/>
+  <text x="1218" y="228" class="group-title">DIMENSÕES DE INCIDENTE</text>
+  <text x="1218" y="252" class="small">4 relações adicionais</text>
+  <g filter="url(#shadow)">
+    <rect x="1218" y="280" width="274" height="72" rx="10" class="dim"/>
+    <text x="1238" y="308" class="node-title">DimStatus</text><text x="1238" y="332" class="small">StatusKey · aberto/fechado</text>
+    <rect x="1218" y="370" width="274" height="72" rx="10" class="dim"/>
+    <text x="1238" y="398" class="node-title">DimAnalyst</text><text x="1238" y="422" class="small">AnalystKey · equipe e experiência</text>
+    <rect x="1218" y="460" width="274" height="72" rx="10" class="dim"/>
+    <text x="1238" y="488" class="node-title">DimClassification</text><text x="1238" y="512" class="small">ClassificationKey</text>
+    <rect x="1218" y="550" width="274" height="72" rx="10" class="dim"/>
+    <text x="1238" y="578" class="node-title">DimSLA</text><text x="1238" y="602" class="small">SLAKey · metas por severidade</text>
+  </g>
+  <path d="M1218 642 C1130 642 1080 750 978 750" class="rel"/>
+  <rect x="1060" y="676" width="112" height="28" rx="14" fill="#7d8cff"/>
+  <text x="1116" y="695" text-anchor="middle" class="count">4 relações</text>
+
+  <!-- Logical helpers -->
+  <rect x="1550" y="190" width="200" height="500" rx="18" class="group"/>
+  <text x="1576" y="228" class="group-title">SEM RELAÇÃO</text>
+  <g filter="url(#shadow)">
+    <rect x="1576" y="280" width="148" height="98" rx="10" class="helper"/>
+    <text x="1594" y="308" class="node-title">SecurityAccess</text>
+    <text x="1594" y="334" class="small">consultada pela</text>
+    <text x="1594" y="354" class="small">expressão RLS</text>
+    <rect x="1576" y="410" width="148" height="92" rx="10" class="helper"/>
+    <text x="1594" y="438" class="node-title">_Measures</text>
+    <text x="1594" y="464" class="small">41 medidas DAX</text>
+    <rect x="1576" y="534" width="148" height="92" rx="10" class="helper"/>
+    <text x="1594" y="562" class="node-title">DQ_RejectedRows</text>
+    <text x="1594" y="588" class="small">tabela desconectada</text>
+  </g>
+  <path d="M1576 330 C1538 330 1530 406 1492 406" class="logical"/>
+
+  <!-- Detail and MITRE zone -->
+  <rect x="50" y="900" width="1700" height="280" rx="18" class="group"/>
+  <text x="78" y="940" class="group-title">DETALHES E MITRE ATT&amp;CK · 5 RELAÇÕES</text>
+  <text x="78" y="964" class="small">linhas sólidas representam relações físicas; a relação âmbar é bidirecional</text>
+  <g filter="url(#shadow)">
+    <rect x="110" y="1000" width="250" height="112" rx="12" class="fact"/>
+    <text x="132" y="1032" class="node-title">FactIncidentLifecycle</text>
+    <text x="132" y="1060" class="body">IncidentKey · 18.034 transições</text>
+    <text x="132" y="1086" class="small">1 relação a FactIncidents</text>
+
+    <rect x="420" y="1000" width="226" height="112" rx="12" class="fact"/>
+    <text x="442" y="1032" class="node-title">FactSLA</text>
+    <text x="442" y="1060" class="body">IncidentKey · 3.200 avaliações</text>
+    <text x="442" y="1086" class="small">1 relação a FactIncidents</text>
+
+    <rect x="720" y="990" width="300" height="132" rx="12" class="bridge"/>
+    <text x="744" y="1022" class="node-title">BridgeIncidentTechnique</text>
+    <text x="744" y="1050" class="body">4.000 vínculos incidente ↔ técnica</text>
+    <text x="744" y="1078" class="small">IncidentKey: bidirecional controlada</text>
+    <text x="744" y="1102" class="small">AttackTechniqueKey: unidirecional</text>
+
+    <rect x="1100" y="1000" width="250" height="112" rx="12" class="dim"/>
+    <text x="1122" y="1032" class="node-title">DimAttackTechnique</text>
+    <text x="1122" y="1060" class="body">26 técnicas observadas</text>
+    <text x="1122" y="1086" class="small">AttackTechniqueKey</text>
+
+    <rect x="1430" y="1000" width="250" height="112" rx="12" class="dim"/>
+    <text x="1452" y="1032" class="node-title">DimAttackTactic</text>
+    <text x="1452" y="1060" class="body">13 táticas Enterprise</text>
+    <text x="1452" y="1086" class="small">AttackTacticKey</text>
+  </g>
+
+  <path d="M680 836 C610 900 360 940 235 1000" class="rel"/>
+  <path d="M760 836 C720 910 610 952 533 1000" class="rel"/>
+  <path d="M870 836 L870 990" class="rel-amber"/>
+  <path d="M1100 1056 L1020 1056" class="rel"/>
+  <path d="M1430 1056 L1350 1056" class="rel"/>
+
+  <!-- Accounting / legend -->
+  <rect x="50" y="1204" width="1700" height="34" rx="17" fill="#141b25" stroke="#273244"/>
+  <text x="78" y="1227" class="small">CONTAGEM: 18 dimensões conformadas→fatos + 4 dimensões de incidente→FactIncidents + 3 detalhes↔incidente + 1 técnica→ponte + 1 tática→técnica = 27 relações físicas</text>
+  <circle cx="1420" cy="1221" r="6" fill="#39c6e6"/><text x="1434" y="1227" class="small">dimensão</text>
+  <circle cx="1512" cy="1221" r="6" fill="#46c78c"/><text x="1526" y="1227" class="small">fato</text>
+  <circle cx="1588" cy="1221" r="6" fill="#f2b84b"/><text x="1602" y="1227" class="small">bridge bidirecional</text>
+</svg>

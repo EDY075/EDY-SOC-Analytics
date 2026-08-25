@@ -10,11 +10,13 @@ table DimSeverity
 		sourceColumn: SeverityKey
 	column Severity
 		dataType: string
+		sortByColumn: SeverityOrder
 		lineageTag: cd06668b-2093-567d-be7d-9f201ab91835
 		summarizeBy: none
 		sourceColumn: Severity
 	column SeverityPT
 		dataType: string
+		sortByColumn: SeverityOrder
 		lineageTag: 6ddc694a-184d-5c5e-995d-ed6b0741feb2
 		summarizeBy: none
 		sourceColumn: SeverityPT

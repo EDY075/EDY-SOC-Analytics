@@ -22,6 +22,7 @@ table DimTime
 		sourceColumn: Minute
 	column HourLabel
 		dataType: string
+		sortByColumn: Hour
 		lineageTag: d36d81f4-026a-57b5-a567-873b16ca3d67
 		summarizeBy: none
 		sourceColumn: HourLabel

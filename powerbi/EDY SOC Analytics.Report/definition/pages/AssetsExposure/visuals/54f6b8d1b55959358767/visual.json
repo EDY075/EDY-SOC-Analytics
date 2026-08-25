@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "DimAsset.BusinessUnit",
-              "nativeQueryRef": "BusinessUnit"
+              "nativeQueryRef": "DimAsset.BusinessUnit",
+              "displayName": "Unidade de negócio"
             }
           ]
         }
@@ -41,6 +42,19 @@
               "expr": {
                 "Literal": {
                   "Value": "'Dropdown'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "header": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

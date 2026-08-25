@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "DimAttackTactic.TacticNamePT",
-              "nativeQueryRef": "TacticNamePT"
+              "nativeQueryRef": "DimAttackTactic.TacticNamePT",
+              "displayName": "Tática"
             }
           ]
         }
@@ -41,6 +42,19 @@
               "expr": {
                 "Literal": {
                   "Value": "'Dropdown'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "header": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

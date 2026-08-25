@@ -26,4 +26,22 @@ Linhas com chave de evento, timestamp ou severidade inválidos não entram nas f
 
 ## Valores esperados
 
-`data/expected/` funciona como oracle de testes e não como substituto do Power Query. `data/expected/kpi_expected.json` contém baselines reproduzíveis para conferir medidas.
+`data/expected/` tem duas funções no desenho atual:
+
+1. **oracle reproduzível:** hashes, chaves, contagens e `kpi_expected.json` permitem comparar a saída regenerada e o modelo vivo;
+2. **camada curada carregada:** `FactIncidentLifecycle`, `FactSLA` e `BridgeIncidentTechnique` são importadas diretamente de seus CSVs em `data/expected/`.
+
+As três fatos principais não são substituídas por esse oracle: `FactSecurityEvents`, `FactAlerts` e `FactIncidents` continuam sendo tipadas, normalizadas, deduplicadas e conformadas por Power Query a partir de `data/raw/`. `DQ_RejectedRows` também deriva da camada raw. Essa distinção deve ser mantida em diagramas e instruções de reprodução.
+
+## Controles automatizados existentes
+
+- seed e SHA-256 determinísticos no manifesto;
+- unicidade após deduplicação;
+- tratamento de membros desconhecidos;
+- integridade referencial de ativo, regra e severidade;
+- sequência temporal do lifecycle;
+- regras de SLA e chaves MITRE;
+- contagens e KPIs esperados;
+- classificação `SYNTHETIC_DEMO_DATA` e varredura básica de segredos/PII.
+
+`Registros rejeitados = 0` é o resultado atual do modelo carregado, não prova universal de qualidade. Ele indica apenas que nenhuma linha da amostra atual caiu nas condições não recuperáveis da query de quarentena.

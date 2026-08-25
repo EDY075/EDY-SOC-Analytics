@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "DimDetectionRule.RuleFamily",
-              "nativeQueryRef": "RuleFamily"
+              "nativeQueryRef": "DimDetectionRule.RuleFamily",
+              "displayName": "Família da regra"
             }
           ]
         }
@@ -41,6 +42,19 @@
               "expr": {
                 "Literal": {
                   "Value": "'Dropdown'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "header": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

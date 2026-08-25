@@ -1,0 +1,77 @@
+%% EDY SOC Analytics — modelo dimensional
+%% As 27 arestas sólidas abaixo correspondem aos 27 relacionamentos do TMDL.
+flowchart LR
+    subgraph SHARED["Dimensões conformadas · 18 relações"]
+        Date["DimDate"]
+        Time["DimTime"]
+        Asset["DimAsset"]
+        Source["DimSourceProduct"]
+        Severity["DimSeverity"]
+        Rule["DimDetectionRule"]
+    end
+
+    subgraph FACTS["Fatos principais"]
+        Events["FactSecurityEvents\ngrão: evento"]
+        Alerts["FactAlerts\ngrão: alerta"]
+        Incidents["FactIncidents\ngrão: estado atual do incidente"]
+    end
+
+    Date -->|EventDateKey| Events
+    Time -->|EventTimeKey| Events
+    Asset -->|AssetKey| Events
+    Source -->|SourceProductKey| Events
+    Severity -->|SeverityKey| Events
+    Rule -->|DetectionRuleKey| Events
+
+    Date -->|AlertDateKey| Alerts
+    Time -->|AlertTimeKey| Alerts
+    Asset -->|AssetKey| Alerts
+    Source -->|SourceProductKey| Alerts
+    Severity -->|SeverityKey| Alerts
+    Rule -->|DetectionRuleKey| Alerts
+
+    Date -->|CreatedDateKey| Incidents
+    Time -->|CreatedTimeKey| Incidents
+    Asset -->|AssetKey| Incidents
+    Source -->|SourceProductKey| Incidents
+    Severity -->|SeverityKey| Incidents
+    Rule -->|DetectionRuleKey| Incidents
+
+    subgraph INCIDENT_DIMS["Dimensões exclusivas de incidente · 4 relações"]
+        Status["DimStatus"]
+        Analyst["DimAnalyst"]
+        Classification["DimClassification"]
+        SLA["DimSLA"]
+    end
+
+    Status -->|StatusKey| Incidents
+    Analyst -->|AnalystKey| Incidents
+    Classification -->|ClassificationKey| Incidents
+    SLA -->|SLAKey| Incidents
+
+    subgraph DETAILS["Detalhes e cobertura · 5 relações"]
+        Lifecycle["FactIncidentLifecycle\ngrão: transição de estágio"]
+        SLAFact["FactSLA\ngrão: avaliação por incidente"]
+        Bridge["BridgeIncidentTechnique\ngrão: incidente ↔ técnica"]
+        Technique["DimAttackTechnique"]
+        Tactic["DimAttackTactic"]
+    end
+
+    Incidents -->|IncidentKey| Lifecycle
+    Incidents -->|IncidentKey| SLAFact
+    Incidents <-->|"IncidentKey · bidirecional controlada"| Bridge
+    Technique -->|AttackTechniqueKey| Bridge
+    Tactic -->|AttackTacticKey| Technique
+
+    Access["SecurityAccess\nsem relacionamento físico"] -. "consultada pela expressão RLS" .-> Analyst
+    Measures["_Measures\n41 medidas · tabela desconectada"] -. "DAX" .-> FACTS
+    DQ["DQ_RejectedRows\ndesconectada"]
+
+    classDef dim fill:#14202c,stroke:#39c6e6,color:#e8eef7,stroke-width:2px;
+    classDef fact fill:#18251f,stroke:#46c78c,color:#e8eef7,stroke-width:2px;
+    classDef bridge fill:#2b2416,stroke:#f2b84b,color:#f5f8fc,stroke-width:3px;
+    classDef helper fill:#171d2f,stroke:#7d8cff,color:#e8eef7,stroke-width:2px,stroke-dasharray:5 4;
+    class Date,Time,Asset,Source,Severity,Rule,Status,Analyst,Classification,SLA,Technique,Tactic dim;
+    class Events,Alerts,Incidents,Lifecycle,SLAFact fact;
+    class Bridge bridge;
+    class Access,Measures,DQ helper;

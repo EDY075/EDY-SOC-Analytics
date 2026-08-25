@@ -1,0 +1,71 @@
+{
+  "runDate": "2026-08-25",
+  "scope": "manual Power BI Desktop validation with loaded synthetic data",
+  "reportPath": "powerbi/EDY SOC Analytics.pbip",
+  "dataState": {
+    "loaded": true,
+    "activeIncidentsDefault": 253,
+    "backlogDefault": 253,
+    "savedAfterRefresh": false
+  },
+  "evidence": {
+    "source": "manual validation reported by the project owner",
+    "dataQualityMobileRecaptured": true,
+    "newFilesAddedToRepository": false,
+    "screenReaderTested": false,
+    "highContrastTested": false
+  },
+  "interactions": [
+    {
+      "interaction": "page_navigation",
+      "observed": "Navigation between the tested pages completed correctly.",
+      "result": "approved"
+    },
+    {
+      "interaction": "cross_filter",
+      "observed": "A chart selection reduced the cards and filtered the related visuals.",
+      "result": "approved"
+    },
+    {
+      "interaction": "drillthrough",
+      "observed": "INC-00000001 opened page 9 with total 1, synthetic asset 067, risk 285, and corresponding timeline and MITRE visuals.",
+      "result": "approved"
+    },
+    {
+      "interaction": "reset_bookmark",
+      "observed": "After a selection reduced the cards from 253 to 30, Limpar filtros removed the selection and restored 253.",
+      "result": "approved"
+    },
+    {
+      "interaction": "mobile_timestamp",
+      "observed": "Última atualização UTC was fully displayed as 31/07/26 23:22 UTC.",
+      "result": "approved"
+    },
+    {
+      "interaction": "rejections_empty_state",
+      "observed": "Registros rejeitados — nenhum no período selecionado was displayed correctly.",
+      "result": "approved"
+    },
+    {
+      "interaction": "methodology_mobile",
+      "observed": "The page was legible, with no clipping or overlap.",
+      "result": "approved"
+    },
+    {
+      "interaction": "data_quality_mobile",
+      "observed": "Loaded data and the empty state were recaptured and reviewed.",
+      "result": "approved"
+    },
+    {
+      "interaction": "keyboard_focus",
+      "observed": "A visible focus outline reached the filters pane and the Fidelidade por produto-fonte visual.",
+      "coverage": "tested targets only; not a screen-reader audit",
+      "result": "approved"
+    }
+  ],
+  "remainingLimitations": [
+    "Interactive screen-reader validation was not performed.",
+    "Interactive Windows high-contrast validation was not performed.",
+    "Power BI Service tenant, RLS group assignment, and license behavior remain outside the local validation scope."
+  ]
+}

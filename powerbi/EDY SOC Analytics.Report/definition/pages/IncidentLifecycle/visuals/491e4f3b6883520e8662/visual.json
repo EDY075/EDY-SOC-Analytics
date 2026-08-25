@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "FactIncidentLifecycle.Stage",
-              "nativeQueryRef": "Stage",
+              "nativeQueryRef": "FactIncidentLifecycle.Stage",
+              "displayName": "Etapa",
               "active": true
             }
           ]
@@ -51,7 +52,8 @@
                 }
               },
               "queryRef": "Average(FactIncidentLifecycle.MinutesFromPreviousStage)",
-              "nativeQueryRef": "Average of MinutesFromPreviousStage"
+              "nativeQueryRef": "Average(FactIncidentLifecycle.MinutesFromPreviousStage)",
+              "displayName": "Média de Minutos desde etapa anterior"
             }
           ]
         }

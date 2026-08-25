@@ -17,6 +17,7 @@ table FactIncidentLifecycle
 		sourceColumn: IncidentKey
 	column Stage
 		dataType: string
+		sortByColumn: StageOrder
 		lineageTag: 4212a276-726a-5fd9-8928-efd30400616e
 		summarizeBy: none
 		sourceColumn: Stage

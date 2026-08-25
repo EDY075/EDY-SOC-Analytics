@@ -1,6 +1,6 @@
 # Catálogo de medidas DAX
 
-As fórmulas abaixo são a especificação executável do modelo. Percentuais usam `DIVIDE`, tempos usam minutos e bases são reutilizadas. `MTTR` significa exclusivamente criação→resolução.
+Este catálogo contém exatamente as 41 medidas versionadas em `_Measures.tmdl`. A definição TMDL é a fonte executável; as fórmulas abaixo são sua representação legível. Percentuais usam `DIVIDE`, tempos usam minutos e bases são reutilizadas. `MTTR` significa exclusivamente criação → resolução.
 
 ## Volume e estado
 
@@ -114,11 +114,6 @@ CALCULATE ( [MTTR resolução (min)], DATEADD ( DimDate[Date], -1, MONTH ) )
 
 Variação MTTR % =
 DIVIDE ( [MTTR resolução (min)] - [MTTR mês anterior], [MTTR mês anterior] )
-
-Tendência mensal (índice) =
-VAR Atual = [Total de incidentes]
-VAR Anterior = [Incidentes mês anterior]
-RETURN DIVIDE ( Atual, Anterior, 1 )
 ```
 
 ## MITRE, ativos, regras e fontes
@@ -141,8 +136,6 @@ COUNTROWS (
         [Risco acumulado do ativo] >= 250
     )
 )
-
-Alertas por regra = [Total de alertas]
 
 Ruído por 1.000 alertas =
 DIVIDE (
@@ -176,9 +169,6 @@ RETURN DIVIDE ( Complexidade * ( 0.5 + SLA ), 1 + DIVIDE ( Tempo, 60 ) )
 
 Registros rejeitados = COALESCE ( COUNTROWS ( DQ_RejectedRows ), 0 )
 
-Completude de eventos =
-1 - DIVIDE ( [Registros rejeitados], COUNTROWS ( Stg_SecurityEvents ) )
-
 Última atualização UTC = MAX ( FactSecurityEvents[ReceivedAtUTC] )
 ```
 
@@ -190,3 +180,7 @@ O índice contextual não é um ranking de pessoas. Ele deve ser lido junto com 
 - Incidentes ainda abertos não entram em médias que dependem de timestamp futuro.
 - A data de referência vem do dataset, não de `NOW()`, preservando reprodutibilidade.
 - Filtros sem dados devem mostrar `—` em vez de zero quando zero sugerir atividade medida.
+
+## Comportamento sob RLS
+
+Medidas que leem `FactIncidents`, `FactIncidentLifecycle`, `FactSLA` ou `BridgeIncidentTechnique` respeitam a equipe do papel `SOC_Analyst`. Medidas baseadas em `FactSecurityEvents` e `FactAlerts` permanecem globais porque esses fatos não têm rota de segurança por analista. Consequentemente, uma visualização pode combinar um denominador global de alertas com um numerador de incidentes restrito; isso deve ser interpretado como escopo misto, não como taxa exclusiva da equipe. A matriz de teste está em `docs/RLS_SECURITY.md`.

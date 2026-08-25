@@ -1,0 +1,367 @@
+import re
+import sys
+import unittest
+from pathlib import Path
+from urllib.parse import unquote
+
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from validation.project_inventory import (  # noqa: E402
+    EXPECTED_INVENTORY,
+    collect_inventory,
+    read_json,
+    validate_project,
+)
+
+
+MARKDOWN_LINK = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
+
+EXPECTED_FRIENDLY_COLUMN_LABELS = {
+    "Year": "Ano",
+    "YearMonth": "Ano/mês",
+    "Team": "Equipe",
+    "SeverityPT": "Severidade",
+    "StatusPT": "Status",
+    "BusinessUnit": "Unidade de negócio",
+    "TacticNamePT": "Tática",
+    "TechniqueId": "ID da técnica",
+    "TechniqueName": "Técnica",
+    "RuleName": "Regra",
+    "RuleFamily": "Família da regra",
+    "SourceProduct": "Produto-fonte",
+    "SourceSystem": "Sistema-fonte",
+    "DataClassification": "Classificação",
+    "AnalystLabel": "Analista",
+    "ExperienceBand": "Experiência",
+    "AssetLabel": "Ativo",
+    "AssetType": "Tipo de ativo",
+    "Criticality": "Criticidade",
+    "Environment": "Ambiente",
+    "Stage": "Etapa",
+    "StageAtUTC": "Data/hora UTC",
+    "MinutesFromPreviousStage": "Minutos desde etapa anterior",
+    "SafeAction": "Ação sintética",
+    "IncidentId": "Incidente",
+    "RiskScore": "Risco",
+    "source_product": "Produto-fonte",
+    "QualityIssue": "Motivo da rejeição",
+    "data_classification": "Classificação",
+}
+
+
+class ProjectQualityTests(unittest.TestCase):
+    def test_public_pbir_tmdl_inventory(self):
+        self.assertEqual(collect_inventory(), EXPECTED_INVENTORY)
+
+    def test_pbir_json_alt_text_and_tab_order(self):
+        self.assertEqual(validate_project(), [])
+
+    def test_all_local_markdown_links_resolve(self):
+        failures = []
+        for markdown in sorted(ROOT.rglob("*.md")):
+            if any(part in {".git", "archive"} for part in markdown.parts):
+                continue
+            text = markdown.read_text(encoding="utf-8")
+            for match in MARKDOWN_LINK.finditer(text):
+                raw_target = match.group(1).strip().strip("<>")
+                if raw_target.startswith(("http://", "https://", "mailto:", "#")):
+                    continue
+                local_target = unquote(raw_target.split("#", 1)[0])
+                if not local_target:
+                    continue
+                resolved = (markdown.parent / local_target).resolve()
+                try:
+                    resolved.relative_to(ROOT)
+                except ValueError:
+                    failures.append(
+                        f"{markdown.relative_to(ROOT)} -> path escapes repository: {raw_target}"
+                    )
+                    continue
+                if not resolved.exists():
+                    failures.append(
+                        f"{markdown.relative_to(ROOT)} -> {raw_target}"
+                    )
+        self.assertEqual(failures, [], "broken local Markdown links")
+
+    def test_page_metadata_names_existing_directories(self):
+        pages_root = (
+            ROOT
+            / "powerbi"
+            / "EDY SOC Analytics.Report"
+            / "definition"
+            / "pages"
+        )
+        metadata = read_json(pages_root / "pages.json")
+        declared = metadata["pageOrder"]
+        existing = sorted(path.name for path in pages_root.iterdir() if path.is_dir())
+        self.assertEqual(sorted(declared), existing)
+
+    def test_csv_connector_uses_one_folder_privacy_boundary(self):
+        function_source = (
+            ROOT / "powerbi" / "power-query" / "Functions.m"
+        ).read_text(encoding="utf-8")
+        generated_source = (
+            ROOT
+            / "powerbi"
+            / "EDY SOC Analytics.SemanticModel"
+            / "definition"
+            / "expressions.tmdl"
+        ).read_text(encoding="utf-8")
+
+        for source in (function_source, generated_source):
+            self.assertIn("Folder.Files", source)
+            self.assertNotIn("File.Contents", source)
+            self.assertIn("Table.RowCount(Matches) = 1", source)
+
+    def test_report_interaction_contracts(self):
+        definition = (
+            ROOT / "powerbi" / "EDY SOC Analytics.Report" / "definition"
+        )
+        actions = []
+        for visual_path in sorted((definition / "pages").glob("*/visuals/*/visual.json")):
+            payload = read_json(visual_path)
+            visual = payload.get("visual", {})
+            if visual.get("visualType") != "actionButton":
+                continue
+            link = visual["visualContainerObjects"]["visualLink"][0]["properties"]
+
+            def literal(name):
+                value = link.get(name, {}).get("expr", {}).get("Literal", {}).get("Value")
+                return value.strip("'") if isinstance(value, str) else None
+
+            actions.append((literal("type"), literal("navigationSection"), literal("bookmark")))
+
+        self.assertEqual(
+            [action[0] for action in actions].count("ClearAllSlicers"),
+            5,
+        )
+        self.assertIn(("Bookmark", None, "f145a352ab22f855cfd6"), actions)
+        self.assertIn(("Bookmark", None, "0eec5555eec8573e85e1"), actions)
+        self.assertIn(("PageNavigation", "Methodology", None), actions)
+        self.assertIn(("PageNavigation", "CommandCenter", None), actions)
+
+        bookmark = definition / "bookmarks" / "f145a352ab22f855cfd6.bookmark.json"
+        self.assertTrue(bookmark.is_file())
+
+        drillthrough = read_json(
+            definition / "pages" / "IncidentDrillthrough" / "page.json"
+        )
+        self.assertEqual(drillthrough["pageBinding"]["type"], "Drillthrough")
+        filters = drillthrough["filterConfig"]["filters"]
+        self.assertEqual(len(filters), 1)
+        self.assertEqual(filters[0]["howCreated"], "Drillthrough")
+        field = filters[0]["field"]["Column"]
+        self.assertEqual(field["Expression"]["SourceRef"]["Entity"], "FactIncidents")
+        self.assertEqual(field["Property"], "IncidentId")
+
+    def test_command_center_reset_bookmark_captures_default_data_state(self):
+        definition = (
+            ROOT / "powerbi" / "EDY SOC Analytics.Report" / "definition"
+        )
+        bookmark_name = "0eec5555eec8573e85e1"
+        command_page = definition / "pages" / "CommandCenter"
+        reset_path = (
+            command_page
+            / "visuals"
+            / "07dd385141415f659ba1"
+            / "visual.json"
+        )
+        reset = read_json(reset_path)
+        link = reset["visual"]["visualContainerObjects"]["visualLink"][0][
+            "properties"
+        ]
+
+        def literal(name):
+            return link[name]["expr"]["Literal"]["Value"].strip("'")
+
+        self.assertEqual(reset["visual"]["visualType"], "actionButton")
+        self.assertEqual(literal("show"), "true")
+        self.assertEqual(literal("type"), "Bookmark")
+        self.assertEqual(literal("bookmark"), bookmark_name)
+        self.assertEqual(reset["position"]["tabOrder"], 3)
+
+        metadata = read_json(definition / "bookmarks" / "bookmarks.json")
+        declared = {item["name"] for item in metadata["items"]}
+        existing = {
+            path.name.removesuffix(".bookmark.json")
+            for path in (definition / "bookmarks").glob("*.bookmark.json")
+        }
+        self.assertEqual(declared, existing)
+        self.assertIn(bookmark_name, declared)
+
+        bookmark = read_json(
+            definition / "bookmarks" / f"{bookmark_name}.bookmark.json"
+        )
+        state = bookmark["explorationState"]
+        self.assertEqual(state["activeSection"], "CommandCenter")
+        self.assertEqual(bookmark["options"]["targetVisualNames"], [])
+        captured = state["sections"]["CommandCenter"]["visualContainers"]
+        page_visuals = {
+            path.parent.name: read_json(path)
+            for path in command_page.glob("visuals/*/visual.json")
+        }
+        self.assertEqual(set(captured), set(page_visuals))
+
+        data_visuals = {
+            name
+            for name, payload in page_visuals.items()
+            if payload.get("visual", {}).get("query", {}).get("queryState")
+        }
+        self.assertTrue(data_visuals)
+        for name in data_visuals:
+            saved = captured[name]
+            self.assertEqual(
+                saved["singleVisual"]["visualType"],
+                page_visuals[name]["visual"]["visualType"],
+            )
+            self.assertTrue(saved["filters"]["byExpr"], name)
+            for saved_filter in saved["filters"]["byExpr"]:
+                self.assertNotIn("filter", saved_filter)
+                self.assertNotIn("where", saved_filter)
+
+        for chart_name in ("010fb39b23d75ba49327", "f6e0e767fc605a12b2e9"):
+            saved = captured[chart_name]
+            self.assertIn("Category", saved["singleVisual"]["activeProjections"])
+            self.assertTrue(saved["filters"]["byExpr"])
+
+    def test_visual_finishing_contracts(self):
+        pages = (
+            ROOT
+            / "powerbi"
+            / "EDY SOC Analytics.Report"
+            / "definition"
+            / "pages"
+        )
+
+        technical_aliases = []
+        for visual_path in sorted(pages.glob("*/visuals/*/visual.json")):
+            payload = read_json(visual_path)
+            query_state = payload.get("visual", {}).get("query", {}).get("queryState", {})
+            for bucket in query_state.values():
+                for projection in bucket.get("projections", []):
+                    column_field = projection.get("field", {}).get("Column", {})
+                    property_name = column_field.get("Property")
+                    if property_name and projection.get("displayName") == property_name:
+                        technical_aliases.append(
+                            f"{visual_path.relative_to(ROOT)} -> {property_name}"
+                        )
+        self.assertEqual(technical_aliases, [])
+
+        for visual_path in sorted(pages.glob("*/visuals/*/visual.json")):
+            payload = read_json(visual_path)
+            visual = payload.get("visual", {})
+            if visual.get("visualType") != "slicer":
+                continue
+            header_show = visual["objects"]["header"][0]["properties"]["show"]
+            self.assertEqual(
+                header_show["expr"]["Literal"]["Value"],
+                "false",
+                str(visual_path.relative_to(ROOT)),
+            )
+
+        quality_refresh = read_json(
+            pages
+            / "DataQuality"
+            / "visuals"
+            / "e28667afd71f5261b652"
+            / "visual.json"
+        )
+        value_size = quality_refresh["visual"]["objects"]["value"][0]["properties"]["fontSize"]
+        self.assertEqual(value_size["expr"]["Literal"]["Value"], "10D")
+
+        quality_mobile = read_json(
+            pages
+            / "DataQuality"
+            / "visuals"
+            / "e28667afd71f5261b652"
+            / "mobile.json"
+        )
+        mobile_position = quality_mobile["position"]
+        self.assertEqual(mobile_position["width"], 320)
+        self.assertGreaterEqual(mobile_position["height"], 176)
+
+        measures = (
+            ROOT
+            / "powerbi"
+            / "EDY SOC Analytics.SemanticModel"
+            / "definition"
+            / "tables"
+            / "_Measures.tmdl"
+        ).read_text(encoding="utf-8")
+        timestamp = re.search(
+            r"measure 'Última atualização UTC'.*?formatString:\s*([^\r\n]+)",
+            measures,
+            flags=re.DOTALL,
+        )
+        self.assertIsNotNone(timestamp)
+        timestamp_format = timestamp.group(1).strip()
+        self.assertEqual(timestamp_format, 'dd/MM/yy HH:mm "UTC"')
+        self.assertIn("UTC", timestamp_format)
+        self.assertNotIn("...", timestamp_format)
+
+        rejection_table = read_json(
+            pages
+            / "DataQuality"
+            / "visuals"
+            / "8482f4be411957b99c19"
+            / "visual.json"
+        )
+        rejection_title = rejection_table["visual"]["visualContainerObjects"]["title"][0]
+        title_value = rejection_title["properties"]["text"]["expr"]["Literal"]["Value"]
+        self.assertEqual(
+            title_value,
+            "'Registros rejeitados — nenhum no período selecionado'",
+        )
+
+        methodology_colors = {
+            "e7e5d36693ab56be9160": "#B8C6DA",
+            "2c72cf03734e50968672": "#F1F5FA",
+            "47be0e0c85ed543d9254": "#F1F5FA",
+            "8de983b2fd82555e9ce7": "#F1F5FA",
+            "97ecd27dbd74543ea6d3": "#F1F5FA",
+            "b4598a123b645edb90bc": "#F1F5FA",
+            "b8f77960180256659146": "#F1F5FA",
+        }
+        for visual_id, expected_color in methodology_colors.items():
+            payload = read_json(
+                pages / "Methodology" / "visuals" / visual_id / "visual.json"
+            )
+            text_style = payload["visual"]["objects"]["general"][0]["properties"][
+                "paragraphs"
+            ][0]["textRuns"][0]["textStyle"]
+            self.assertEqual(text_style["color"], expected_color)
+
+    def test_table_headers_use_friendly_portuguese_display_names(self):
+        pages = (
+            ROOT
+            / "powerbi"
+            / "EDY SOC Analytics.Report"
+            / "definition"
+            / "pages"
+        )
+        checked = 0
+        for visual_path in sorted(pages.glob("*/visuals/*/visual.json")):
+            payload = read_json(visual_path)
+            visual = payload.get("visual", {})
+            if visual.get("visualType") != "tableEx":
+                continue
+            projections = visual["query"]["queryState"]["Values"]["projections"]
+            for projection in projections:
+                column_field = projection.get("field", {}).get("Column", {})
+                property_name = column_field.get("Property")
+                if not property_name:
+                    continue
+                checked += 1
+                self.assertIn(property_name, EXPECTED_FRIENDLY_COLUMN_LABELS)
+                self.assertEqual(
+                    projection.get("displayName"),
+                    EXPECTED_FRIENDLY_COLUMN_LABELS[property_name],
+                    f"{visual_path.relative_to(ROOT)} -> {property_name}",
+                )
+        self.assertGreater(checked, 0)
+
+
+if __name__ == "__main__":
+    unittest.main()

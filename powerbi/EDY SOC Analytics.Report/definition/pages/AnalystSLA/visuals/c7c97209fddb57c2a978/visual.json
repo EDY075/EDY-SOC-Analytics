@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "DimAnalyst.Team",
-              "nativeQueryRef": "Team"
+              "nativeQueryRef": "DimAnalyst.Team",
+              "displayName": "Equipe"
             }
           ]
         }
@@ -41,6 +42,19 @@
               "expr": {
                 "Literal": {
                   "Value": "'Dropdown'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "header": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

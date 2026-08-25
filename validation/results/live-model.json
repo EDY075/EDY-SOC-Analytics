@@ -1,0 +1,37 @@
+{
+  "status": "passed",
+  "assertions": {
+    "EventRows": true,
+    "MeasureEvents": true,
+    "AlertRows": true,
+    "MeasureAlerts": true,
+    "IncidentRows": true,
+    "MeasureIncidents": true,
+    "LifecycleRows": true,
+    "BridgeRows": true,
+    "SLARows": true,
+    "UnknownAssetEvents": true,
+    "UnknownAnalystIncidents": true,
+    "RejectedRows": true,
+    "MitreFilter": true
+  },
+  "actual": {
+    "RejectedRows": 0,
+    "UnknownAssetEvents": 693,
+    "MeasureIncidents": 3200,
+    "AlertRows": 18000,
+    "EventRows": 120000,
+    "UnknownAnalystIncidents": 16,
+    "MeasureEvents": 120000,
+    "SLARows": 3200,
+    "MeasureAlerts": 18000,
+    "BridgeRows": 4000,
+    "IncidentRows": 3200,
+    "LifecycleRows": 18034
+  },
+  "mitreProbe": {
+    "technique": "T1490",
+    "bridgeRows": 247,
+    "filteredIncidents": 247
+  }
+}

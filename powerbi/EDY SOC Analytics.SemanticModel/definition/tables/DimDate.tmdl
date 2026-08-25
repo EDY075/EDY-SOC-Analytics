@@ -33,6 +33,7 @@ table DimDate
 		sourceColumn: MonthNumber
 	column MonthName
 		dataType: string
+		sortByColumn: MonthNumber
 		lineageTag: c20231da-2785-5a85-80c0-e52c6dd47831
 		summarizeBy: none
 		sourceColumn: MonthName
@@ -55,6 +56,7 @@ table DimDate
 		sourceColumn: WeekdayNumber
 	column WeekdayName
 		dataType: string
+		sortByColumn: WeekdayNumber
 		lineageTag: 020f85a4-54d3-5e32-95e4-95df51b73534
 		summarizeBy: none
 		sourceColumn: WeekdayName
