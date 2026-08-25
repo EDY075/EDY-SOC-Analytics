@@ -1,12 +1,15 @@
 param(
-    [string]$ExpectedWindowTitle = "EDY SOC Analytics"
+    [string]$ExpectedWindowTitle = "EDY SOC Analytics",
+    [int]$DesktopPid = 0,
+    [ValidateSet("EffectiveUserName", "EphemeralCustomData")]
+    [string]$IdentityMode = "EffectiveUserName"
 )
 
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $PSScriptRoot
 
 . (Join-Path $PSScriptRoot "resolve_powerbi_workspace.ps1")
-$live = Resolve-PowerBIWorkspace -ExpectedWindowTitle $ExpectedWindowTitle
+$live = Resolve-PowerBIWorkspace -ExpectedWindowTitle $ExpectedWindowTitle -DesktopPid $DesktopPid
 $desktop = $live.Desktop
 $workspace = $live.Workspace
 $port = $live.Port
@@ -24,6 +27,54 @@ if (-not $adomdAssembly) {
 }
 [void][Reflection.Assembly]::LoadFrom($adomdAssembly)
 
+$bin = Split-Path -Parent $adomdAssembly
+[void][Reflection.Assembly]::LoadFrom((Join-Path $bin "Microsoft.AnalysisServices.Server.Core.dll"))
+[void][Reflection.Assembly]::LoadFrom((Join-Path $bin "Microsoft.AnalysisServices.Server.Tabular.dll"))
+
+$validationRoleName = "__EDY_RLS_VALIDATION"
+$validationRoleCreated = $false
+$validationRoleFilter = $null
+
+try {
+if ($IdentityMode -eq "EphemeralCustomData") {
+    $tomServer = [Microsoft.AnalysisServices.Tabular.Server]::new()
+    try {
+        $tomServer.Connect("Data Source=localhost:$port")
+        $tomDatabase = $tomServer.Databases | Select-Object -First 1
+        $tomModel = $tomDatabase.Model
+        if ($tomModel.Roles.Contains($validationRoleName)) {
+            throw "O role temporário de validação já existe; limpeza manual necessária antes do teste."
+        }
+
+        $productionRole = $tomModel.Roles["SOC_Analyst"]
+        $productionPermission = $productionRole.TablePermissions["DimAnalyst"]
+        $validationRoleFilter = $productionPermission.FilterExpression.Replace(
+            "LOWER ( USERPRINCIPALNAME () )",
+            "LOWER ( CUSTOMDATA () )"
+        )
+        if ($validationRoleFilter -eq $productionPermission.FilterExpression) {
+            throw "Não foi possível derivar o role temporário a partir do filtro SOC_Analyst."
+        }
+
+        $validationRole = [Microsoft.AnalysisServices.Tabular.ModelRole]::new()
+        $validationRole.Name = $validationRoleName
+        $validationRole.ModelPermission = [Microsoft.AnalysisServices.Tabular.ModelPermission]::Read
+        $validationPermission = [Microsoft.AnalysisServices.Tabular.TablePermission]::new()
+        $validationPermission.Name = "DimAnalyst"
+        $validationPermission.Table = $tomModel.Tables["DimAnalyst"]
+        $validationPermission.FilterExpression = $validationRoleFilter
+        $validationRole.TablePermissions.Add($validationPermission)
+        $tomModel.Roles.Add($validationRole)
+        [void]$tomModel.SaveChanges()
+        $validationRoleCreated = $true
+    }
+    finally {
+        if ($tomServer.Connected) {
+            $tomServer.Disconnect()
+        }
+    }
+}
+
 $discovery = [Microsoft.AnalysisServices.AdomdClient.AdomdConnection]::new("Data Source=localhost:$port")
 $discovery.Open()
 try {
@@ -35,7 +86,13 @@ finally {
 }
 
 function Invoke-RlsProbe([string]$Role, [string]$EffectiveUserName) {
-    $connectionString = "Data Source=localhost:$port;Initial Catalog=$catalog;Roles=$Role;EffectiveUserName=$EffectiveUserName"
+    $identityProperty = if ($IdentityMode -eq "EphemeralCustomData") {
+        "CustomData=$EffectiveUserName"
+    }
+    else {
+        "EffectiveUserName=$EffectiveUserName"
+    }
+    $connectionString = "Data Source=localhost:$port;Initial Catalog=$catalog;Roles=$Role;$identityProperty"
     $connection = [Microsoft.AnalysisServices.AdomdClient.AdomdConnection]::new($connectionString)
     $connection.Open()
     try {
@@ -84,24 +141,31 @@ Import-Csv (Join-Path $root "data\reference\DimAnalyst.csv") | ForEach-Object {
 
 $incidentsByTeam = @{}
 $incidentTeamById = @{}
+$incidentTeamByKey = @{}
 $incidentRows = Import-Csv (Join-Path $root "data\expected\FactIncidents.csv")
 foreach ($incident in $incidentRows) {
     $team = $analystTeamByKey[[string]$incident.AnalystKey]
     if ($team) {
         $incidentsByTeam[$team] = 1 + [int]($incidentsByTeam[$team])
         $incidentTeamById[[string]$incident.IncidentId] = $team
+        $incidentTeamByKey[[string]$incident.IncidentKey] = $team
     }
 }
 
 function Get-RowsByIncidentTeam([string]$RelativePath) {
     $counts = @{}
     foreach ($row in (Import-Csv (Join-Path $root $RelativePath))) {
-        $team = $incidentTeamById[[string]$row.IncidentId]
+        $team = if ($row.PSObject.Properties.Name -contains "IncidentId") {
+            $incidentTeamById[[string]$row.IncidentId]
+        }
+        else {
+            $incidentTeamByKey[[string]$row.IncidentKey]
+        }
         if ($team) {
             $counts[$team] = 1 + [int]($counts[$team])
         }
     }
-    return $counts
+    return ,$counts
 }
 
 $lifecycleByTeam = Get-RowsByIncidentTeam "data\expected\FactIncidentLifecycle.csv"
@@ -119,6 +183,7 @@ foreach ($access in $accessRows) {
     if ($access.RoleName -eq "SOC_Analyst") {
         $scenarios += [pscustomobject]@{
             role = "SOC_Analyst"
+            connectionRole = if ($IdentityMode -eq "EphemeralCustomData") { $validationRoleName } else { "SOC_Analyst" }
             upn = $access.UPN
             expectedIncidents = [int]$incidentsByTeam[$access.Team]
             expectedLifecycle = [int]$lifecycleByTeam[$access.Team]
@@ -134,6 +199,7 @@ foreach ($access in $accessRows) {
 $manager = $accessRows | Where-Object RoleName -eq "SOC_Manager" | Select-Object -First 1
 $scenarios += [pscustomobject]@{
     role = "SOC_Manager"
+    connectionRole = "SOC_Manager"
     upn = $manager.UPN
     expectedIncidents = $incidentRows.Count
     expectedLifecycle = [int]$lifecycleTotal
@@ -145,6 +211,7 @@ $scenarios += [pscustomobject]@{
 }
 $scenarios += [pscustomobject]@{
     role = "SOC_Analyst"
+    connectionRole = if ($IdentityMode -eq "EphemeralCustomData") { $validationRoleName } else { "SOC_Analyst" }
     upn = "unmapped.identity@example.invalid"
     expectedIncidents = 0
     expectedLifecycle = 0
@@ -157,7 +224,7 @@ $scenarios += [pscustomobject]@{
 
 $results = @()
 foreach ($scenario in $scenarios) {
-    $actual = Invoke-RlsProbe -Role $scenario.role -EffectiveUserName $scenario.upn
+    $actual = Invoke-RlsProbe -Role $scenario.connectionRole -EffectiveUserName $scenario.upn
     $visibleTeams = @($actual.visibleTeams -split ',' | Where-Object { $_ })
     $countMatches =
         $actual.incidentRows -eq $scenario.expectedIncidents -and
@@ -207,9 +274,37 @@ $result = [ordered]@{
     status = if ($failed.Count -eq 0) { "passed" } else { "failed" }
     desktopPid = $desktop.Id
     catalog = $catalog
+    identityMode = $IdentityMode
+    productionRoleFilterParity = if ($IdentityMode -eq "EphemeralCustomData") {
+        $validationRoleFilter.Replace("LOWER ( CUSTOMDATA () )", "LOWER ( USERPRINCIPALNAME () )") -eq
+            ($tomModel.Roles["SOC_Analyst"].TablePermissions["DimAnalyst"].FilterExpression)
+    }
+    else {
+        $true
+    }
     scenarios = $results
 }
 $result | ConvertTo-Json -Depth 6
 if ($failed.Count -gt 0) {
     throw "Validação RLS em memória falhou em $($failed.Count) cenário(s)."
+}
+}
+finally {
+    if ($validationRoleCreated) {
+        $cleanupServer = [Microsoft.AnalysisServices.Tabular.Server]::new()
+        try {
+            $cleanupServer.Connect("Data Source=localhost:$port")
+            $cleanupDatabase = $cleanupServer.Databases | Select-Object -First 1
+            $cleanupRole = $cleanupDatabase.Model.Roles[$validationRoleName]
+            if ($null -ne $cleanupRole) {
+                [void]$cleanupDatabase.Model.Roles.Remove($cleanupRole)
+                [void]$cleanupDatabase.Model.SaveChanges()
+            }
+        }
+        finally {
+            if ($cleanupServer.Connected) {
+                $cleanupServer.Disconnect()
+            }
+        }
+    }
 }

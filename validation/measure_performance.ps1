@@ -1,5 +1,6 @@
 param(
     [string]$ExpectedWindowTitle = "EDY SOC Analytics",
+    [int]$DesktopPid = 0,
     [int]$WarmIterations = 5
 )
 
@@ -9,7 +10,7 @@ $resultsDir = Join-Path $PSScriptRoot "results"
 New-Item -ItemType Directory -Path $resultsDir -Force | Out-Null
 
 . (Join-Path $PSScriptRoot "resolve_powerbi_workspace.ps1")
-$live = Resolve-PowerBIWorkspace -ExpectedWindowTitle $ExpectedWindowTitle
+$live = Resolve-PowerBIWorkspace -ExpectedWindowTitle $ExpectedWindowTitle -DesktopPid $DesktopPid
 $desktop = $live.Desktop
 $workspace = $live.Workspace
 $port = $live.Port

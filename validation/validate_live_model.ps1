@@ -1,5 +1,6 @@
 param(
-    [string]$ExpectedWindowTitle = "EDY SOC Analytics"
+    [string]$ExpectedWindowTitle = "EDY SOC Analytics",
+    [int]$DesktopPid = 0
 )
 
 $ErrorActionPreference = "Stop"
@@ -7,7 +8,7 @@ $root = Split-Path -Parent $PSScriptRoot
 $manifest = Get-Content -LiteralPath (Join-Path $root "data\dataset_manifest.json") -Raw | ConvertFrom-Json
 
 . (Join-Path $PSScriptRoot "resolve_powerbi_workspace.ps1")
-$live = Resolve-PowerBIWorkspace -ExpectedWindowTitle $ExpectedWindowTitle
+$live = Resolve-PowerBIWorkspace -ExpectedWindowTitle $ExpectedWindowTitle -DesktopPid $DesktopPid
 $desktop = $live.Desktop
 $workspace = $live.Workspace
 $port = $live.Port

@@ -1,12 +1,32 @@
 function Resolve-PowerBIWorkspace {
     param(
-        [string]$ExpectedWindowTitle = "EDY SOC Analytics"
+        [string]$ExpectedWindowTitle = "EDY SOC Analytics",
+        [int]$DesktopPid = 0
     )
 
     $desktops = @(Get-Process -Name PBIDesktop -ErrorAction SilentlyContinue)
-    $desktop = $desktops |
-        Where-Object MainWindowTitle -eq $ExpectedWindowTitle |
-        Select-Object -First 1
+    $desktop = $null
+
+    if ($DesktopPid -gt 0) {
+        $desktop = $desktops |
+            Where-Object Id -eq $DesktopPid |
+            Select-Object -First 1
+        if ($null -eq $desktop) {
+            throw "A instância PBIDesktop informada não está ativa."
+        }
+        if ($desktop.MainWindowTitle -and $desktop.MainWindowTitle -ne $ExpectedWindowTitle) {
+            throw "A instância PBIDesktop informada não corresponde ao título esperado '$ExpectedWindowTitle'."
+        }
+    }
+    else {
+        $titleMatches = @($desktops | Where-Object MainWindowTitle -eq $ExpectedWindowTitle)
+        if ($titleMatches.Count -eq 1) {
+            $desktop = $titleMatches[0]
+        }
+        elseif ($titleMatches.Count -gt 1) {
+            throw "Há mais de uma instância do Power BI Desktop para '$ExpectedWindowTitle'; informe -DesktopPid explicitamente."
+        }
+    }
 
     if ($null -eq $desktop -and $desktops.Count -eq 1) {
         $desktop = $desktops[0]
