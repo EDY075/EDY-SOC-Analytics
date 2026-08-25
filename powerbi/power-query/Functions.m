@@ -1,10 +1,25 @@
 // fxCsv(relativePath as text) as table
 (relativePath as text) as table =>
 let
-    NormalizedRoot = Text.TrimEnd(pProjectRoot, {"\\", "/"}),
-    FullPath = NormalizedRoot & "\\" & Text.Replace(relativePath, "/", "\\"),
+    Slash = Character.FromNumber(92),
+    NormalizedRoot = Text.TrimEnd(pProjectRoot, {Slash, "/"}),
+    DataRoot = NormalizedRoot & Slash & "data",
+    FullPath = NormalizedRoot & Slash & Text.Replace(relativePath, "/", Slash),
+    Files = Folder.Files(DataRoot),
+    Matches = Table.SelectRows(
+        Files,
+        each Text.Lower(Text.TrimEnd([Folder Path], {Slash, "/"}) & Slash & [Name])
+            = Text.Lower(FullPath)
+    ),
+    Content =
+        if Table.RowCount(Matches) = 1 then Matches{0}[Content]
+        else error Error.Record(
+            "fxCsv",
+            "CSV path did not resolve uniquely",
+            [Path = FullPath, Matches = Table.RowCount(Matches)]
+        ),
     Source = Csv.Document(
-        File.Contents(FullPath),
+        Content,
         [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]
     ),
     Headers = Table.PromoteHeaders(Source, [PromoteAllScalars = true])

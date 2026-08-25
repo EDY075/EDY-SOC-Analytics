@@ -66,6 +66,63 @@ class ProjectQualityTests(unittest.TestCase):
         existing = sorted(path.name for path in pages_root.iterdir() if path.is_dir())
         self.assertEqual(sorted(declared), existing)
 
+    def test_csv_connector_uses_one_folder_privacy_boundary(self):
+        function_source = (
+            ROOT / "powerbi" / "power-query" / "Functions.m"
+        ).read_text(encoding="utf-8")
+        generated_source = (
+            ROOT
+            / "powerbi"
+            / "EDY SOC Analytics.SemanticModel"
+            / "definition"
+            / "expressions.tmdl"
+        ).read_text(encoding="utf-8")
+
+        for source in (function_source, generated_source):
+            self.assertIn("Folder.Files", source)
+            self.assertNotIn("File.Contents", source)
+            self.assertIn("Table.RowCount(Matches) = 1", source)
+
+    def test_report_interaction_contracts(self):
+        definition = (
+            ROOT / "powerbi" / "EDY SOC Analytics.Report" / "definition"
+        )
+        actions = []
+        for visual_path in sorted((definition / "pages").glob("*/visuals/*/visual.json")):
+            payload = read_json(visual_path)
+            visual = payload.get("visual", {})
+            if visual.get("visualType") != "actionButton":
+                continue
+            link = visual["visualContainerObjects"]["visualLink"][0]["properties"]
+
+            def literal(name):
+                value = link.get(name, {}).get("expr", {}).get("Literal", {}).get("Value")
+                return value.strip("'") if isinstance(value, str) else None
+
+            actions.append((literal("type"), literal("navigationSection"), literal("bookmark")))
+
+        self.assertEqual(
+            [action[0] for action in actions].count("ClearAllSlicers"),
+            6,
+        )
+        self.assertIn(("Bookmark", None, "f145a352ab22f855cfd6"), actions)
+        self.assertIn(("PageNavigation", "Methodology", None), actions)
+        self.assertIn(("PageNavigation", "CommandCenter", None), actions)
+
+        bookmark = definition / "bookmarks" / "f145a352ab22f855cfd6.bookmark.json"
+        self.assertTrue(bookmark.is_file())
+
+        drillthrough = read_json(
+            definition / "pages" / "IncidentDrillthrough" / "page.json"
+        )
+        self.assertEqual(drillthrough["pageBinding"]["type"], "Drillthrough")
+        filters = drillthrough["filterConfig"]["filters"]
+        self.assertEqual(len(filters), 1)
+        self.assertEqual(filters[0]["howCreated"], "Drillthrough")
+        field = filters[0]["field"]["Column"]
+        self.assertEqual(field["Expression"]["SourceRef"]["Entity"], "FactIncidents")
+        self.assertEqual(field["Property"], "IncidentId")
+
 
 if __name__ == "__main__":
     unittest.main()
