@@ -104,3 +104,4 @@ Todas as mudanças relevantes do EDY SOC Analytics serão registradas neste arqu
 - Geração JSON alterada para bytes UTF-8 com LF explícito, eliminando tradução de newline dependente do sistema operacional.
 - Ordenação dos hashes do manifesto normalizada por `casefold`, preservando a mesma ordem em Windows e Linux.
 - CSVs declarados com CRLF explícito no Git para corresponder ao `csv.DictWriter` em todos os runners.
+- Actions oficiais atualizadas para `checkout@v7` e `setup-python@v7`, removendo o aviso de runtime Node.js obsoleto.
