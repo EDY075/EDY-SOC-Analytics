@@ -27,7 +27,7 @@
                 }
               },
               "queryRef": "DimAttackTactic.TacticNamePT",
-              "nativeQueryRef": "TacticNamePT"
+              "nativeQueryRef": "Tática"
             },
             {
               "field": {
@@ -41,7 +41,7 @@
                 }
               },
               "queryRef": "DimAttackTechnique.TechniqueId",
-              "nativeQueryRef": "TechniqueId"
+              "nativeQueryRef": "ID da técnica"
             },
             {
               "field": {
@@ -55,7 +55,7 @@
                 }
               },
               "queryRef": "DimAttackTechnique.TechniqueName",
-              "nativeQueryRef": "TechniqueName"
+              "nativeQueryRef": "Técnica"
             },
             {
               "field": {

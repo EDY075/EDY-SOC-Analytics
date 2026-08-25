@@ -27,7 +27,7 @@
                 }
               },
               "queryRef": "DQ_RejectedRows.source_product",
-              "nativeQueryRef": "source_product"
+              "nativeQueryRef": "Produto-fonte"
             },
             {
               "field": {
@@ -41,7 +41,7 @@
                 }
               },
               "queryRef": "DQ_RejectedRows.QualityIssue",
-              "nativeQueryRef": "QualityIssue"
+              "nativeQueryRef": "Motivo da rejeição"
             },
             {
               "field": {
@@ -55,7 +55,7 @@
                 }
               },
               "queryRef": "DQ_RejectedRows.data_classification",
-              "nativeQueryRef": "data_classification"
+              "nativeQueryRef": "Classificação"
             }
           ]
         }

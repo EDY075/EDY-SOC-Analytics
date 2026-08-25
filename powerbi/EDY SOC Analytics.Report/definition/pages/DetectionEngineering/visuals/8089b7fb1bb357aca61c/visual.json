@@ -27,7 +27,7 @@
                 }
               },
               "queryRef": "DimDetectionRule.RuleFamily",
-              "nativeQueryRef": "RuleFamily"
+              "nativeQueryRef": "Família da regra"
             }
           ]
         }

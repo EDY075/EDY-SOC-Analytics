@@ -27,7 +27,7 @@
                 }
               },
               "queryRef": "FactIncidentLifecycle.Stage",
-              "nativeQueryRef": "Stage",
+              "nativeQueryRef": "Etapa",
               "active": true
             }
           ]

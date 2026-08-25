@@ -27,7 +27,7 @@
                 }
               },
               "queryRef": "DimAsset.Environment",
-              "nativeQueryRef": "Environment"
+              "nativeQueryRef": "Ambiente"
             }
           ]
         }

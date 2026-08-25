@@ -27,7 +27,7 @@
                 }
               },
               "queryRef": "DimDetectionRule.RuleName",
-              "nativeQueryRef": "RuleName"
+              "nativeQueryRef": "Regra"
             },
             {
               "field": {
@@ -41,7 +41,7 @@
                 }
               },
               "queryRef": "DimDetectionRule.RuleFamily",
-              "nativeQueryRef": "RuleFamily"
+              "nativeQueryRef": "Família da regra"
             },
             {
               "field": {

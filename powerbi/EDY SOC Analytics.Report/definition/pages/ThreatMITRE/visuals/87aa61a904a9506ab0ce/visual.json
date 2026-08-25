@@ -27,7 +27,7 @@
                 }
               },
               "queryRef": "DimAttackTechnique.TechniqueName",
-              "nativeQueryRef": "TechniqueName",
+              "nativeQueryRef": "Técnica",
               "active": true
             }
           ]

@@ -46,11 +46,41 @@ def position(x: int, y: int, width: int, height: int, order: int) -> dict[str, A
     return {"x": x, "y": y, "z": order, "height": height, "width": width, "tabOrder": order}
 
 
+FRIENDLY_COLUMN_LABELS = {
+    "SeverityPT": "Severidade",
+    "StatusPT": "Status",
+    "BusinessUnit": "Unidade de negócio",
+    "TacticNamePT": "Tática",
+    "TechniqueId": "ID da técnica",
+    "TechniqueName": "Técnica",
+    "RuleName": "Regra",
+    "RuleFamily": "Família da regra",
+    "SourceProduct": "Produto-fonte",
+    "SourceSystem": "Sistema-fonte",
+    "DataClassification": "Classificação",
+    "AnalystLabel": "Analista",
+    "ExperienceBand": "Experiência",
+    "AssetLabel": "Ativo",
+    "AssetType": "Tipo de ativo",
+    "Criticality": "Criticidade",
+    "Environment": "Ambiente",
+    "Stage": "Etapa",
+    "StageAtUTC": "Data/hora UTC",
+    "MinutesFromPreviousStage": "Minutos desde etapa anterior",
+    "SafeAction": "Ação sintética",
+    "IncidentId": "Incidente",
+    "RiskScore": "Risco",
+    "source_product": "Produto-fonte",
+    "QualityIssue": "Motivo da rejeição",
+    "data_classification": "Classificação",
+}
+
+
 def column(table: str, name: str, active: bool = False) -> dict[str, Any]:
     result: dict[str, Any] = {
         "field": {"Column": {"Expression": {"SourceRef": {"Entity": table}}, "Property": name}},
         "queryRef": f"{table}.{name}",
-        "nativeQueryRef": name,
+        "nativeQueryRef": FRIENDLY_COLUMN_LABELS.get(name, name),
     }
     if active:
         result["active"] = True
@@ -102,7 +132,7 @@ def vco(title: str, alt_text: str, *, title_visible: bool = True) -> dict[str, A
     }
 
 
-def textbox(page: str, label: str, text: str, x: int, y: int, width: int, height: int, order: int, *, size: int = 18, color_hex: str = "#E8EEF7", weight: str = "Segoe UI Semibold") -> dict[str, Any]:
+def textbox(page: str, label: str, text: str, x: int, y: int, width: int, height: int, order: int, *, size: int = 18, color_hex: str = "#E8EEF7", weight: str = "Segoe UI Semibold", panel: bool = False) -> dict[str, Any]:
     name = visual_id(page, label)
     return {
         "$schema": VISUAL_SCHEMA,
@@ -113,9 +143,9 @@ def textbox(page: str, label: str, text: str, x: int, y: int, width: int, height
             "objects": {"general": [{"properties": {"paragraphs": [{"textRuns": [{"value": text, "textStyle": {"fontFamily": weight, "fontSize": f"{size}px", "color": color_hex}}], "horizontalTextAlignment": "left"}]}}]},
             "visualContainerObjects": {
                 "general": [{"properties": {"altText": lit_string(text)}}],
-                "background": [{"properties": {"show": lit_bool(False)}}],
-                "border": [{"properties": {"show": lit_bool(False)}}],
-                "padding": [{"properties": {"top": lit_num(0), "bottom": lit_num(0), "left": lit_num(0), "right": lit_num(0)}}],
+                "background": [{"properties": ({"show": lit_bool(True), "color": color("#141B25"), "transparency": lit_num(0)} if panel else {"show": lit_bool(False)})}],
+                "border": [{"properties": ({"show": lit_bool(True), "color": color("#273244"), "radius": lit_num(6), "width": lit_num(1)} if panel else {"show": lit_bool(False)})}],
+                "padding": [{"properties": ({"top": lit_num(10), "bottom": lit_num(10), "left": lit_num(12), "right": lit_num(12)} if panel else {"top": lit_num(0), "bottom": lit_num(0), "left": lit_num(0), "right": lit_num(0)})}],
             },
         },
     }
@@ -139,7 +169,7 @@ def navigator(page: str, order: int = 20) -> dict[str, Any]:
     }
 
 
-def card(page: str, label: str, title: str, measures: list[str], x: int, y: int, width: int, height: int, order: int) -> dict[str, Any]:
+def card(page: str, label: str, title: str, measures: list[str], x: int, y: int, width: int, height: int, order: int, *, value_font_size: int = 16) -> dict[str, Any]:
     name = visual_id(page, label)
     return {
         "$schema": VISUAL_SCHEMA,
@@ -149,7 +179,7 @@ def card(page: str, label: str, title: str, measures: list[str], x: int, y: int,
             "visualType": "cardVisual",
             "query": {"queryState": {"Data": {"projections": [measure(item) for item in measures]}}},
             "objects": {
-                "value": [{"properties": {"fontColor": color("#F5F8FC"), "fontSize": lit_num(16), "bold": lit_bool(True)}, "selector": {"id": "default"}}],
+                "value": [{"properties": {"fontColor": color("#F5F8FC"), "fontSize": lit_num(value_font_size), "bold": lit_bool(True)}, "selector": {"id": "default"}}],
                 "label": [{"properties": {"show": lit_bool(True), "fontColor": color("#AEBBD0"), "fontSize": lit_num(9), "textWrap": lit_bool(True)}, "selector": {"id": "default"}}],
                 "cardCalloutArea": [{"properties": {"show": lit_bool(True), "paddingUniform": lit_num(6), "rectangleRoundedCurve": lit_num(4), "backgroundFillColor": color("#111823"), "backgroundTransparency": lit_num(0)}}],
                 "layout": [{"properties": {"autoGrid": lit_bool(True), "style": lit_string("Cards"), "cellPadding": lit_num(6, "L")}, "selector": {"id": "default"}}],
@@ -349,7 +379,7 @@ def build_pages() -> dict[str, list[dict[str, Any]]]:
     p = "DataQuality"
     pages[p] = page_header(p, "DATA QUALITY", "Completude, validade, rejeições e linhagem segura", reset="clear") + [
         card(p, "quality-volume", "Estado do dataset", ["Registros rejeitados", "Total de eventos"], 24, 120, 440, 118, 20),
-        card(p, "quality-refresh", "Atualização e fidelidade", ["Última atualização UTC", "Fidelidade da fonte"], 480, 120, 440, 118, 21),
+        card(p, "quality-refresh", "Atualização e fidelidade", ["Última atualização UTC", "Fidelidade da fonte"], 480, 120, 440, 118, 21, value_font_size=14),
         slicer(p, "source", "Produto-fonte", ("DimSourceProduct", "SourceProduct"), 940, 120, 316, 80, 22),
         chart(p, "quality-source", "Eventos por produto-fonte", "clusteredBarChart", ("DimSourceProduct", "SourceProduct"), [measure("Total de eventos")], 24, 254, 610, 242, 30),
         chart(p, "fidelity-source", "Fidelidade por produto-fonte", "clusteredBarChart", ("DimSourceProduct", "SourceProduct"), [measure("Fidelidade da fonte")], 650, 254, 606, 242, 31),
@@ -369,12 +399,12 @@ def build_pages() -> dict[str, list[dict[str, Any]]]:
 
     p = "Methodology"
     pages[p] = page_header(p, "METHODOLOGY", "Definições, limites e fontes primárias") + [
-        textbox(p, "scope", "ESCOPO E ÉTICA\nTodos os registros são sintéticos, determinísticos e classificados como SYNTHETIC_DEMO_DATA. Nenhum log, banco, credencial, IP pessoal ou evidência operacional foi usado.", 24, 124, 386, 190, 20, size=13, weight="Segoe UI"),
-        textbox(p, "clocks", "RELÓGIOS DO SOC\nMTTD: evento → detecção. MTTA: criação → reconhecimento. Triagem, contenção, resolução e recuperação são medidos separadamente; MTTR neste relatório significa tempo até resolução.", 426, 124, 402, 190, 21, size=13, weight="Segoe UI"),
-        textbox(p, "security", "SEGURANÇA E ACESSO\nRLS demonstrativa: SOC_Analyst restringe a equipe atribuída; SOC_Manager tem visão completa. A opção de privacidade é limitada a este arquivo e apenas às fontes CSV sintéticas locais.", 844, 124, 412, 190, 22, size=13, weight="Segoe UI"),
-        textbox(p, "sources", "FONTES PRIMÁRIAS\nMicrosoft Learn: PL-300, Power BI, star schema, PBIP/PBIR/TMDL, RLS, acessibilidade, mobile e Performance Analyzer. MITRE ATT&CK Enterprise. NIST CSF 2.0 e SP 800-61 Rev. 3.", 24, 334, 600, 176, 30, size=13, weight="Segoe UI"),
-        textbox(p, "limits", "LIMITAÇÕES\nO dataset representa uma operação fictícia e não estima risco real. Comparações entre analistas são contextualizadas por severidade e complexidade; não constituem avaliação individual. Cobertura MITRE significa técnicas observadas no conjunto sintético.", 640, 334, 616, 176, 31, size=13, weight="Segoe UI"),
-        textbox(p, "usage", "COMO LER\nComece no Command Center, use os filtros por período e severidade, selecione barras para filtrar os detalhes e abra o drillthrough a partir de um incidente. Tabelas oferecem alternativa legível aos gráficos.", 24, 530, 1232, 142, 40, size=13, weight="Segoe UI"),
+        textbox(p, "scope", "ESCOPO E ÉTICA\nTodos os registros são sintéticos, determinísticos e classificados como SYNTHETIC_DEMO_DATA. Nenhum log, banco, credencial, IP pessoal ou evidência operacional foi usado.", 24, 124, 386, 190, 20, size=14, weight="Segoe UI", panel=True),
+        textbox(p, "clocks", "RELÓGIOS DO SOC\nMTTD: evento → detecção. MTTA: criação → reconhecimento. Triagem, contenção, resolução e recuperação são medidos separadamente; MTTR neste relatório significa tempo até resolução.", 426, 124, 402, 190, 21, size=14, weight="Segoe UI", panel=True),
+        textbox(p, "security", "SEGURANÇA E ACESSO\nRLS demonstrativa: SOC_Analyst restringe somente o domínio de incidentes da equipe; eventos e alertas permanecem globais. SOC_Manager tem visão completa.", 844, 124, 412, 190, 22, size=14, weight="Segoe UI", panel=True),
+        textbox(p, "sources", "FONTES PRIMÁRIAS\nMicrosoft Learn: PL-300, Power BI, star schema, PBIP/PBIR/TMDL, RLS, acessibilidade, mobile e Performance Analyzer. MITRE ATT&CK Enterprise. NIST CSF 2.0 e SP 800-61 Rev. 3.", 24, 334, 600, 176, 30, size=14, weight="Segoe UI", panel=True),
+        textbox(p, "limits", "LIMITAÇÕES\nO dataset representa uma operação fictícia e não estima risco real. Comparações entre analistas são contextualizadas por severidade e complexidade; não constituem avaliação individual. Cobertura MITRE significa técnicas observadas no conjunto sintético.", 640, 334, 616, 176, 31, size=14, weight="Segoe UI", panel=True),
+        textbox(p, "usage", "COMO LER\nComece no Command Center, use os filtros por período e severidade, selecione barras para filtrar os detalhes e abra o drillthrough a partir de um incidente. Tabelas oferecem alternativa legível aos gráficos.", 24, 530, 1232, 142, 40, size=14, weight="Segoe UI", panel=True),
     ]
     return pages
 

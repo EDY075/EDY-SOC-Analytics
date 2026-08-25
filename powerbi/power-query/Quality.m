@@ -3,6 +3,7 @@ let
     WithIssue = Table.AddColumn(Source, "QualityIssue", each
         if [event_id] = null or Text.Trim([event_id]) = "" then "Missing event_id"
         else if (try DateTimeZone.FromText([event_timestamp]))[HasError] then "Invalid event_timestamp"
+        else if (try DateTimeZone.FromText([received_at]))[HasError] then "Invalid received_at"
         else if fxNormalizeSeverity([severity]) = null then "Invalid severity"
         else null, type text),
     InvalidRows = Table.SelectRows(WithIssue, each [QualityIssue] <> null),

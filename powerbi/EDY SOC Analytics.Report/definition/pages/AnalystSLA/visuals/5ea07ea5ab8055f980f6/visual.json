@@ -27,7 +27,7 @@
                 }
               },
               "queryRef": "DimAnalyst.AnalystLabel",
-              "nativeQueryRef": "AnalystLabel"
+              "nativeQueryRef": "Analista"
             },
             {
               "field": {
@@ -55,7 +55,7 @@
                 }
               },
               "queryRef": "DimAnalyst.ExperienceBand",
-              "nativeQueryRef": "ExperienceBand"
+              "nativeQueryRef": "Experiência"
             },
             {
               "field": {

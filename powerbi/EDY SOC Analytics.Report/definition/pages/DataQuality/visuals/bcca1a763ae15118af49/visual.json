@@ -27,7 +27,7 @@
                 }
               },
               "queryRef": "DimSourceProduct.SourceProduct",
-              "nativeQueryRef": "SourceProduct"
+              "nativeQueryRef": "Produto-fonte"
             }
           ]
         }

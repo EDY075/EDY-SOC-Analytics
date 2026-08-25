@@ -165,6 +165,17 @@ PRIMARY_KEYS = {
     "BridgeIncidentTechnique": "IncidentTechniqueKey",
 }
 
+SORT_BY_COLUMNS = {
+    ("DimDate", "MonthName"): "MonthNumber",
+    ("DimDate", "WeekdayName"): "WeekdayNumber",
+    ("DimTime", "HourLabel"): "Hour",
+    ("DimSeverity", "Severity"): "SeverityOrder",
+    ("DimSeverity", "SeverityPT"): "SeverityOrder",
+    ("DimStatus", "Status"): "StatusOrder",
+    ("DimStatus", "StatusPT"): "StatusOrder",
+    ("FactIncidentLifecycle", "Stage"): "StageOrder",
+}
+
 
 def make_table(name: str, path: Path, relative: str, custom_m: str | None = None) -> str:
     columns, sample = read_csv_meta(path)
@@ -178,6 +189,8 @@ def make_table(name: str, path: Path, relative: str, custom_m: str | None = None
         if col.endswith("Key") or col in {"EventId", "AlertId", "IncidentId", "DataClassification", "NetworkAddress"}:
             lines.append("\t\tisHidden")
         if fmt: lines.append(f"\t\tformatString: {fmt}")
+        if (name, col) in SORT_BY_COLUMNS:
+            lines.append(f"\t\tsortByColumn: {q(SORT_BY_COLUMNS[(name, col)])}")
         lines.extend([f"\t\tlineageTag: {guid('column:'+name+':'+col)}", "\t\tsummarizeBy: none", f"\t\tsourceColumn: {q(col)}", ""])
     source = custom_m or direct_csv_m(relative, columns, types)
     lines.extend([f"\tpartition {q(name)} = m", "\t\tmode: import", "\t\tsource ="])

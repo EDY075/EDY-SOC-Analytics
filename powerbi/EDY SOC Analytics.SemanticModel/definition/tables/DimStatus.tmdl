@@ -10,11 +10,13 @@ table DimStatus
 		sourceColumn: StatusKey
 	column Status
 		dataType: string
+		sortByColumn: StatusOrder
 		lineageTag: 115c3e31-e965-59d8-bef1-5398e09e0ecb
 		summarizeBy: none
 		sourceColumn: Status
 	column StatusPT
 		dataType: string
+		sortByColumn: StatusOrder
 		lineageTag: 0be8eb0f-0007-5ab2-bb08-ebd3dcf014e2
 		summarizeBy: none
 		sourceColumn: StatusPT
