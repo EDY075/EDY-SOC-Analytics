@@ -39,7 +39,7 @@ Portanto, “deny-by-default” significa **zero linhas no domínio de incidente
 
 As contagens abaixo são o oracle estático derivado dos CSVs versionados. Elas devem ser confirmadas no modelo vivo por conexão com `Roles` e `EffectiveUserName`, ou pelo fluxo `Exibir como` do Power BI Desktop.
 
-O script `validation/validate_live_rls.ps1` automatiza os cinco cenários e compara incidentes, lifecycle, ponte MITRE, SLA, eventos, alertas e medidas de volume. Ele só produz aprovação depois de consultar o modelo vivo; indisponibilidade de autenticação local mantém o gate pendente.
+O script `validation/validate_live_rls.ps1` automatiza os cinco cenários e compara incidentes, lifecycle, ponte MITRE, SLA, eventos, alertas e medidas de volume. Ele só produz aprovação depois de consultar o modelo vivo. O modo `EffectiveUserName` é preferível; quando o engine Windows rejeita os UPNs fictícios antes da avaliação, `-IdentityMode EphemeralCustomData` usa uma role temporária em memória, verifica paridade com o filtro de produção, injeta a identidade por `CUSTOMDATA()` e remove a role ao terminar.
 
 | Papel e identidade fictícia | Equipe | Analistas | Incidentes | Lifecycle | Ponte MITRE | SLA | Eventos | Alertas |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
@@ -64,15 +64,17 @@ Os 16 incidentes associados ao membro `Unassigned` não pertencem às equipes Bl
 9. Teste `SOC_Manager`; os totais devem corresponder à linha gerencial.
 10. Saia de **Exibir como** e registre versão do Desktop, identidade fictícia, role, data e resultados, sem capturar contas reais.
 
-## Evidência obtida até a versão 1.0.0
+## Evidência local obtida em 25/08/2026
 
 | Cenário | Resultado obtido | Estado |
 |---|---|---|
-| `Exibir como: SOC_Manager` | 3.200 incidentes | validado no Desktop |
-| `Exibir como: SOC_Analyst` sem identidade correspondente | zero incidentes | validado no Desktop |
-| identidade fictícia específica em `Outro usuário` | o campo não aceitou o valor de modo confiável | pendente; não alegado como validado |
+| `SOC_Manager` | 3.200 incidentes, 18.034 lifecycle, 4.000 ponte MITRE e 3.200 SLA | validado no modelo vivo |
+| Blue-A | 1.060 incidentes, 6.006 lifecycle, 1.371 ponte MITRE e 1.060 SLA | validado com injeção local controlada |
+| Blue-B | 1.037 incidentes, 5.817 lifecycle, 1.281 ponte MITRE e 1.037 SLA | validado com injeção local controlada |
+| Blue-C | 1.087 incidentes, 6.124 lifecycle, 1.328 ponte MITRE e 1.087 SLA | validado com injeção local controlada |
+| identidade sem mapeamento | zero nos quatro fatos protegidos; eventos e alertas globais | validado com injeção local controlada |
 
-Os totais específicos Blue-A, Blue-B e Blue-C são resultados esperados, ainda não evidência de execução viva. O relatório foi retirado do modo `Exibir como` após o teste registrado.
+O engine local rejeitou UPNs `example.invalid` via `EffectiveUserName`, portanto a validação das cinco identidades usou a role efêmera descrita acima. A paridade com o filtro de produção foi aprovada, a role temporária foi removida e o modelo vivo permaneceu com duas roles. Ainda é necessário testar associações reais de usuários/grupos em um tenant autorizado antes de alegar RLS de produção.
 
 ## Power BI Service e governança
 

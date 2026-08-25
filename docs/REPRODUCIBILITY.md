@@ -97,6 +97,8 @@ Em uma pasta diferente daquela gravada no parâmetro:
 4. não grave caminhos de perfil pessoal em documentação ou screenshots;
 5. revise o diff TMDL antes de versionar qualquer alteração.
 
+`fxCsv` enumera uma única fronteira de privacidade com `Folder.Files(pProjectRoot & "\\data")` e então resolve o caminho completo esperado com comparação exata e guarda de unicidade. Isso evita combinar várias fontes dinâmicas `File.Contents` no firewall de privacidade, sem aceitar arquivos fora de `data/`.
+
 ## 6. Reconstruir PBIP/PBIR por código, quando necessário
 
 `generator/generate_pbip.py` reescreve artefatos gerados do relatório e do modelo, inclusive o parâmetro de raiz. Use-o apenas em worktree limpa, sem alterações não salvas no Desktop, e sempre revise o diff.
@@ -127,13 +129,16 @@ O primeiro comando é o gate estrutural offline e deve retornar zero erros e zer
 Com o relatório aberto e atualizado no Power BI Desktop, execute no Windows:
 
 ```powershell
+powershell -ExecutionPolicy Bypass -File validation/refresh_live_model.ps1
 powershell -ExecutionPolicy Bypass -File validation/validate_live_model.ps1
-powershell -ExecutionPolicy Bypass -File validation/validate_live_rls.ps1
+powershell -ExecutionPolicy Bypass -File validation/validate_live_rls.ps1 -IdentityMode EphemeralCustomData
 ```
 
-Os scripts localizam a instância e o workspace Analysis Services sem registrar PID ou porta na documentação. Quando título de janela ou WMI não estão acessíveis, o fallback só é aceito se houver exatamente uma instância e um workspace recentes; qualquer ambiguidade falha de forma fechada.
+Os scripts localizam a instância e o workspace Analysis Services sem registrar PID ou porta na documentação. Quando houver duas instâncias com o mesmo título, use `-DesktopPid <PID>` em cada comando; sem esse parâmetro, a ambiguidade falha de forma fechada. Quando título de janela ou WMI não estão acessíveis, o fallback só é aceito se houver exatamente uma instância e um workspace recentes.
 
-`validate_live_model.ps1` compara eventos, alertas, incidentes, lifecycle, ponte, SLA, membros desconhecidos, rejeições e propagação MITRE. `validate_live_rls.ps1` testa gerente, três equipes e identidade sem mapeamento, incluindo o escopo parcial esperado: incidentes/lifecycle/MITRE/SLA por equipe e eventos/alertas globais. Todos os asserts devem ser verdadeiros. Se o engine recusar a autenticação local, registre o gate como não executado e use o procedimento manual de `docs/RLS_SECURITY.md`; não converta o oracle estático em evidência viva.
+`refresh_live_model.ps1` processa as tabelas sequencialmente, registra tempo e falha na primeira tabela problemática. `validate_live_model.ps1` compara eventos, alertas, incidentes, lifecycle, ponte, SLA, membros desconhecidos, rejeições e propagação MITRE. `validate_live_rls.ps1` testa gerente, três equipes e identidade sem mapeamento, incluindo o escopo parcial esperado: incidentes/lifecycle/MITRE/SLA por equipe e eventos/alertas globais.
+
+O modo padrão `EffectiveUserName` é a prova preferida quando o engine local aceita os UPNs fictícios. Se o Desktop Windows rejeitar `example.invalid` antes de avaliar RLS, o modo `EphemeralCustomData` cria temporariamente, apenas na memória, uma role de validação cujo filtro é comparado ao filtro de produção e troca somente `USERPRINCIPALNAME()` por `CUSTOMDATA()` para injetar a identidade. O script remove a role no bloco `finally`; depois da execução, confirme que o modelo vivo continua com apenas `SOC_Analyst` e `SOC_Manager`. Essa técnica valida a lógica e as contagens locais, mas não substitui a atribuição de usuários e grupos no Power BI Service.
 
 ## 9. Medir desempenho
 
@@ -159,6 +164,8 @@ No Desktop, registre versão e execute:
 8. se alto contraste ou tecnologia assistiva não puder ser testado, marque explicitamente como pendente.
 
 As capturas aprovadas ficam em `screenshots/desktop-final/` e `screenshots/mobile-final-true/`. Uma nova captura só substitui evidência anterior após revisão visual.
+
+A automação de captura pode validar renderização, mas não comprova por si só cliques, drillthrough, bookmark, foco por teclado ou cross-filter. Se o driver de entrada do Windows estiver indisponível, mantenha esses itens explicitamente pendentes e valide apenas o contrato estático de ações, filtros de drillthrough, bookmarks, `altText`, `tabOrder` e layouts mobile.
 
 ## 11. Exportar por fluxo suportado
 

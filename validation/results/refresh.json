@@ -1,0 +1,132 @@
+{
+  "status": "passed",
+  "desktopPid": 33300,
+  "catalog": "8d4655e6-3493-40fb-9671-36a463097a3f",
+  "startedAt": "2026-08-25T01:30:09.0061452-03:00",
+  "completedAt": "2026-08-25T01:30:35.6994794-03:00",
+  "totalSeconds": 26.69,
+  "tables": [
+    {
+      "table": "DimAnalyst",
+      "elapsedSeconds": 0.55,
+      "affectedObjects": 1,
+      "status": "passed"
+    },
+    {
+      "table": "DimAsset",
+      "elapsedSeconds": 0.22,
+      "affectedObjects": 1,
+      "status": "passed"
+    },
+    {
+      "table": "DimAttackTactic",
+      "elapsedSeconds": 0.19,
+      "affectedObjects": 1,
+      "status": "passed"
+    },
+    {
+      "table": "DimAttackTechnique",
+      "elapsedSeconds": 0.21,
+      "affectedObjects": 1,
+      "status": "passed"
+    },
+    {
+      "table": "DimClassification",
+      "elapsedSeconds": 0.16,
+      "affectedObjects": 1,
+      "status": "passed"
+    },
+    {
+      "table": "DimDate",
+      "elapsedSeconds": 0.21,
+      "affectedObjects": 1,
+      "status": "passed"
+    },
+    {
+      "table": "DimDetectionRule",
+      "elapsedSeconds": 0.2,
+      "affectedObjects": 1,
+      "status": "passed"
+    },
+    {
+      "table": "DimSeverity",
+      "elapsedSeconds": 0.2,
+      "affectedObjects": 1,
+      "status": "passed"
+    },
+    {
+      "table": "DimSLA",
+      "elapsedSeconds": 0.16,
+      "affectedObjects": 1,
+      "status": "passed"
+    },
+    {
+      "table": "DimSourceProduct",
+      "elapsedSeconds": 0.2,
+      "affectedObjects": 1,
+      "status": "passed"
+    },
+    {
+      "table": "DimStatus",
+      "elapsedSeconds": 0.15,
+      "affectedObjects": 1,
+      "status": "passed"
+    },
+    {
+      "table": "DimTime",
+      "elapsedSeconds": 0.18,
+      "affectedObjects": 1,
+      "status": "passed"
+    },
+    {
+      "table": "SecurityAccess",
+      "elapsedSeconds": 0.16,
+      "affectedObjects": 1,
+      "status": "passed"
+    },
+    {
+      "table": "BridgeIncidentTechnique",
+      "elapsedSeconds": 0.21,
+      "affectedObjects": 1,
+      "status": "passed"
+    },
+    {
+      "table": "FactIncidentLifecycle",
+      "elapsedSeconds": 0.34,
+      "affectedObjects": 1,
+      "status": "passed"
+    },
+    {
+      "table": "FactSLA",
+      "elapsedSeconds": 0.23,
+      "affectedObjects": 1,
+      "status": "passed"
+    },
+    {
+      "table": "FactSecurityEvents",
+      "elapsedSeconds": 11.46,
+      "affectedObjects": 1,
+      "status": "passed"
+    },
+    {
+      "table": "FactAlerts",
+      "elapsedSeconds": 8.13,
+      "affectedObjects": 1,
+      "status": "passed"
+    },
+    {
+      "table": "FactIncidents",
+      "elapsedSeconds": 2.19,
+      "affectedObjects": 1,
+      "status": "passed"
+    },
+    {
+      "table": "DQ_RejectedRows",
+      "elapsedSeconds": 0.96,
+      "affectedObjects": 1,
+      "status": "passed"
+    }
+  ],
+  "failedTable": null,
+  "failure": null
+}

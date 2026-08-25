@@ -135,20 +135,21 @@ O CI roda em Ubuntu e Windows, regenera o dataset e exige ausência de arquivos 
 Com o relatório aberto no Desktop:
 
 ```powershell
+powershell -ExecutionPolicy Bypass -File validation/refresh_live_model.ps1
 powershell -ExecutionPolicy Bypass -File validation/validate_live_model.ps1
-powershell -ExecutionPolicy Bypass -File validation/validate_live_rls.ps1
+powershell -ExecutionPolicy Bypass -File validation/validate_live_rls.ps1 -IdentityMode EphemeralCustomData
 powershell -ExecutionPolicy Bypass -File validation/measure_performance.ps1
 powerbi-report-author validate "powerbi/EDY SOC Analytics.Report" --no-schema --pretty
 powerbi-report-author validate "powerbi/EDY SOC Analytics.Report" --pretty
 ```
 
-O primeiro gate PBIR é estrutural e funciona offline; o segundo consulta os schemas oficiais. Os validadores vivos falham de forma fechada se não conseguirem identificar uma única instância/workspace ou autenticar no engine local.
+O primeiro gate PBIR é estrutural e funciona offline; o segundo consulta os schemas oficiais. Os validadores vivos falham de forma fechada se não conseguirem identificar uma única instância/workspace ou autenticar no engine local. Quando houver mais de uma janela do mesmo relatório, informe explicitamente `-DesktopPid <PID>`; os scripts nunca escolhem uma delas por aproximação.
 
 ## Desempenho
 
-A release-base executou cinco consultas DAX representativas, cada uma com cinco amostras aquecidas. O maior tempo observado foi 8,16 ms, abaixo do orçamento interno de 2.000 ms. Com apenas cinco amostras, esse valor é descritivo e não um p95 estatisticamente robusto. A captura/navegação das dez páginas levou 17.400,69 ms, média de 1.740,07 ms por página, incluindo automação e renderização.
+A validação isolada de 25/08/2026 executou refresh completo das 20 tabelas em 26,69 s e cinco consultas DAX representativas, cada uma com cinco amostras aquecidas. O maior p95 observado foi 7,02 ms, abaixo do orçamento interno de 2.000 ms. Com apenas cinco amostras, esse valor é descritivo e não um p95 estatisticamente robusto. A evidência anterior de captura/navegação das dez páginas levou 17.400,69 ms, média de 1.740,07 ms por página, incluindo automação e renderização.
 
-Resultados versionados: [performance.json](validation/results/performance.json) e [render-performance.json](validation/results/render-performance.json). Metodologia: [PERFORMANCE_BUDGET.md](docs/PERFORMANCE_BUDGET.md).
+Resultados versionados: [refresh.json](validation/results/refresh.json), [live-model.json](validation/results/live-model.json), [live-rls.json](validation/results/live-rls.json), [performance.json](validation/results/performance.json) e [render-performance.json](validation/results/render-performance.json). Metodologia: [PERFORMANCE_BUDGET.md](docs/PERFORMANCE_BUDGET.md).
 
 ## Como executar do zero
 
@@ -177,7 +178,7 @@ Desktop | Mobile
 --- | ---
 ![Visão desktop das dez páginas](screenshots/desktop-contact-sheet-final.png) | ![Layouts mobile das dez páginas](screenshots/mobile-contact-sheet-final.png)
 
-Capturas individuais reais estão em [screenshots/desktop-final](screenshots/desktop-final) e [screenshots/mobile-final-true](screenshots/mobile-final-true). O PDF exportado pelo Desktop está em [EDY_SOC_ANALYTICS_REPORT.pdf](output/pdf/EDY_SOC_ANALYTICS_REPORT.pdf); o estudo acadêmico está em [RELATORIO_ACADEMICO.pdf](output/pdf/RELATORIO_ACADEMICO.pdf).
+Capturas individuais reais estão em [screenshots/desktop-final](screenshots/desktop-final), [screenshots/reconcile-live-2026-08-25](screenshots/reconcile-live-2026-08-25) e [screenshots/mobile-final-true](screenshots/mobile-final-true). O PDF exportado pelo Desktop está em [EDY_SOC_ANALYTICS_REPORT.pdf](output/pdf/EDY_SOC_ANALYTICS_REPORT.pdf); o estudo acadêmico está em [RELATORIO_ACADEMICO.pdf](output/pdf/RELATORIO_ACADEMICO.pdf).
 
 Roteiro de apresentação: [DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md).
 
