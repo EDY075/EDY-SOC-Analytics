@@ -6,29 +6,11 @@ $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $PSScriptRoot
 $manifest = Get-Content -LiteralPath (Join-Path $root "data\dataset_manifest.json") -Raw | ConvertFrom-Json
 
-$desktop = Get-Process -Name PBIDesktop |
-    Where-Object MainWindowTitle -eq $ExpectedWindowTitle |
-    Select-Object -First 1
-if ($null -eq $desktop) {
-    throw "Power BI Desktop com o projeto '$ExpectedWindowTitle' não está aberto."
-}
-
-$engine = Get-CimInstance Win32_Process -Filter "Name='msmdsrv.exe'" |
-    Where-Object ParentProcessId -eq $desktop.Id |
-    Select-Object -First 1
-if ($null -eq $engine) {
-    throw "Engine Analysis Services filho do Power BI não encontrado."
-}
-
-if ($engine.CommandLine -notmatch '-s\s+"([^"]+\\Data)"') {
-    throw "Workspace do modelo não pôde ser resolvido."
-}
-$workspace = $Matches[1]
-$portText = Get-Content -LiteralPath (Join-Path $workspace "msmdsrv.port.txt") -Raw
-$port = [regex]::Replace($portText, '\D', '')
-if (-not $port) {
-    throw "Porta local do modelo não encontrada."
-}
+. (Join-Path $PSScriptRoot "resolve_powerbi_workspace.ps1")
+$live = Resolve-PowerBIWorkspace -ExpectedWindowTitle $ExpectedWindowTitle
+$desktop = $live.Desktop
+$workspace = $live.Workspace
+$port = $live.Port
 
 $bin = "C:\Program Files\Microsoft Power BI Desktop\bin"
 [void][Reflection.Assembly]::LoadFrom((Join-Path $bin "Microsoft.PowerBI.AdomdClient.dll"))

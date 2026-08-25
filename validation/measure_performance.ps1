@@ -8,21 +8,11 @@ $root = Split-Path -Parent $PSScriptRoot
 $resultsDir = Join-Path $PSScriptRoot "results"
 New-Item -ItemType Directory -Path $resultsDir -Force | Out-Null
 
-$desktop = Get-Process -Name PBIDesktop |
-    Where-Object MainWindowTitle -eq $ExpectedWindowTitle |
-    Select-Object -First 1
-if ($null -eq $desktop) {
-    throw "Power BI Desktop com o projeto '$ExpectedWindowTitle' não está aberto."
-}
-
-$engine = Get-CimInstance Win32_Process -Filter "Name='msmdsrv.exe'" |
-    Where-Object ParentProcessId -eq $desktop.Id |
-    Select-Object -First 1
-if ($null -eq $engine -or $engine.CommandLine -notmatch '-s\s+"([^"]+\\Data)"') {
-    throw "Workspace do modelo não pôde ser resolvido."
-}
-$workspace = $Matches[1]
-$port = [regex]::Replace((Get-Content -LiteralPath (Join-Path $workspace "msmdsrv.port.txt") -Raw), '\D', '')
+. (Join-Path $PSScriptRoot "resolve_powerbi_workspace.ps1")
+$live = Resolve-PowerBIWorkspace -ExpectedWindowTitle $ExpectedWindowTitle
+$desktop = $live.Desktop
+$workspace = $live.Workspace
+$port = $live.Port
 
 $bin = "C:\Program Files\Microsoft Power BI Desktop\bin"
 [void][Reflection.Assembly]::LoadFrom((Join-Path $bin "Microsoft.PowerBI.AdomdClient.dll"))
