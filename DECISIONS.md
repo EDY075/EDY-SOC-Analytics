@@ -34,12 +34,6 @@ Atualizado em: 2026-08-24
 - Decisão: usar `VALIDADO` somente após execução e aprovação do teste correspondente.
 - Razão: preservar rastreabilidade acadêmica e profissional.
 
-## ADRs pendentes
-
-- Formato exato PBIP/PBIR/TMDL suportado pela versão local do Power BI Desktop.
-- Volume final do dataset após orçamento de desempenho.
-- Estratégia de materialização dos dados esperados e de execução dos testes DAX.
-
 ## ADR-006 — Instalação oficial do Power BI Desktop
 
 - Estado: aceito.
@@ -110,14 +104,15 @@ Resultado: instalado e confirmado em 24/08/2026. O aplicativo ainda não foi abe
 - Estado: aceito e validado.
 - Decisão: usar somente visuais nativos, cartões com no máximo três KPIs por contêiner e layout mobile explícito sem navegador horizontal de páginas.
 - Razão: legibilidade, acessibilidade, desempenho e auditabilidade no PBIR.
-- Evidência: 94 visuais renderizados em desktop, 84 estados mobile e validação oficial com zero erros/avisos.
+- Evidência: 101 visuais renderizados em desktop, 91 estados mobile e validação oficial da release-base sem erros/avisos.
 
-## ADR-016 — RLS demonstrativa verificável
+## ADR-016 — RLS demonstrativa de escopo parcial
 
-- Estado: aceito parcialmente.
-- Decisão: validar `SOC_Manager` com visão integral e `SOC_Analyst` sem identidade correspondente como deny-by-default; não alegar simulação de equipe específica enquanto o campo `Outro usuário` não aceitar a identidade fictícia de forma confiável.
-- Evidência: `SOC_Manager` exibiu 3.200 incidentes; `SOC_Analyst` sem correspondência não exibiu linhas.
-- Limitação: teste de um analista fictício específico permanece pendente.
+- Estado: aceito com limitação explícita.
+- Decisão: `SOC_Manager` mantém visão integral; `SOC_Analyst` restringe `DimAnalyst` e o domínio de incidentes à equipe autorizada.
+- Fronteira: eventos e alertas não possuem rota por equipe e permanecem globais. “Deny-by-default” só se aplica ao domínio de incidentes, não ao modelo inteiro.
+- Evidência-base: `SOC_Manager` exibiu 3.200 incidentes; identidade sem correspondência exibiu zero incidentes.
+- Novo gate: `validation/validate_live_rls.ps1` testa Blue-A, Blue-B, Blue-C, gerente e identidade desconhecida por `Roles` e `EffectiveUserName` quando o Desktop está aberto.
 
 ## ADR-017 — Restauração de filtros com ações nativas
 
@@ -130,7 +125,8 @@ Resultado: instalado e confirmado em 24/08/2026. O aplicativo ainda não foi abe
 
 - Estado: aceito e validado.
 - Decisão: registrar tempos obtidos por scripts reproduzíveis, sem estimativas substituindo medições.
-- Evidência final: maior p95 de consulta de 8,16 ms; renderização integral de 17.400,69 ms e média de 1.740,07 ms por página.
+- Evidência final: maior tempo aquecido observado de 8,16 ms entre cinco amostras; renderização integral de 17.400,69 ms e média de 1.740,07 ms por página.
+- Limitação: cinco amostras não sustentam um p95 estatisticamente robusto; o resultado é descritivo e deve ser complementado pelo Performance Analyzer.
 - Artefatos: `validation/results/performance.json` e `validation/results/render-performance.json`.
 
 ## ADR-019 — Não fabricar PBIX/PBIT
@@ -161,3 +157,23 @@ Resultado: instalado e confirmado em 24/08/2026. O aplicativo ainda não foi abe
 - Decisão: criar `v1.0.0` somente após o CI verde do checkpoint técnico/documental e anexar os dois PDFs revisados.
 - Razão: a tag identifica exatamente o snapshot reproduzível aprovado, enquanto registros pós-release podem evoluir na branch `main` sem reescrever a tag.
 - Evidência: `v1.0.0` aponta para `53386f3285a8b328b03f803b784e15b4c3adc531` e está publicada com os dois artefatos PDF.
+
+## ADR-023 — Hardening orientado pelo estado executável
+
+- Estado: aceito.
+- Decisão: tratar PBIR/TMDL e testes como fonte primária para corrigir README, catálogo DAX, blueprint e documentação acadêmica.
+- Razão: a auditoria encontrou alegações de componentes inexistentes e métricas documentais divergentes.
+- Consequência: ideias não implementadas são classificadas como roadmap; nenhuma tela, tooltip, bookmark, medida ou teste é alegado sem artefato correspondente.
+
+## ADR-024 — Alterações substanciais separadas da entrega segura
+
+- Estado: aceito.
+- Decisão: não redesenhar RLS para eventos/alertas nem trocar a origem de lifecycle/SLA/bridge sem confirmação do usuário.
+- Razão: ambas as mudanças alteram significativamente modelo, dados e compatibilidade e exigem novo round-trip e novas evidências.
+- Consequência: esta branch entrega documentação precisa, testes, validadores, arquitetura, acessibilidade e correções pequenas; isolamento integral permanece decisão futura.
+
+## ADR-025 — Sem publicação automática do hardening
+
+- Estado: aceito.
+- Decisão: trabalhar em `codex/portfolio-10-hardening` com commits locais e não executar push, merge, release ou alteração da tag `v1.0.0` sem autorização explícita.
+- Razão: preservar a main e o snapshot público já validado.

@@ -4,6 +4,37 @@ Todas as mudanças relevantes do EDY SOC Analytics serão registradas neste arqu
 
 ## [Unreleased]
 
+### Added
+
+- Diagramas profissionais de arquitetura e modelo dimensional em Mermaid, SVG e PNG.
+- Capa original para README/LinkedIn e roteiro de demonstração de 75 segundos.
+- Guia funcional das dez páginas e guia de reprodução desde um clone limpo.
+- Validador RLS vivo por cinco identidades com `Roles` e `EffectiveUserName`.
+- Testes de inventário PBIR/TMDL, alt text, tab order, links locais e política de acesso sintética.
+- CI em Windows e Linux com detecção de arquivos modificados e novos não rastreados.
+
+### Changed
+
+- README reestruturado para leitura executiva e reprodução técnica.
+- Relatório acadêmico ampliado com problema de pesquisa, arquitetura, testes, resultados, conclusão e referências completas.
+- Documentação alinhada às 41 medidas, 27 relações, um bookmark e ausência de tooltips dedicados.
+- RLS documentado conforme o escopo real: incidentes por equipe; eventos e alertas globais.
+- Parsing de timestamps do Power Query tornado tolerante a erro antes da carga da fato.
+- Ordenação semântica e rótulos amigáveis adicionados; Methodology e Data Quality mobile receberam ajustes de legibilidade.
+- Descoberta do workspace vivo tornou-se resiliente à indisponibilidade de `MainWindowTitle` e WMI quando há uma única instância inequívoca.
+- Relatório acadêmico passou a renderizar ênfase e referências bibliográficas com tipografia e recuo apropriados.
+
+### Validation
+
+- 23/23 testes portáteis aprovados localmente.
+- Inventário estático aprovado em 10 páginas, 101 visuais, 91 estados mobile, 21 tabelas, 41 medidas e dois papéis.
+- PBIR aprovado offline com 0 erros/0 avisos; validação remota teve 10 avisos exclusivamente por schemas inacessíveis na rede.
+- PDF acadêmico de 9 páginas renderizado e inspecionado integralmente.
+- A janela do projeto foi confirmada pela árvore acessível; round-trip, RLS vivo, performance e recaptura pós-hardening permanecem pendentes porque o sandbox não conseguiu aplicar alterações externas, capturar a janela nem autenticar no engine ADOMD.
+- Nenhum push, merge, release ou publicação realizado.
+
+## [1.0.0] - 2026-08-24
+
 ### Added — 2026-08-24
 
 - Estrutura inicial do projeto em pasta isolada.

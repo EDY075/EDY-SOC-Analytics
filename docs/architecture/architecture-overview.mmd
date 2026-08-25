@@ -1,0 +1,80 @@
+%% EDY SOC Analytics — arquitetura completa
+%% Fonte editável. O SVG equivalente é portátil e não depende de Mermaid em runtime.
+flowchart TB
+    subgraph G["1 · Geração sintética determinística · seed 75075"]
+        PY["generator/generate_dataset.py"]
+        RAW["data/raw\n120.720 eventos brutos · 18.000 alertas · 3.216 incidentes\nduplicidades, nulls e labels variantes controlados"]
+        REF["data/reference\n13 dimensões e SecurityAccess\nsomente identidades example.invalid"]
+        EXP["data/expected\noracle reproduzível + hashes\n120.000 eventos · 18.000 alertas · 3.200 incidentes"]
+        PY --> RAW
+        PY --> REF
+        PY --> EXP
+    end
+
+    subgraph Q["2 · Power Query M · Import"]
+        PARAM["pProjectRoot + fxCsv\nnormalização de caminho e UTF-8"]
+        CLEAN["Tipagem · trim · normalização\ndeduplicação · membros desconhecidos\nchaves substitutas"]
+        QUAR["DQ_RejectedRows\nquarentena sem payload"]
+        CURATED["Tabelas carregadas de data/expected\nFactIncidentLifecycle · FactSLA\nBridgeIncidentTechnique"]
+        PARAM --> CLEAN
+        CLEAN --> QUAR
+    end
+
+    RAW --> PARAM
+    REF --> PARAM
+    EXP --> CURATED
+
+    subgraph S["3 · Modelo semântico TMDL"]
+        STAR["21 tabelas · 27 relacionamentos\nmodelo estrela com dimensões conformadas\nponte MITRE bidirecional controlada"]
+        DAX["_Measures\n41 medidas DAX explícitas\n6 pastas de exibição"]
+        RLS["RLS demonstrativa\nSOC_Manager: visão integral\nSOC_Analyst: filtro de equipe em DimAnalyst\nEscopo parcial: fatos de eventos/alertas permanecem globais"]
+        STAR --> DAX
+        STAR --> RLS
+    end
+
+    CLEAN --> STAR
+    CURATED --> STAR
+    QUAR --> STAR
+
+    subgraph R["4 · Relatório PBIR · Signal Grid"]
+        PBIR["10 páginas · 101 visuais nativos\n1 bookmark · ações ClearAllSlicers\ndrillthrough e cross-filter"]
+        MOBILE["91 estados mobile\nlargura 320 · navegação vertical\nsem sobreposições"]
+        A11Y["Alt text em 101/101 visuais\ntab order determinística\ntabelas equivalentes"]
+        PBIR --> MOBILE
+        PBIR --> A11Y
+    end
+
+    DAX --> PBIR
+    RLS --> PBIR
+
+    subgraph D["5 · Execução e evidências"]
+        DESKTOP["Power BI Desktop 2.157.879.0\nrefresh · round-trip · View As"]
+        OUTPUT["PDF visual · screenshots desktop/mobile\nfolhas de contato · relatório acadêmico"]
+        DESKTOP --> OUTPUT
+    end
+
+    PBIR --> DESKTOP
+
+    subgraph V["6 · Qualidade e gates"]
+        UNIT["CI Safe validation · GitHub Actions\nsuíte Python + inventário estático\nárvore reproduzível limpa"]
+        STATIC["Validação local PBIR\nschemas oficiais · gate com rede"]
+        LIVE["Validação local do modelo vivo\nADOMD · baseline release 13/13"]
+        PERF["Performance local\n5 consultas DAX · 5 warm runs\nrender/screenshot das 10 páginas"]
+    end
+
+    PY --> UNIT
+    PBIR --> STATIC
+    DESKTOP --> LIVE
+    DESKTOP --> PERF
+
+    classDef source fill:#14202c,stroke:#39c6e6,color:#e8eef7,stroke-width:2px;
+    classDef process fill:#171d2f,stroke:#7d8cff,color:#e8eef7,stroke-width:2px;
+    classDef semantic fill:#18251f,stroke:#46c78c,color:#e8eef7,stroke-width:2px;
+    classDef caution fill:#2b2416,stroke:#f2b84b,color:#f5f8fc,stroke-width:2px;
+    classDef output fill:#231b2d,stroke:#b28cff,color:#e8eef7,stroke-width:2px;
+    class PY,RAW,REF,EXP source;
+    class PARAM,CLEAN,QUAR,CURATED process;
+    class STAR,DAX semantic;
+    class RLS caution;
+    class PBIR,MOBILE,A11Y,DESKTOP,OUTPUT output;
+    class UNIT,STATIC,LIVE,PERF process;

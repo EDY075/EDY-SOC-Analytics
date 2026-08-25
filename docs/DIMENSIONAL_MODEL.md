@@ -36,24 +36,54 @@ erDiagram
   DimAttackTactic ||--o{ DimAttackTechnique : AttackTacticKey
 ```
 
+`SecurityAccess` é uma tabela desconectada. A role `SOC_Analyst` consulta seus valores por DAX para filtrar `DimAnalyst[Team]`; não existe relacionamento físico entre as duas tabelas.
+
 ## Direção de filtro
 
-Todas as relações são 1:* e unidirecionais da dimensão para o fato, exceto as relações de navegação entre incidente e suas tabelas de detalhe. Não há filtro bidirecional. A ponte MITRE evita relacionamento many-to-many direto.
+As relações de dimensões conformadas para fatos são 1:* e unidirecionais. A exceção deliberada é `FactIncidents` ↔ `BridgeIncidentTechnique`, configurada com `crossFilteringBehavior: bothDirections`. Ela permite que a seleção de uma técnica atravesse a ponte e filtre medidas de incidente, e que o incidente restrinja suas linhas de técnica.
+
+A relação `BridgeIncidentTechnique` → `DimAttackTechnique` permanece com direção padrão da dimensão para a ponte. Não há segunda rota entre técnica e incidente, o que limita ambiguidade. A exceção bidirecional deve continuar coberta pelo teste `MitreFilter` do modelo vivo e por medição de desempenho.
+
+## Propagação de RLS
+
+```mermaid
+flowchart LR
+  U[USERPRINCIPALNAME] --> SA[SecurityAccess desconectada]
+  SA -. expressão DAX .-> DA[DimAnalyst]
+  DA --> FI[FactIncidents]
+  FI --> FL[FactIncidentLifecycle]
+  FI --> FS[FactSLA]
+  FI --> B[BridgeIncidentTechnique]
+  FE[FactSecurityEvents\nsem escopo de equipe]
+  FA[FactAlerts\nsem escopo de equipe]
+```
+
+O filtro de analista alcança somente o ramo de incidentes. Eventos e alertas compartilham dimensões como data, ativo, severidade e regra, mas essas dimensões não recebem o filtro de equipe; seus totais permanecem globais. Essa fronteira está detalhada em `docs/RLS_SECURITY.md`.
 
 ## Dimensões conformadas
 
-Data, hora, ativo, produto-fonte, severidade e regra filtram eventos, alertas e incidentes. Isso permite medir conversão sem misturar granularidades. `DimDate` tem relação ativa com a data principal de cada fato. Datas alternativas do incidente permanecem inativas e são acionadas apenas em medidas explícitas.
+Data, hora, ativo, produto-fonte, severidade e regra filtram eventos, alertas e incidentes. Isso permite comparar granularidades sem unir diretamente os fatos. `DimDate` tem relação ativa com a data principal de cada fato.
+
+Dimensões exclusivas de incidentes incluem status, analista, classificação e SLA. A ponte incidente-técnica resolve a relação multivalorada MITRE sem criar many-to-many direto entre fatos e dimensão.
+
+## Tabelas diretamente carregadas e transformadas
+
+- `FactSecurityEvents`, `FactAlerts` e `FactIncidents` são conformadas por Power Query a partir de `data/raw/`;
+- `FactIncidentLifecycle`, `FactSLA` e `BridgeIncidentTechnique` importam as tabelas curadas versionadas em `data/expected/`;
+- dimensões e `SecurityAccess` importam `data/reference/`;
+- `DQ_RejectedRows` deriva da camada raw e conserva apenas razão segura, sem payload.
+
+Assim, `data/expected/` é simultaneamente oracle dos testes e camada curada diretamente carregada para três estruturas auxiliares do modelo atual. Ela não substitui o Power Query das três fatos principais.
 
 ## Propriedades de usabilidade
 
-- Colunas técnicas e chaves ficam ocultas no relatório.
+- Chaves técnicas ficam ocultas no relatório.
 - Severidade é classificada por `SeverityOrder`; status por `StatusOrder`; mês por `MonthNumber`/`YearMonth`.
-- Hierarquia de data: Ano → Trimestre → Mês → Data.
-- Hierarquia MITRE: Tática → Técnica.
-- Medidas ficam em tabela exclusiva `_Measures` e pastas `01 Volume`, `02 Operações`, `03 Tempos`, `04 Qualidade`, `05 Tendência`, `06 Contexto`.
-- Percentuais têm uma casa decimal; minutos são exibidos como número decimal e não como hora de relógio.
+- A hierarquia de data é Ano → Trimestre → Mês → Data.
+- A hierarquia MITRE é Tática → Técnica.
+- As 41 medidas ficam em `_Measures`, organizadas nas pastas `01 Volume`, `02 Operações`, `03 Tempos`, `04 Qualidade`, `05 Tendência` e `06 Contexto`.
+- Percentuais têm uma casa decimal; minutos são números decimais, não horas de relógio.
 
-## Role-playing dates
+## Datas
 
-`CreatedDateKey` é a data ativa do incidente. Relações inativas previstas: reconhecimento, triagem, contenção, resolução e fechamento. Medidas que dependem dessas datas usarão `USERELATIONSHIP` somente fora de filtros RLS; análises RLS preferem colunas derivadas/relacionamentos dedicados para evitar comportamento inesperado documentado pela Microsoft.
-
+`CreatedDateKey` é a data ativa do incidente. Os tempos de reconhecimento, triagem, contenção, resolução, fechamento e recuperação são armazenados em colunas próprias e medidos diretamente. O modelo atual não declara relações alternativas inativas para esses timestamps; portanto a documentação e novas medidas não devem alegar `USERELATIONSHIP` sem que a relação exista no TMDL.
