@@ -146,3 +146,11 @@ Resultado: instalado e confirmado em 24/08/2026. O aplicativo ainda não foi abe
 - Decisão: entregar o PDF visual exportado pelo Power BI e um relatório acadêmico A4 gerado a partir da documentação.
 - Razão: preservar tanto a evidência fiel das dez páginas do dashboard quanto a narrativa técnica adequada para avaliação acadêmica e recrutamento.
 - Evidência: ambos foram renderizados página a página e revisados visualmente; o PDF do Power BI tem dez páginas e o acadêmico seis.
+
+## ADR-021 — Publicação segura e reprodutível
+
+- Estado: aceito e validado.
+- Decisão: publicar somente após testes locais, inventário de segredos/PII, revisão do stage e CI Linux com regeneração do dataset seguida de `git diff --exit-code`.
+- Razão: impedir vazamento de artefatos locais e provar que o dataset determinístico é idêntico entre Windows e Linux.
+- Evidência: o primeiro CI detectou diferenças de newline/ordenação; a geração foi corrigida com bytes LF explícitos para JSON, CRLF explícito para CSV e ordenação `casefold`. O workflow subsequente passou integralmente.
+- Repositório: `https://github.com/EDY075/EDY-SOC-Analytics`, público, sem licença e sem force push.

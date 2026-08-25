@@ -137,3 +137,13 @@ Validação final do relatório — PBIP/PBIR/TMDL, refresh, modelo em memória,
 ### PRÓXIMO GATE
 
 - Inventário de segredos/PII e arquivos transitórios, inicialização Git, publicação pública em `EDY075/EDY-SOC-Analytics`, execução do CI e release `v1.0.0`.
+
+## Checkpoint pós-publicação — 2026-08-24
+
+- Auditoria pré-Git aprovada: somente identidades fictícias `example.invalid`; nenhum segredo, `.env`, banco, token, caminho pessoal ou arquivo Power BI transitório foi publicado.
+- Repositório público criado: `https://github.com/EDY075/EDY-SOC-Analytics`.
+- Branch padrão: `main`; commit técnico validado: `4e71a45590b177707208e64ed4bcda77096fa814`.
+- CI `Safe validation` aprovado no Linux com regeneração do dataset, 18 testes e árvore reproduzível limpa.
+- Portabilidade corrigida com newline explícito e ordenação case-insensitive determinística entre Windows e Linux.
+- Nenhuma licença adicionada, conforme requisito.
+- Gate restante: validar o commit deste checkpoint e publicar a release `v1.0.0`.

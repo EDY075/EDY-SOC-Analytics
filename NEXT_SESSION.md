@@ -122,6 +122,15 @@ Git ainda não inicializado neste projeto. Nenhum commit de checkpoint existe.
 - PBIX/PBIT: não gerados porque o `Salvar como` real de PBIP produziu somente outro PBIP; duplicata preservada em `archive/failed-pbix-export` e ignorada pelo Git.
 - Git: ainda não inicializado neste checkpoint.
 
+## Estado pós-publicação — 2026-08-24
+
+- Repositório: `https://github.com/EDY075/EDY-SOC-Analytics`.
+- Branch `main` publicada e protegida por um workflow read-only de validação.
+- CI do commit técnico `4e71a45590b177707208e64ed4bcda77096fa814`: aprovado.
+- O primeiro CI revelou divergência de newline/ordenação entre Windows e Linux; a causa raiz foi corrigida e o segundo/terceiro CI confirmou regeneração limpa.
+- Nenhum segredo, PII real, `.env`, banco, cache Power BI, tentativa PBIX ou evidência diagnóstica foi incluído.
+- Próximo passo exato: publicar a tag/release `v1.0.0` após o CI deste checkpoint.
+
 ## Próximo passo exato atualizado
 
 Executar inventário de segredos, PII e transitórios; depois inicializar Git em `main`, revisar o stage, publicar `EDY075/EDY-SOC-Analytics`, aguardar o CI e criar a release `v1.0.0`.

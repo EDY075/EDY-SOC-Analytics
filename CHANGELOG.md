@@ -105,3 +105,10 @@ Todas as mudanças relevantes do EDY SOC Analytics serão registradas neste arqu
 - Ordenação dos hashes do manifesto normalizada por `casefold`, preservando a mesma ordem em Windows e Linux.
 - CSVs declarados com CRLF explícito no Git para corresponder ao `csv.DictWriter` em todos os runners.
 - Actions oficiais atualizadas para `checkout@v7` e `setup-python@v7`, removendo o aviso de runtime Node.js obsoleto.
+
+### Published — 2026-08-24
+
+- Repositório público criado em `https://github.com/EDY075/EDY-SOC-Analytics`, branch padrão `main` e sem arquivo de licença.
+- Auditoria pré-publicação aprovada sem segredos, credenciais, PII real, caches Power BI ou artefatos arquivados no inventário.
+- CI `Safe validation` aprovado com geração determinística, 18 testes e verificação de árvore limpa.
+- Release `v1.0.0` preparada para publicação após o CI do checkpoint final.
