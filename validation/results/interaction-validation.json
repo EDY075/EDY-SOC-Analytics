@@ -1,0 +1,72 @@
+{
+  "runDate": "2026-08-25",
+  "scope": "clean RECONCILE Power BI Desktop instance",
+  "reportPath": "powerbi/EDY SOC Analytics.pbip",
+  "instance": {
+    "bridgeStatus": "connected",
+    "hasUnsavedChanges": false,
+    "externalFilesReloaded": true,
+    "dataState": "incomplete_tables_not_refreshed"
+  },
+  "automation": {
+    "primary": "Accessibility tree was captured, but indexed click failed because input geometry was unavailable.",
+    "safeAlternative": "Screenshot-backed control failed because Windows.Graphics.Capture is unsupported for this Power BI window.",
+    "retryLimitRespected": true
+  },
+  "interactions": [
+    {
+      "interaction": "drillthrough",
+      "origin": "Command Center — incident table",
+      "action": "Open Incident Drillthrough from one selected incident",
+      "expected": "Page 9 opens filtered to the selected IncidentId",
+      "observed": "The clean instance had no loaded incident rows and the input driver could not execute the selection.",
+      "evidence": "Power BI incomplete-table banner and automation errors recorded in this run",
+      "result": "inconclusive"
+    },
+    {
+      "interaction": "cross-filter",
+      "origin": "Command Center — severity chart and incident table",
+      "action": "Select one severity bar",
+      "expected": "The incident table and related KPIs are filtered",
+      "observed": "The clean instance had no loaded chart categories and the input driver could not execute the selection.",
+      "evidence": "screenshots/reconcile-final-2026-08-25/CommandCenter.png",
+      "result": "inconclusive"
+    },
+    {
+      "interaction": "bookmark",
+      "origin": "SOC Operations — Estado padrão",
+      "action": "Activate the default-state bookmark",
+      "expected": "The saved default report state is restored",
+      "observed": "The bookmark exists in the live accessibility tree, but the input driver could not safely activate it.",
+      "evidence": "Static PBIR contract passed; no interactive approval claimed",
+      "result": "inconclusive"
+    },
+    {
+      "interaction": "reset_filters",
+      "origin": "Analyst & SLA — Limpar filtros",
+      "action": "Activate ClearAllSlicers after a filter selection",
+      "expected": "The page slicer returns to Todos and dependent visuals reset",
+      "observed": "The clean instance had no selectable values and the input driver could not safely activate the button.",
+      "evidence": "screenshots/reconcile-final-2026-08-25/AnalystSLA.png",
+      "result": "inconclusive"
+    },
+    {
+      "interaction": "page_navigation",
+      "origin": "Affected report pages",
+      "action": "Navigate to each affected page through the connected Desktop bridge",
+      "expected": "The selected page changes and renders its corresponding layout",
+      "observed": "Eight affected pages were selected and captured from the clean instance; each active-page state matched the requested page.",
+      "evidence": "screenshots/reconcile-final-2026-08-25/",
+      "result": "approved"
+    },
+    {
+      "interaction": "keyboard_focus",
+      "origin": "Methodology — page navigator",
+      "action": "Move focus with Tab and activate a page with Enter",
+      "expected": "A visible focus indicator follows the declared tab order and Enter activates the control",
+      "observed": "The accessibility tree exposed focusable page buttons and tabs, but screenshot capture and safe input verification failed.",
+      "evidence": "Accessibility tree observed; visible focus not captured",
+      "result": "inconclusive"
+    }
+  ]
+}

@@ -41,6 +41,7 @@ Todos superam 4,5:1 para texto normal. O cálculo de cor não substitui inspeç�
 - [x] Conteúdo essencial não depende de tooltip customizado.
 - [x] Ações principais de navegação, voltar, limpar e bookmark possuem rótulo e alt text.
 - [x] Não há sobreposição nos layouts mobile versionados.
+- [x] Oito páginas afetadas foram recapturadas após os acabamentos finais; os slicers exibem apenas títulos amigáveis e Data Quality/Methodology preservam o layout desktop.
 - [ ] Recapturar e reinspecionar as dez páginas após as alterações de ordenação, rótulos e Methodology mobile.
 
 Problemas encontrados na evidência-base:
@@ -50,7 +51,7 @@ Problemas encontrados na evidência-base:
 - a captura de Incident Drillthrough estava sem um único incidente filtrado;
 - as capturas desktop mantinham uma faixa estreita do painel lateral do Desktop.
 
-Os três primeiros receberam correção de definição ou requisito de nova evidência; a aprovação visual final depende de recaptura real no Desktop.
+Os três primeiros receberam correção de definição. As páginas desktop afetadas foram recapturadas em `screenshots/reconcile-final-2026-08-25/`; a aprovação mobile final ainda depende de recaptura real no editor com dados carregados.
 
 ## Checklist manual exato
 

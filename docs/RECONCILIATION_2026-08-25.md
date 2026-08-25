@@ -27,14 +27,31 @@ Esta entrega foi construída no worktree isolado `EDY-SOC-Analytics-RECONCILE`, 
 
 Os resultados estruturados estão em `validation/results/`; as capturas desktop desta execução estão em `screenshots/reconcile-live-2026-08-25/`.
 
+## Acabamentos finais
+
+- Os nove slicers agora escondem o cabeçalho técnico redundante do campo e preservam o título amigável e o `altText` em português. Os aliases PBIR de `Year`, `YearMonth` e `Team` foram corrigidos para `Ano`, `Ano/mês` e `Equipe`.
+- O valor de `Última atualização UTC` foi reduzido de 14 para 12 pontos para caber no card mobile de Data Quality sem alterar o layout de 320 pontos.
+- O subtítulo e os seis painéis de Methodology passaram a usar cores secundárias mais claras (`#B8C6DA` e `#F1F5FA`), preservando o tema Signal Grid.
+- A tabela vazia informa `Registros rejeitados — nenhum no período selecionado`; a mensagem foi confirmada na instância limpa.
+- O inventário permaneceu em 10 páginas, 101 visuais e 91 estados mobile. Nenhum TMDL, medida DAX, role, relacionamento ou dado foi alterado.
+
+Uma nova instância limpa foi aberta no PBIP desta reconciliação, confirmada pelo bridge com `hasUnsavedChanges: false`, e recarregou somente os arquivos externos desta branch. Não houve novo refresh. Oito páginas afetadas foram recapturadas em `screenshots/reconcile-final-2026-08-25/`; a ausência de dados na instância limpa é indicada pelos banners do Desktop e não foi interpretada como regressão visual.
+
+O acabamento de rótulos permanece parcialmente pendente: títulos de slicer e aliases PBIR estão amigáveis, porém o Desktop continua renderizando captions técnicas em alguns cabeçalhos de tabelas (`AnalystLabel`, `ExperienceBand`, `SourceProduct` etc.). Corrigi-los integralmente exigiria alterar captions do modelo semântico ou reconstruir as tabelas; isso excede o escopo visual seguro desta etapa e acionaria nova validação live.
+
+## Evidência interativa final
+
+O arquivo `validation/results/interaction-validation.json` registra origem, ação, resultado esperado, observado, evidência e status das seis interações. A navegação real entre páginas foi aprovada pelo Desktop bridge e pelas capturas correspondentes. Drillthrough, cross-filter, bookmark, reset de filtros e foco visível por teclado ficaram inconclusivos: a instância limpa não possuía linhas carregadas e o driver de entrada atingiu o limite combinado de uma abordagem por acessibilidade e uma alternativa por captura. Nenhuma interação foi aprovada apenas pelo contrato estático.
+
+Gates finais: `tests.test_project_quality` aprovou 7/7; `tests.test_security` aprovou 5/5; PBIR estrutural e schema oficial retornaram 0 erros/0 avisos; a suíte completa aprovou 26/26 em 41,388 s. Após o último ajuste de cabeçalho de slicer, o teste afetado e os dois gates PBIR foram repetidos e permaneceram aprovados; a suíte completa não foi executada uma segunda vez.
+
 ## Limitações registradas sem sobredeclaração
 
 - O driver de entrada do Windows não conseguiu executar com segurança cliques no Power BI Desktop. Drillthrough, bookmark, navegação por teclado, reset e cross-filter foram confirmados apenas por contrato PBIR, não por interação automatizada nesta sessão.
 - As capturas mobile são evidências do hardening já preservado; o editor mobile não foi recapturado ao vivo nesta sessão.
-- A página mobile Data Quality elide o timestamp de última atualização na largura estreita.
-- A página mobile Methodology mantém contraste secundário mais baixo e espaçamento vertical amplo.
-- Alguns nomes técnicos de campos continuam visíveis em slicers e cabeçalhos. Não foram reintroduzidos pela reconciliação; já pertenciam ao commit-base preservado.
-- A tabela vazia de registros rejeitados não apresenta mensagem explicativa quando o total é zero.
+- A correção de tamanho do timestamp de Data Quality mobile foi validada estruturalmente, mas não recapturada com um valor vivo porque a instância limpa não foi atualizada.
+- Methodology desktop foi recapturada com o contraste novo; a confirmação mobile viva permanece manual.
+- Alguns nomes técnicos continuam visíveis somente em cabeçalhos de tabelas; os cabeçalhos técnicos dos slicers foram removidos.
 - RLS no Power BI Service, associação de grupos e comportamento por licença continuam dependentes de um tenant autorizado.
 
 ## Próxima decisão

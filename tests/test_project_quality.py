@@ -123,6 +123,83 @@ class ProjectQualityTests(unittest.TestCase):
         self.assertEqual(field["Expression"]["SourceRef"]["Entity"], "FactIncidents")
         self.assertEqual(field["Property"], "IncidentId")
 
+    def test_visual_finishing_contracts(self):
+        pages = (
+            ROOT
+            / "powerbi"
+            / "EDY SOC Analytics.Report"
+            / "definition"
+            / "pages"
+        )
+
+        technical_aliases = []
+        for visual_path in sorted(pages.glob("*/visuals/*/visual.json")):
+            payload = read_json(visual_path)
+            query_state = payload.get("visual", {}).get("query", {}).get("queryState", {})
+            for bucket in query_state.values():
+                for projection in bucket.get("projections", []):
+                    column_field = projection.get("field", {}).get("Column", {})
+                    property_name = column_field.get("Property")
+                    if property_name and projection.get("nativeQueryRef") == property_name:
+                        technical_aliases.append(
+                            f"{visual_path.relative_to(ROOT)} -> {property_name}"
+                        )
+        self.assertEqual(technical_aliases, [])
+
+        for visual_path in sorted(pages.glob("*/visuals/*/visual.json")):
+            payload = read_json(visual_path)
+            visual = payload.get("visual", {})
+            if visual.get("visualType") != "slicer":
+                continue
+            header_show = visual["objects"]["header"][0]["properties"]["show"]
+            self.assertEqual(
+                header_show["expr"]["Literal"]["Value"],
+                "false",
+                str(visual_path.relative_to(ROOT)),
+            )
+
+        quality_refresh = read_json(
+            pages
+            / "DataQuality"
+            / "visuals"
+            / "e28667afd71f5261b652"
+            / "visual.json"
+        )
+        value_size = quality_refresh["visual"]["objects"]["value"][0]["properties"]["fontSize"]
+        self.assertEqual(value_size["expr"]["Literal"]["Value"], "12D")
+
+        rejection_table = read_json(
+            pages
+            / "DataQuality"
+            / "visuals"
+            / "8482f4be411957b99c19"
+            / "visual.json"
+        )
+        rejection_title = rejection_table["visual"]["visualContainerObjects"]["title"][0]
+        title_value = rejection_title["properties"]["text"]["expr"]["Literal"]["Value"]
+        self.assertEqual(
+            title_value,
+            "'Registros rejeitados — nenhum no período selecionado'",
+        )
+
+        methodology_colors = {
+            "e7e5d36693ab56be9160": "#B8C6DA",
+            "2c72cf03734e50968672": "#F1F5FA",
+            "47be0e0c85ed543d9254": "#F1F5FA",
+            "8de983b2fd82555e9ce7": "#F1F5FA",
+            "97ecd27dbd74543ea6d3": "#F1F5FA",
+            "b4598a123b645edb90bc": "#F1F5FA",
+            "b8f77960180256659146": "#F1F5FA",
+        }
+        for visual_id, expected_color in methodology_colors.items():
+            payload = read_json(
+                pages / "Methodology" / "visuals" / visual_id / "visual.json"
+            )
+            text_style = payload["visual"]["objects"]["general"][0]["properties"][
+                "paragraphs"
+            ][0]["textRuns"][0]["textStyle"]
+            self.assertEqual(text_style["color"], expected_color)
+
 
 if __name__ == "__main__":
     unittest.main()

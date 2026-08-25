@@ -1,0 +1,35 @@
+{
+  "runDate": "2026-08-25",
+  "affected": {
+    "projectQuality": {
+      "tests": 7,
+      "result": "passed",
+      "secondsFinalRun": 0.167
+    },
+    "security": {
+      "tests": 5,
+      "result": "passed",
+      "secondsFinalCombinedRun": 3.696
+    },
+    "pbirStructural": {
+      "errors": 0,
+      "warnings": 0,
+      "result": "passed"
+    },
+    "pbirOfficialSchema": {
+      "errors": 0,
+      "warnings": 0,
+      "result": "passed"
+    }
+  },
+  "fullSuite": {
+    "runs": 1,
+    "tests": 26,
+    "failures": 0,
+    "errors": 0,
+    "seconds": 41.388,
+    "result": "passed"
+  },
+  "semanticLiveGatesRepeated": false,
+  "reason": "Only PBIR visual definitions, tests, evidence, and reconciliation documentation changed. Previously approved live refresh, DAX, RLS, and performance gates were not repeated."
+}
