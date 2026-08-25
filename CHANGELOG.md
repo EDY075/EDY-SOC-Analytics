@@ -111,4 +111,4 @@ Todas as mudanças relevantes do EDY SOC Analytics serão registradas neste arqu
 - Repositório público criado em `https://github.com/EDY075/EDY-SOC-Analytics`, branch padrão `main` e sem arquivo de licença.
 - Auditoria pré-publicação aprovada sem segredos, credenciais, PII real, caches Power BI ou artefatos arquivados no inventário.
 - CI `Safe validation` aprovado com geração determinística, 18 testes e verificação de árvore limpa.
-- Release `v1.0.0` preparada para publicação após o CI do checkpoint final.
+- Release `v1.0.0` publicada após o CI do checkpoint final, com os PDFs visual e acadêmico anexados.

@@ -131,6 +131,13 @@ Git ainda não inicializado neste projeto. Nenhum commit de checkpoint existe.
 - Nenhum segredo, PII real, `.env`, banco, cache Power BI, tentativa PBIX ou evidência diagnóstica foi incluído.
 - Próximo passo exato: publicar a tag/release `v1.0.0` após o CI deste checkpoint.
 
+## Release concluída — 2026-08-24
+
+- `v1.0.0`: `https://github.com/EDY075/EDY-SOC-Analytics/releases/tag/v1.0.0`.
+- Snapshot da tag: `53386f3285a8b328b03f803b784e15b4c3adc531`, previamente aprovado no CI.
+- Anexos: PDF visual de dez páginas e relatório acadêmico A4 de seis páginas.
+- Não há tarefa obrigatória pendente. Trabalhos futuros possíveis: testar alto contraste em ambiente dedicado, validar uma identidade RLS específica em um tenant compatível e gerar PBIX/PBIT se o Desktop oferecer exportação binária real.
+
 ## Próximo passo exato atualizado
 
 Executar inventário de segredos, PII e transitórios; depois inicializar Git em `main`, revisar o stage, publicar `EDY075/EDY-SOC-Analytics`, aguardar o CI e criar a release `v1.0.0`.

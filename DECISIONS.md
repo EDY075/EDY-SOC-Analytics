@@ -154,3 +154,10 @@ Resultado: instalado e confirmado em 24/08/2026. O aplicativo ainda não foi abe
 - Razão: impedir vazamento de artefatos locais e provar que o dataset determinístico é idêntico entre Windows e Linux.
 - Evidência: o primeiro CI detectou diferenças de newline/ordenação; a geração foi corrigida com bytes LF explícitos para JSON, CRLF explícito para CSV e ordenação `casefold`. O workflow subsequente passou integralmente.
 - Repositório: `https://github.com/EDY075/EDY-SOC-Analytics`, público, sem licença e sem force push.
+
+## ADR-022 — Release imutável sobre snapshot validado
+
+- Estado: aceito e validado.
+- Decisão: criar `v1.0.0` somente após o CI verde do checkpoint técnico/documental e anexar os dois PDFs revisados.
+- Razão: a tag identifica exatamente o snapshot reproduzível aprovado, enquanto registros pós-release podem evoluir na branch `main` sem reescrever a tag.
+- Evidência: `v1.0.0` aponta para `53386f3285a8b328b03f803b784e15b4c3adc531` e está publicada com os dois artefatos PDF.

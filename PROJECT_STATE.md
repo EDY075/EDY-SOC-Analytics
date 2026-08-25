@@ -147,3 +147,11 @@ Validação final do relatório — PBIP/PBIR/TMDL, refresh, modelo em memória,
 - Portabilidade corrigida com newline explícito e ordenação case-insensitive determinística entre Windows e Linux.
 - Nenhuma licença adicionada, conforme requisito.
 - Gate restante: validar o commit deste checkpoint e publicar a release `v1.0.0`.
+
+## Estado final da entrega — 2026-08-24
+
+- Checkpoint de release validado no CI `Safe validation`.
+- Release `v1.0.0` publicada em `https://github.com/EDY075/EDY-SOC-Analytics/releases/tag/v1.0.0`.
+- Tag aponta para o snapshot técnico/documental validado `53386f3285a8b328b03f803b784e15b4c3adc531`.
+- Os PDFs do relatório Power BI e do relatório acadêmico foram anexados à release.
+- Construção, validação, documentação, auditoria, publicação e release: concluídas.
