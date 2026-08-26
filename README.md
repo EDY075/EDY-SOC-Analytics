@@ -19,9 +19,9 @@ O EDY SOC Analytics transforma a cadeia **evento → alerta → incidente → re
 | Papéis RLS | 2 |
 | Eventos / alertas / incidentes | 120.000 / 18.000 / 3.200 |
 | Lifecycle / vínculos MITRE | 18.034 / 4.000 |
-| Testes portáteis desta versão | 23/23 |
+| Testes portáteis desta versão | 28/28 |
 | Modelo vivo da release-base | 13/13 asserts |
-| Maior tempo DAX aquecido observado | 8,16 ms |
+| Maior p95 DAX aquecido observado | 7,02 ms |
 
 > O RLS de analista restringe o domínio de incidentes por equipe. Eventos e alertas continuam globais. Essa fronteira é testada e documentada; não é apresentada como isolamento integral.
 
@@ -213,7 +213,7 @@ Alto contraste do Windows e leitor de tela permanecem validações manuais. O pr
 - publicação e role membership no Power BI Service não foram executados;
 - `pProjectRoot` precisa ser ajustado após um clone em outro caminho;
 - alto contraste e leitor de tela exigem validação manual;
-- a captura pública da página Drillthrough não demonstra o filtro de um único incidente e deve ser recapturada;
+- a captura pública principal da página Drillthrough mostra o estado completo; a validação filtrada de um incidente está registrada em `validation/results/interaction-validation.json`;
 - tempos dependem de host, versão e cache;
 - PBIX/PBIT só serão apresentados se gerados por fluxo oficial suportado no Desktop.
 
@@ -229,6 +229,6 @@ Alto contraste do Windows e leitor de tela permanecem validações manuais. O pr
 ## Autor
 
 **Edmilson Gomes** — portfólio em Power BI, Blue Team e Segurança da Informação.
-[GitHub EDY075](https://github.com/EDY075) · [Release v1.0.0](https://github.com/EDY075/EDY-SOC-Analytics/releases/tag/v1.0.0)
+[GitHub EDY075](https://github.com/EDY075) · [Release v1.1.0](https://github.com/EDY075/EDY-SOC-Analytics/releases/tag/v1.1.0)
 
-Este repositório permanece sem arquivo de licença. Nenhum push, merge ou nova release faz parte das alterações locais até autorização explícita.
+Este repositório permanece sem arquivo de licença. Os materiais em `linkedin-post/` são recursos de portfólio e não representam publicação automática em redes sociais.
