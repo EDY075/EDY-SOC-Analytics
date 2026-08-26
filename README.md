@@ -23,7 +23,7 @@ O EDY SOC Analytics transforma a cadeia **evento → alerta → incidente → re
 | Modelo vivo da release-base | 13/13 asserts |
 | Maior p95 DAX aquecido observado | 7,02 ms |
 
-> O RLS de analista restringe o domínio de incidentes por equipe. Eventos e alertas continuam globais. Essa fronteira é testada e documentada; não é apresentada como isolamento integral.
+> O RLS de analista restringe incidentes, ciclo de vida, SLA e vínculos MITRE por equipe; eventos e alertas permanecem globais. Os cinco cenários registrados — Blue-A, Blue-B, Blue-C, gerente e identidade sem mapeamento — passaram no modelo vivo. Essa fronteira não representa isolamento integral nem validação no Power BI Service.
 
 ## Problema resolvido
 
@@ -107,9 +107,9 @@ Todos os identificadores, nomes, UPNs e endereços de rede são sintéticos. End
 | `SOC_Analyst` Blue-A | 1.060 | 120.000 | 18.000 | incidentes da equipe; telemetria global |
 | `SOC_Analyst` Blue-B | 1.037 | 120.000 | 18.000 | incidentes da equipe; telemetria global |
 | `SOC_Analyst` Blue-C | 1.087 | 120.000 | 18.000 | incidentes da equipe; telemetria global |
-| identidade sem mapeamento | 0 | 120.000 | 18.000 | falha fechada no domínio de incidentes |
+| identidade sem mapeamento | 0 | 120.000 | 18.000 | zero também em lifecycle, SLA e MITRE; telemetria global |
 
-O validador [validate_live_rls.ps1](validation/validate_live_rls.ps1) usa `Roles` e `EffectiveUserName` para comparar esses cenários no modelo vivo. Consulte [RLS_SECURITY.md](docs/RLS_SECURITY.md) antes de interpretar qualquer visual sob RLS.
+Os cinco cenários estão marcados como `passed` em [live-rls.json](validation/results/live-rls.json). A validação final usou `EphemeralCustomData` porque o engine local rejeitou os UPNs fictícios `example.invalid` via `EffectiveUserName`; a paridade com o filtro da role de produção foi aprovada. Isso não substitui o teste de associação real de usuários ou grupos no Power BI Service. Consulte [RLS_SECURITY.md](docs/RLS_SECURITY.md) antes de interpretar qualquer visual sob RLS.
 
 ## Testes e qualidade
 
@@ -147,7 +147,7 @@ O primeiro gate PBIR é estrutural e funciona offline; o segundo consulta os sch
 
 ## Desempenho
 
-A validação isolada de 25/08/2026 executou refresh completo das 20 tabelas em 26,69 s e cinco consultas DAX representativas, cada uma com cinco amostras aquecidas. O maior p95 observado foi 7,02 ms, abaixo do orçamento interno de 2.000 ms. Com apenas cinco amostras, esse valor é descritivo e não um p95 estatisticamente robusto. A evidência anterior de captura/navegação das dez páginas levou 17.400,69 ms, média de 1.740,07 ms por página, incluindo automação e renderização.
+A validação isolada de 25/08/2026 executou refresh completo das 20 tabelas em 29,07 s e cinco consultas DAX representativas, cada uma com cinco amostras aquecidas. O maior p95 observado foi 7,02 ms, abaixo do orçamento interno de 2.000 ms. Com apenas cinco amostras, esse valor é descritivo e não um p95 estatisticamente robusto. A evidência anterior de captura/navegação das dez páginas levou 17.400,69 ms, média de 1.740,07 ms por página, incluindo automação e renderização.
 
 Resultados versionados: [refresh.json](validation/results/refresh.json), [live-model.json](validation/results/live-model.json), [live-rls.json](validation/results/live-rls.json), [performance.json](validation/results/performance.json) e [render-performance.json](validation/results/render-performance.json). Metodologia: [PERFORMANCE_BUDGET.md](docs/PERFORMANCE_BUDGET.md).
 
@@ -164,6 +164,7 @@ Pré-requisitos:
 ```powershell
 git clone https://github.com/EDY075/EDY-SOC-Analytics.git
 cd EDY-SOC-Analytics
+python validation/project_inventory.py
 python generator/generate_dataset.py
 python -m unittest discover -s tests -v
 ```
