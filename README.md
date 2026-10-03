@@ -7,6 +7,10 @@
 
 Camada analítica profissional de SOC construída em Power BI com dados 100% sintéticos, modelo estrela, DAX, MITRE ATT&CK, RLS, experiência mobile e quality gates reproduzíveis.
 
+## Apresentação em vídeo
+
+https://github.com/user-attachments/assets/11210ec7-2469-4c24-a4b2-dff58b491d88
+
 ## Visão em 60 segundos
 
 O EDY SOC Analytics transforma a cadeia **evento → alerta → incidente → resposta** em uma narrativa de dez páginas para Blue Team. Ele mostra prioridade, backlog, SLA, relógios do ciclo de vida, exposição de ativos, comportamento ATT&CK, ruído de detecção e qualidade da fonte. Tudo é auditável em PBIP/PBIR/TMDL e nenhum log, banco, segredo ou credencial operacional foi usado.
