@@ -9,7 +9,7 @@ Camada analítica profissional de SOC construída em Power BI com dados 100% sin
 
 ## Apresentação em vídeo
 
-https://github.com/user-attachments/assets/11210ec7-2469-4c24-a4b2-dff58b491d88
+https://github.com/user-attachments/assets/302fff4b-3ddc-4d52-acdb-c1462668fe18
 
 ## Visão em 60 segundos
 
